@@ -13,13 +13,29 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             tools:context=".ui.authentication.RegistrationFragment">
-
+            <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_select"
+                app:borderWidth="1dp"
+                app:checkedBackgroundColor="@color/app_color"
+                app:checkedTextColor="@color/black"
+                app:separatorColor="@color/white"
+                app:borderRadius="20dp"
+                app:uncheckedBorderColor="@color/white"
+                app:uncheckedBackgroundColor="@color/shimmer_background"
+                app:textToggleLeft="@string/Person"
+                app:textToggleRight="@string/Place" />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/name_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_select"
                 >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
@@ -104,14 +120,50 @@
                     android:text="@={user.town}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/password_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/town_layout"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:padding="9dp"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:text="@{password}"
+                    android:singleLine="true"
+                    /></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/re_password_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/password_layout"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/re_password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:padding="9dp"
+                    android:hint="@string/re_password"
+                    android:inputType="textPassword"
+                    android:text="@={confirmPassword}"
+                    android:singleLine="true"
+                    /></com.google.android.material.textfield.TextInputLayout>
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/new_business_btn"
+                android:id="@+id/new_user_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 style="@style/save_btn_outlined"
-                app:layout_constraintTop_toBottomOf="@id/town_layout"
+                app:layout_constraintTop_toBottomOf="@id/re_password_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_register"
                 />
@@ -120,6 +172,13 @@
 
     <data>
         <import type="com.petruskambala.namcovidcontacttracer.model.UserType"/>
+        <variable
+            name="password"
+            type="String" />
+
+        <variable
+            name="confirmPassword"
+            type="String" />
         <variable
             name="user"
             type="com.petruskambala.namcovidcontacttracer.model.User" />

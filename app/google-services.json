@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "197858767739",
+    "firebase_url": "https://namcovidcontacttracer.firebaseio.com",
+    "project_id": "namcovidcontacttracer",
+    "storage_bucket": "namcovidcontacttracer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197858767739:android:98e14e9b85cfd83e9103de",
+        "android_client_info": {
+          "package_name": "com.petruskambala.namcovidcontacttracer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197858767739-487n9rri07ian4dlu1lb9loshth0bfg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaWexbcDIxu8EaPEzT1fkc79DgdzrU-ZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197858767739-487n9rri07ian4dlu1lb9loshth0bfg2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

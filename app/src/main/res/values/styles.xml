@@ -46,7 +46,7 @@
         <item name="android:textColor">@color/hint_color</item>
         <item name="strokeWidth">2dp</item>
         <item name="rippleColor">@color/hint_color</item>
-        <item name="cornerRadius">30dp</item>
+        <item name="cornerRadius">20dp</item>
     </style>
     <style name="save_btn_outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/app_color</item>
@@ -54,7 +54,7 @@
         <item name="backgroundTint">@color/save_btn_enabled</item>
         <item name="strokeWidth">2dp</item>
         <item name="rippleColor">@color/app_color</item>
-        <item name="cornerRadius">30dp</item>
+        <item name="cornerRadius">15dp</item>
     </style>
 
 

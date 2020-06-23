@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NamCovidContactTracer</string>
+    <string name="app_name">Covid-19 Contact Tracer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -21,4 +21,14 @@
     <string name="cell_or_email">Email or Cellphone</string>
     <string name="user_password">Password</string>
     <string name="btn_login">Login</string>
+    <string name="Place">Place</string>
+    <string name="Person">Person</string>
+    <string name="re_password">Confirm password</string>
+    <string name="password">Choose a password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="Createnewaccount">Create New Account.</string>
+    <string name="my_profile">Profile</string>
+    <string name="visits">Visits</string>
+    <string name="menu_notifications">Notifications</string>
+    <string name="user_signout">Logout</string>
 </resources>

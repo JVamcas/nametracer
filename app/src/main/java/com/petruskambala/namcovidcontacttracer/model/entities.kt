@@ -2,6 +2,8 @@ package com.petruskambala.namcovidcontacttracer.model
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import com.petruskambala.namcovidcontacttracer.BR
+import com.google.firebase.auth.FirebaseUser
 
 enum class UserType {
     PERSON, PLACE
@@ -9,7 +11,9 @@ enum class UserType {
 
 abstract class AbstractModel(
     var id: String
-) : BaseObservable()
+) : BaseObservable() {
+    class EntityExistException : Exception()
+}
 
 /***
  * Represent a visit to a place e.g. office, taxi or house
@@ -36,14 +40,16 @@ data class Alert(
  * Represent app user e.g. a place or person
  */
 data class User(
-    private var _name: String = "",
-    var userType: UserType = UserType.PERSON,
-    private var _cellphone: String? = null,
-    private var _email: String? = null,
-    private var _address_1: String = "",
-    private var _town: String = "",
-    var admin: Boolean
-) : AbstractModel(id = "") {
+    val user: FirebaseUser? = null
+
+) : AbstractModel(id = user?.uid ?: "") {
+    private var _name: String = user?.displayName ?: ""
+    var userType: UserType = UserType.PERSON
+    private var _cellphone: String? = user?.phoneNumber
+    private var _email: String? = user?.email
+    private var _address_1: String = ""
+    private var _town: String = ""
+    var admin: Boolean = false
 
     var name: String
         @Bindable get() = _name

@@ -1,82 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            >
+            android:layout_marginEnd="5dp">
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_margin="15dp"
                 android:id="@+id/login_fragment"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
                 tools:context=".ui.fragment.LoginFragment">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+
+                <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
+                    android:id="@+id/user_select"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/email_layout"
+                    app:borderRadius="20dp"
+                    app:borderWidth="1dp"
+                    app:checkedBackgroundColor="@color/app_bar"
+                    app:checkedTextColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    >
+                    app:separatorColor="@color/white"
+                    app:textToggleLeft="@string/Person"
+                    app:textToggleRight="@string/Place"
+                    app:uncheckedBackgroundColor="@color/shimmer_background"
+                    app:uncheckedBorderColor="@color/white" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/user_select">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
-                        android:padding="9dp"
                         android:hint="@string/cell_or_email"
                         android:inputType="textCapWords"
-                        android:text="@{cellOrEmail}"
+                        android:padding="9dp"
                         android:singleLine="true"
-                        />
+                        android:text="@{cellOrEmail}" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/password_layout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/email_layout"
-                    >
+                    app:layout_constraintTop_toBottomOf="@id/email_layout">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
-                        android:padding="9dp"
                         android:hint="@string/user_password"
                         android:inputType="textPassword"
-                        android:text="@={userPassword}"
+                        android:padding="9dp"
                         android:singleLine="true"
-                        />
+                        android:text="@={userPassword}" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/login_btn"
+                    style="@style/save_btn_outlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    style="@style/save_btn_outlined"
-                    app:layout_constraintTop_toBottomOf="@id/password_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/btn_login"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/password_layout" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/reset_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    android:textStyle="bold"
+                    android:textColor="@color/app_color"
+                    app:layout_constraintBottom_toBottomOf="@id/create_new_account"
+                    app:layout_constraintStart_toStartOf="parent"
                     />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Createnewaccount"
+                    android:id="@+id/create_new_account"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/app_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/login_btn" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
     <data>
+
         <variable
             name="cellOrEmail"
             type="String" />
+
         <variable
             name="userPassword"
             type="String" />
