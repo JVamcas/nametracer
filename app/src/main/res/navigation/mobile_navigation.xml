@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.authentication.LoginFragment"
-        android:label="Sign In"
+        android:label=""
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
@@ -39,7 +39,24 @@
     </fragment>
     <fragment
         android:id="@+id/casesFragment"
-        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.CasesFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.CaseListFragment"
         android:label="Recorded Cases"
-        tools:layout="@layout/fragment_cases" />
+        tools:layout="@layout/fragment_case_list" >
+        <action
+            android:id="@+id/action_casesFragment_to_newCaseFragment"
+            app:destination="@id/newCaseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newCaseFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.NewCaseFragment"
+        android:label="Register New Case"
+        tools:layout="@layout/fragment_new_case" >
+        <action
+            android:id="@+id/action_newCaseFragment_to_updateCaseFragment"
+            app:destination="@id/updateCaseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateCaseFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.UpdateCaseFragment"
+        android:label="Update Case" />
 </navigation>

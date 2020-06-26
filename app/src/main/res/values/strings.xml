@@ -31,4 +31,12 @@
     <string name="visits">Visits</string>
     <string name="menu_notifications">Notifications</string>
     <string name="user_signout">Logout</string>
+    <string name="save_btn">Register</string>
+    <string name="find_user">Find</string>
+    <string name="email_or_cell">Enter email or cellphone</string>
+    <string name="find_person">Find Person</string>
+    <string name="user_avatar">Avatar</string>
+    <string name="quarantine_case">Move case to quarantine?</string>
+    <string name="no_place">No places found.</string>
+    <string name="account_type">Account Type</string>
 </resources>

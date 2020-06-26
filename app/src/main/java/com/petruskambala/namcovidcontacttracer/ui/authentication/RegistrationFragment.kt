@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.llollox.androidtoggleswitch.widgets.ToggleSwitch.OnChangeListener
@@ -18,7 +19,6 @@ import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_login.user_select
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 /**
@@ -48,28 +48,34 @@ open class RegistrationFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user_select.checkedPosition = 0
         binding.user = user
-        user_select.onChangeListener = object : OnChangeListener {
-            override fun onToggleSwitchChanged(position: Int) {
-                user.userType = if(position == 0)UserType.PERSON else UserType.PLACE
-            }
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.account_select_auto_layout,
+            UserType.values().map { it.name })
+        account_type.setAdapter(adapter)
+
+        account_type.setOnItemClickListener { _, _, pos, _ ->
+            user.userType = if(pos == 0) UserType.PERSONAL else UserType.BUSINESS
         }
         new_user_btn.setOnClickListener {
             showProgressBar("Creating your account")
             val password = password.text.toString()
-            authModel.createNewUser(user,password)
+            authModel.createNewUser(user, password)
             new_user_btn.isEnabled = false
             authModel.repoResults.observe(viewLifecycleOwner, Observer { mResults ->
-                if(mResults is Results.Success){
+                new_user_btn.isEnabled = true
+                if (mResults is Results.Success) {
                     showToast("Account Created.")
                     navController.navigate(R.id.action_registrationFragment_to_loginFragment)
-                }
-                else super.parseRepoResults(mResults,"")
+                } else super.parseRepoResults(mResults, "")
+                authModel.clearRepoResults(viewLifecycleOwner)
                 endProgressBar()
             })
         }
     }
+
     override fun onResume() {
         super.onResume()
         val activity = (activity as MainActivity)

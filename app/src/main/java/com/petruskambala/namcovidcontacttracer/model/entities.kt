@@ -4,13 +4,16 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.Exclude
+import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 
 enum class UserType {
-    PERSON, PLACE
+    PERSONAL, BUSINESS
 }
 
 abstract class AbstractModel(
-    var id: String
+    var id: String="",
+    var photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
 }
@@ -26,11 +29,25 @@ data class Visit(
     var place: User
 ) : AbstractModel(id = "")
 
+enum class CaseState {
+    NON_QUARANTINE, QUARANTINE, ACTIVE, RECOVERED, DEAD
+}
+
 data class CovidCase(
-    var time: String,
-    var personId: String,
-    var person: User
-) : AbstractModel(id = "")
+    var time: String = DateUtil.today(),
+    var personId: String = "",
+    var person: User? = null,
+    private var _caseState: CaseState = CaseState.NON_QUARANTINE
+) : AbstractModel() {
+    var caseState: CaseState
+        @Bindable get() = _caseState
+        set(value) {
+            if(_caseState != value){
+                _caseState = value
+                notifyPropertyChanged(BR.caseState)
+            }
+        }
+}
 
 data class Alert(
     var id: String
@@ -40,11 +57,11 @@ data class Alert(
  * Represent app user e.g. a place or person
  */
 data class User(
-    val user: FirebaseUser? = null
+    @get: Exclude val user: FirebaseUser? = null
 
 ) : AbstractModel(id = user?.uid ?: "") {
     private var _name: String = user?.displayName ?: ""
-    var userType: UserType = UserType.PERSON
+    var userType: UserType = UserType.PERSONAL
     private var _cellphone: String? = user?.phoneNumber
     private var _email: String? = user?.email
     private var _address_1: String = ""
@@ -91,4 +108,8 @@ data class User(
                 notifyPropertyChanged(BR.address_1)
             }
         }
+
+    override fun toString(): String {
+        return "$address_1 | $town"
+    }
 }

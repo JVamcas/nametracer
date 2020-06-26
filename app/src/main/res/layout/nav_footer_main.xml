@@ -4,16 +4,25 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/shimmer_background"
+        />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signout_button"
         style="@style/exit_btn_outlined"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="10dp"
         android:onClick="onSignOut"
         android:text="@string/user_signout"
         android:textAllCaps="false"
         android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/shimmer_background"
+        />
 </LinearLayout>

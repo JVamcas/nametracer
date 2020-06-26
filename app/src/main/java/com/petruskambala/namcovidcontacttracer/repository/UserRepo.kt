@@ -14,19 +14,23 @@ class UserRepo {
     private val DB = FirebaseFirestore.getInstance()
     private val AUTH = Firebase.auth
 
-    fun createNewUserWithEmailAndPassword(mUser: User, password: String, callback: (User?, Results) -> Unit) {
+    fun createNewUserWithEmailAndPassword(
+        mUser: User,
+        password: String,
+        callback: (User?, Results) -> Unit
+    ) {
         AUTH.createUserWithEmailAndPassword(mUser.email!!, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val user = AUTH.currentUser
-                    DB.collection(Docs.USERS.name).document(user!!.uid)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    mUser.apply { id = AUTH.currentUser!!.uid }
+                    DB.collection(Docs.USERS.name).document(mUser.id)
                         .set(mUser)
-                        .addOnCompleteListener { task1: Task<Void?> ->
-                            if (task1.isSuccessful)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful)
                                 callback(mUser, Success(Success.CODE.WRITE_SUCCESS))
-                            else callback(mUser, Results.Error(task1.exception))
+                            else callback(mUser, Results.Error(task.exception))
                         }
-                } else callback(null, Results.Error(task.exception))
+                } else callback(null, Results.Error(it.exception))
             }
     }
 
@@ -42,7 +46,11 @@ class UserRepo {
             }
     }
 
-    fun authenticateWithEmailAndPassword(email: String, password: String, callback: (Results) -> Unit) {
+    fun authenticateWithEmailAndPassword(
+        email: String,
+        password: String,
+        callback: (Results) -> Unit
+    ) {
         AUTH.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful)

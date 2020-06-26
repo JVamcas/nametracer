@@ -34,7 +34,6 @@ class LoginFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user_select.checkedPosition = 0
 
         create_new_account.setOnClickListener {
             navController.navigate(R.id.action_loginFragment_to_registrationFragment)

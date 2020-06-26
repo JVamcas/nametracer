@@ -22,30 +22,13 @@
                 android:layout_margin="15dp"
                 tools:context=".ui.fragment.LoginFragment">
 
-                <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
-                    android:id="@+id/user_select"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:borderRadius="20dp"
-                    app:borderWidth="1dp"
-                    app:checkedBackgroundColor="@color/app_bar"
-                    app:checkedTextColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:separatorColor="@color/white"
-                    app:textToggleLeft="@string/Person"
-                    app:textToggleRight="@string/Place"
-                    app:uncheckedBackgroundColor="@color/shimmer_background"
-                    app:uncheckedBorderColor="@color/white" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/user_select">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"

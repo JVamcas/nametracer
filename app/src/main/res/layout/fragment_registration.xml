@@ -13,29 +13,13 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             tools:context=".ui.authentication.RegistrationFragment">
-            <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/user_select"
-                app:borderWidth="1dp"
-                app:checkedBackgroundColor="@color/app_color"
-                app:checkedTextColor="@color/black"
-                app:separatorColor="@color/white"
-                app:borderRadius="20dp"
-                app:uncheckedBorderColor="@color/white"
-                app:uncheckedBackgroundColor="@color/shimmer_background"
-                app:textToggleLeft="@string/Person"
-                app:textToggleRight="@string/Place" />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/name_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_select"
+                app:layout_constraintTop_toTopOf="parent"
                 >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
@@ -43,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:padding="9dp"
-                android:hint="@{user.userType == UserType.PERSON?`Full Name`:`Place Name`}"
+                android:hint="@{user.userType == UserType.PERSONAL?`Full Name`:`Place Name`}"
                 android:inputType="textAutoComplete"
                 android:text="@={user.name}"
                 android:singleLine="true"
@@ -156,14 +140,30 @@
                     android:text="@={confirmPassword}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:hint="@string/account_type"
+                android:id="@+id/account_type_layout"
+                app:layout_constraintTop_toBottomOf="@id/re_password_layout"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/account_type"
+                    android:inputType="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/new_user_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="end"
                 style="@style/save_btn_outlined"
-                app:layout_constraintTop_toBottomOf="@id/re_password_layout"
+                app:layout_constraintTop_toBottomOf="@id/account_type_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_register"
                 />
