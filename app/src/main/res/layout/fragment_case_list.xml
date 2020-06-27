@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.cases.CaseListFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".ui.cases.CaseListFragment">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/caseList"
+            tools:listitem="@layout/case_view"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/hint_color"
+            android:text="@string/no_cases"
+            android:visibility="@{caseCount > 0 ? View.GONE: View.VISIBLE}"
+            />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/new_case_btn"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:elevation="10dp"
+            app:srcCompat="@drawable/ic_add"
+            app:rippleColor="@color/app_bar" />
+
+    </FrameLayout>
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="caseCount"
+            type="int" />
+    </data>
+</layout>

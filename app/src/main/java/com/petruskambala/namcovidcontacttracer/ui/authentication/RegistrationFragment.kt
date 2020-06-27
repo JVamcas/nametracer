@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import com.llollox.androidtoggleswitch.widgets.ToggleSwitch.OnChangeListener
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentRegistrationBinding
-import com.petruskambala.namcovidcontacttracer.model.User
-import com.petruskambala.namcovidcontacttracer.model.UserType
+import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,15 +25,15 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  * A simple [Fragment] subclass.
  */
 open class RegistrationFragment : AbstractFragment() {
-    lateinit var binding: FragmentRegistrationBinding
-    private lateinit var user: User
+    private lateinit var binding: FragmentRegistrationBinding
+    lateinit var account: Account
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        user = User()
+        account = Account()
         arguments?.let {
-            val json = it.getString("user")
-            user = ParseUtil.fromJson(json, User::class.java)
+            val json = it.getString(Const.ACCOUNT)
+            account = ParseUtil.fromJson(json, Account::class.java)
         }
     }
 
@@ -48,32 +48,47 @@ open class RegistrationFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.user = user
+        new_account_btn.text = if(account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
+        binding.business = account
 
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.account_select_auto_layout,
-            UserType.values().map { it.name })
+            AccountType.values().map { it.name })
         account_type.setAdapter(adapter)
 
         account_type.setOnItemClickListener { _, _, pos, _ ->
-            user.userType = if(pos == 0) UserType.PERSONAL else UserType.BUSINESS
+            account.accountType = if (pos == 0) AccountType.PERSONAL else AccountType.BUSINESS
+            new_account_btn.text = if(pos == 0) "NEXT" else "CREATE"
         }
-        new_user_btn.setOnClickListener {
-            showProgressBar("Creating your account")
+        new_account_btn.setOnClickListener {
             val password = password.text.toString()
-            authModel.createNewUser(user, password)
-            new_user_btn.isEnabled = false
-            authModel.repoResults.observe(viewLifecycleOwner, Observer { mResults ->
-                new_user_btn.isEnabled = true
-                if (mResults is Results.Success) {
-                    showToast("Account Created.")
-                    navController.navigate(R.id.action_registrationFragment_to_loginFragment)
-                } else super.parseRepoResults(mResults, "")
-                authModel.clearRepoResults(viewLifecycleOwner)
-                endProgressBar()
-            })
+            if (account.accountType == AccountType.PERSONAL) {
+                val bundle = Bundle()
+                bundle.putString(Const.ACCOUNT, ParseUtil.toJson(account))
+                bundle.putString(Const.PASSWORD, password)
+                navController.navigate(
+                    R.id.action_registrationFragment_to_extendedRegistrationFragment,
+                    bundle
+                )
+            } else
+                createNewUser(account, password)
         }
+    }
+
+    fun createNewUser(account: Account, password: String) {
+        showProgressBar("Creating your account.")
+        authModel.createNewUser(account, password)
+        new_account_btn.isEnabled = false
+        authModel.repoResults.observe(viewLifecycleOwner, Observer { mResults ->
+            new_account_btn.isEnabled = true
+            if (mResults is Results.Success) {
+                showToast("Account Created.")
+                navController.navigate(R.id.action_global_loginFragment)
+            } else super.parseRepoResults(mResults, "")
+            authModel.clearRepoResults(viewLifecycleOwner)
+            endProgressBar()
+        })
     }
 
     override fun onResume() {

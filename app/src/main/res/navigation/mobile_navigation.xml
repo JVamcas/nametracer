@@ -22,8 +22,8 @@
         android:label="Create New Account"
         tools:layout="@layout/fragment_registration" >
         <action
-            android:id="@+id/action_registrationFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_registrationFragment_to_extendedRegistrationFragment"
+            app:destination="@id/extendedRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -59,4 +59,15 @@
         android:id="@+id/updateCaseFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.cases.UpdateCaseFragment"
         android:label="Update Case" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.ProfileFragment"
+        android:label="My Profile"
+        tools:layout="@layout/fragment_profile" />
+    <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
+    <fragment
+        android:id="@+id/extendedRegistrationFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.authentication.ExtendedRegistrationFragment"
+        android:label="Create New Account"
+        tools:layout="@layout/fragment_extended_registration" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
 </navigation>

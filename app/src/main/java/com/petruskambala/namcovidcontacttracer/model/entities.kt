@@ -7,12 +7,12 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 
-enum class UserType {
+enum class AccountType {
     PERSONAL, BUSINESS
 }
 
 abstract class AbstractModel(
-    var id: String="",
+    var id: String = "",
     var photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
@@ -25,8 +25,8 @@ data class Visit(
     var time: String = "",
     var personId: String,
     var placeId: String,
-    var person: User,
-    var place: User
+    var person: Account,
+    var place: Account
 ) : AbstractModel(id = "")
 
 enum class CaseState {
@@ -36,13 +36,13 @@ enum class CaseState {
 data class CovidCase(
     var time: String = DateUtil.today(),
     var personId: String = "",
-    var person: User? = null,
+    var person: Account? = null,
     private var _caseState: CaseState = CaseState.NON_QUARANTINE
 ) : AbstractModel() {
     var caseState: CaseState
         @Bindable get() = _caseState
         set(value) {
-            if(_caseState != value){
+            if (_caseState != value) {
                 _caseState = value
                 notifyPropertyChanged(BR.caseState)
             }
@@ -56,17 +56,26 @@ data class Alert(
 /***
  * Represent app user e.g. a place or person
  */
-data class User(
-    @get: Exclude val user: FirebaseUser? = null
-
+open class Account(
+    @get: Exclude val user: FirebaseUser? = null,
+    private var _name: String = user?.displayName ?: "",
+    private var _cellphone: String? = user?.phoneNumber,
+    private var _email: String? = user?.email,
+    private var _address_1: String = "",
+    private var _town: String = "",
+    var admin: Boolean = false,
+    private var _accountType: AccountType = AccountType.PERSONAL,
+    private var _nationalId: String? = null,
+    private var _gender: Gender? = null,
+    private var _birthDate: String? = null
 ) : AbstractModel(id = user?.uid ?: "") {
-    private var _name: String = user?.displayName ?: ""
-    var userType: UserType = UserType.PERSONAL
-    private var _cellphone: String? = user?.phoneNumber
-    private var _email: String? = user?.email
-    private var _address_1: String = ""
-    private var _town: String = ""
-    var admin: Boolean = false
+
+    var accountType: AccountType
+    @Bindable get() = _accountType
+    set(value) {
+        _accountType = value
+        notifyPropertyChanged(BR.accountType)
+    }
 
     var name: String
         @Bindable get() = _name
@@ -109,7 +118,38 @@ data class User(
             }
         }
 
+    var nationalId: String?
+        @Bindable get() = _nationalId
+        set(value) {
+            if (_nationalId != value) {
+                _nationalId = value
+                notifyPropertyChanged(BR.nationalId)
+            }
+        }
+
+    var gender: Gender?
+        @Bindable get() = _gender
+        set(value) {
+            if (_gender != value) {
+                _gender = value
+                notifyPropertyChanged(BR.gender)
+            }
+        }
+
+    var birthDate: String?
+        @Bindable get() = _birthDate
+        set(value) {
+            if (_birthDate != value) {
+                _birthDate = value
+                notifyPropertyChanged(BR.birthDate)
+            }
+        }
+
     override fun toString(): String {
         return "$address_1 | $town"
     }
+}
+
+enum class Gender {
+    Male, Female
 }

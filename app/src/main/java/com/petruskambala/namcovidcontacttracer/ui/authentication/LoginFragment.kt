@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentLoginBinding
-import com.petruskambala.namcovidcontacttracer.model.UserType
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*

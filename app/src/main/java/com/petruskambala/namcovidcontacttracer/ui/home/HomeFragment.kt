@@ -1,10 +1,8 @@
 package com.petruskambala.namcovidcontacttracer.ui.home
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentHomeBinding
@@ -25,6 +23,7 @@ class HomeFragment : AbstractFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         binding = FragmentHomeBinding.inflate(inflater,container,false)
         return  binding.root
     }
@@ -36,5 +35,23 @@ class HomeFragment : AbstractFragment() {
             if(authState != AuthState.AUTHENTICATED)
                 navController.navigate(R.id.action_homeFragment_to_loginFragment)
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        authModel.currentAccount.observe(viewLifecycleOwner, Observer {
+            it?.apply {
+                if(admin){
+                    super.onCreateOptionsMenu(menu, inflater)
+                    inflater.inflate(R.menu.admin_menu,menu)
+                }
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.cases -> {navController.navigate(R.id.action_homeFragment_to_casesFragment)}
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

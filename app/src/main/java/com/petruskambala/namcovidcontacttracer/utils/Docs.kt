@@ -1,7 +1,7 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
 enum class Docs(private val value: String) {
-    USERS("Users"),
+    ACCOUNT("Accounts"),
     VISITS("Visits"),
     CASES("cases");
 

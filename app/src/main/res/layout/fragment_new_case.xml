@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="40dp"
-            android:visibility="@{covidCase.id == null ? View.VISIBLE:View.GONE}">
+            android:visibility="@{covidCase.person == null ? View.VISIBLE:View.GONE}">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/view"
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toBottomOf="@id/view">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_or_cell"
+                    android:id="@+id/email_cell_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -72,7 +72,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{covidCase.id != null ? View.VISIBLE : View.GONE}">
+            android:visibility="@{covidCase.person != null ? View.VISIBLE : View.GONE}">
 
             <include
                 android:id="@+id/user_avatar"
@@ -108,7 +108,6 @@
                 bind:title="@{`Places Visited`}" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/place_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +116,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_sep2">
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/permissionList"
+                    android:id="@+id/place_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -171,6 +170,15 @@
                 android:textColor="@color/hint_color"
                 android:textStyle="bold"
                 />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="5dp"
+                android:background="@color/app_color"
+                app:layout_constraintTop_toBottomOf="@id/save_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

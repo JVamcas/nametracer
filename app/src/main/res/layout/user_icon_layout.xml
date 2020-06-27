@@ -38,7 +38,7 @@
 
         <variable
             name="model"
-            type="com.petruskambala.namcovidcontacttracer.model.User" />
+            type="com.petruskambala.namcovidcontacttracer.model.Account" />
 
         <variable
             name="cameraVisible"

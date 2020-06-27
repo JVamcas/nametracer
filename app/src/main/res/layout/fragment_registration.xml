@@ -27,9 +27,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:padding="9dp"
-                android:hint="@{user.userType == UserType.PERSONAL?`Full Name`:`Place Name`}"
+                android:hint="@{business.accountType == AccountType.PERSONAL?`Full Name`:`Place Name`}"
                 android:inputType="textAutoComplete"
-                android:text="@={user.name}"
+                android:text="@={business.name}"
                 android:singleLine="true"
                 /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -46,8 +46,8 @@
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@{`Cellphone`}"
-                    android:inputType="textAutoComplete"
-                    android:text="@={user.cellphone}"
+                    android:inputType="number"
+                    android:text="@={business.cellphone}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +65,7 @@
                     android:padding="9dp"
                     android:hint="@{`Email Address`}"
                     android:inputType="textAutoComplete"
-                    android:text="@={user.email}"
+                    android:text="@={business.email}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -83,7 +83,7 @@
                     android:padding="9dp"
                     android:hint="@string/line_1_address"
                     android:inputType="textAutoComplete"
-                    android:text="@={user.address_1}"
+                    android:text="@={business.address_1}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -101,7 +101,7 @@
                     android:padding="9dp"
                     android:hint="@string/town"
                     android:inputType="textAutoComplete"
-                    android:text="@={user.town}"
+                    android:text="@={business.town}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -157,7 +157,7 @@
             </com.google.android.material.textfield.TextInputLayout>
             <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/new_user_btn"
+                android:id="@+id/new_account_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -171,7 +171,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.model.UserType"/>
+        <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
         <variable
             name="password"
             type="String" />
@@ -180,7 +180,7 @@
             name="confirmPassword"
             type="String" />
         <variable
-            name="user"
-            type="com.petruskambala.namcovidcontacttracer.model.User" />
+            name="business"
+            type="com.petruskambala.namcovidcontacttracer.model.Account" />
     </data>
 </layout>

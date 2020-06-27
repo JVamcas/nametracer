@@ -49,7 +49,7 @@ abstract class AbstractFragment : Fragment() {
     protected fun parseRepoResults(mResults: Results, modelName: String) {
         if (mResults is Results.Success) {
             when (mResults.code) {
-                AUTH_SUCCESS -> showToast("Welcome to Stock Manager!")
+                AUTH_SUCCESS -> showToast("Welcome to Covid-19 Contact Tracer!")
                 WRITE_SUCCESS -> showToast("$modelName registered successfully.")
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
