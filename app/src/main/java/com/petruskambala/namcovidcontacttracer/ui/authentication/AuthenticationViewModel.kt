@@ -41,7 +41,7 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
     }
 
     private fun loadUserProfile(userId: String) {
-        mAccountRepo.loadUserProfile(userId) { user, mResult ->
+        mAccountRepo.loadAccountInfo(userId) { user, mResult ->
             if (mResult is Results.Success)
                 _currentUser.postValue(user)
         }
@@ -49,7 +49,7 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
 
     fun authenticate(email: String, password: String) {
         mAccountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
-            repoResults = MutableLiveData(mResults)
+            repoResults = MutableLiveData(Pair(null,mResults))
         }
     }
 
@@ -60,7 +60,7 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
                 _mAuthState.value = AuthState.AUTHENTICATED
 
             } else _mAuthState.value = AuthState.UNAUTHENTICATED
-            repoResults = MutableLiveData(mResults)
+            repoResults = MutableLiveData(Pair(obj,mResults))
         }
     }
 

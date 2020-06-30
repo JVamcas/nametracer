@@ -33,7 +33,7 @@ class AccountRepo {
             }
     }
 
-    fun loadUserProfile(userId: String, callback: (Account?, Results) -> Unit) {
+    fun loadAccountInfo(userId: String, callback: (Account?, Results) -> Unit) {
         DB.collection(Docs.ACCOUNT.name).document(userId).get()
             .addOnSuccessListener { shot: DocumentSnapshot ->
                 val mUser = shot.toObject(Account::class.java)
@@ -75,7 +75,7 @@ class AccountRepo {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     val account =
-                        it.result!!.documents.mapNotNull { it.toObject(Account::class.java) }
+                        it.result!!.documents.mapNotNull { acc -> acc.toObject(Account::class.java) }
                             .first()
                     callback(account, Success(Success.CODE.LOAD_SUCCESS))
                 } else callback(null, Results.Error(it.exception))

@@ -54,13 +54,14 @@ abstract class AbstractFragment : Fragment() {
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
                 DELETE_SUCCESS -> showToast("$modelName deleted successfully.")
-                LOAD_SUCCESS ->{}
+                LOAD_SUCCESS -> showToast("No record found for your search.")
             }
         } else if (mResults is Results.Error) {
             when (mResults.code) {
                 PERMISSION_DENIED -> showToast("Err: Permission denied!")
                 NETWORK -> showToast("Err: No internet connection!")
                 ENTITY_EXISTS -> showToast( "Err: $modelName is already registered!")
+                AUTH -> showToast("Invalid login details.")
                 else -> showToast("Err: Unknown error!")
             }
         }

@@ -80,12 +80,12 @@ open class RegistrationFragment : AbstractFragment() {
         showProgressBar("Creating your account.")
         authModel.createNewUser(account, password)
         new_account_btn.isEnabled = false
-        authModel.repoResults.observe(viewLifecycleOwner, Observer { mResults ->
+        authModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
             new_account_btn.isEnabled = true
-            if (mResults is Results.Success) {
+            if (pair.second is Results.Success) {
                 showToast("Account Created.")
                 navController.navigate(R.id.action_global_loginFragment)
-            } else super.parseRepoResults(mResults, "")
+            } else super.parseRepoResults(pair.second, "")
             authModel.clearRepoResults(viewLifecycleOwner)
             endProgressBar()
         })

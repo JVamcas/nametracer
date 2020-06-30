@@ -2,14 +2,12 @@ package com.petruskambala.namcovidcontacttracer.ui.cases
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
 import com.petruskambala.namcovidcontacttracer.repository.CaseRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Results
 
 class CaseViewModel : AbstractViewModel<CovidCase>() {
-
 
     private val caseRepo = CaseRepo()
 
@@ -21,7 +19,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
             if (result is Results.Success) {
                 _caseList.postValue(_caseList.value?.apply { add(case) })
             }
-            repoResults = MutableLiveData(result)
+            repoResults = MutableLiveData(Pair(null,result))
         }
     }
 }

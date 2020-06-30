@@ -23,10 +23,10 @@ import kotlinx.android.synthetic.main.fragment_new_case.*
 open class NewCaseFragment : AbstractFragment() {
 
     val caseModel: CaseViewModel by activityViewModels()
+    val accountModel: AccountViewModel by activityViewModels()
+
     private lateinit var case: CovidCase
     private lateinit var binding: FragmentNewCaseBinding
-
-    val accountModel: AccountViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +52,11 @@ open class NewCaseFragment : AbstractFragment() {
         save_btn.setOnClickListener {
             save_btn.isEnabled = false
             caseModel.registerNewCase(case)
-            caseModel.repoResults.observe(viewLifecycleOwner, Observer { result ->
+            caseModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
                 save_btn.isEnabled = true
-                if(result is Results.Success){
+                if(pair.second is Results.Success){
                     showToast("Case registered successfully.")
-                }else super.parseRepoResults(result,"")
+                }else super.parseRepoResults(pair.second,"")
                 caseModel.clearRepoResults(viewLifecycleOwner)
             })
         }
@@ -66,5 +66,13 @@ open class NewCaseFragment : AbstractFragment() {
         find_user.isEnabled = false
         //TODO check if is email or ID or cellphone
         accountModel.findPerson()
+        accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+            if (it.second is Results.Success) {
+                case = CovidCase(person = it.first)
+                binding.covidCase = case
+            }
+            else super.parseRepoResults(it.second,"")
+            accountModel.clearRepoResults(viewLifecycleOwner)
+        })
     }
 }

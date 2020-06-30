@@ -35,10 +35,10 @@ enum class CaseState {
 
 data class CovidCase(
     var time: String = DateUtil.today(),
-    var personId: String = "",
     var person: Account? = null,
     private var _caseState: CaseState = CaseState.NON_QUARANTINE
 ) : AbstractModel() {
+    var personId: String = person?.id?:""
     var caseState: CaseState
         @Bindable get() = _caseState
         set(value) {

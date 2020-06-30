@@ -1,6 +1,7 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException
 import java.lang.Exception
 import com.google.firebase.firestore.FirebaseFirestoreException.Code.*
@@ -26,11 +27,13 @@ sealed class Results {
             NETWORK,
             PERMISSION_DENIED,
             UNKNOWN,
-            ENTITY_EXISTS
+            ENTITY_EXISTS,
+            AUTH
         }
 
         val code: CODE = when (error) {
             is EntityExistException -> CODE.ENTITY_EXISTS
+            is FirebaseAuthException -> CODE.AUTH
             is FirebaseNetworkException -> CODE.NETWORK
             is FirebaseFirestoreException -> {
                 when (error.code) {

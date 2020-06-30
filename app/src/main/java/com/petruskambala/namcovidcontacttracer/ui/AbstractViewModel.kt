@@ -12,8 +12,8 @@ abstract class AbstractViewModel<K: AbstractModel> : ViewModel() {
     enum class LoadState {
         LOADED, NO_LOAD, LOADING, LOAD_FAIL
     }
-    private var _repoResults: MutableLiveData<Results> = MutableLiveData<Results>()
-    var repoResults: LiveData<Results> = _repoResults
+    private var _repoResults: MutableLiveData<Pair<K?,Results>> = MutableLiveData()
+    var repoResults: LiveData<Pair<K?,Results>> = _repoResults
         set(value) {
             _repoResults.postValue(value.value)
             field = value

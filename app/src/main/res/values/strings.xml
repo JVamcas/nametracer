@@ -13,12 +13,10 @@
 
     <string name="home_second">Home Second</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="line_1_address">Line 1 Address</string>
     <string name="town">Town</string>
     <string name="btn_register">Create</string>
-    <string name="cell_or_email">Email or Cellphone</string>
+    <string name="cell_or_email">Enter ID or Email or Cellphone Number.</string>
     <string name="user_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="Place">Place</string>
@@ -26,14 +24,13 @@
     <string name="re_password">Confirm password</string>
     <string name="password">Choose a password</string>
     <string name="forgot_password">Forgot password?</string>
-    <string name="Createnewaccount">Create New Account.</string>
+    <string name="create_new_account">Create New Account?</string>
     <string name="my_profile">Profile</string>
     <string name="visits">Visits</string>
     <string name="menu_notifications">Notifications</string>
     <string name="user_signout">Logout</string>
     <string name="save_btn">Register</string>
     <string name="find_user">Find</string>
-    <string name="email_or_cell">Enter email or cellphone</string>
     <string name="find_person">Find Person</string>
     <string name="user_avatar">Avatar</string>
     <string name="quarantine_case">Move case to quarantine?</string>

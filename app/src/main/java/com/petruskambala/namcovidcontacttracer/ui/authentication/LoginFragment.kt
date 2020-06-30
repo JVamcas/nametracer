@@ -46,12 +46,12 @@ class LoginFragment : AbstractFragment() {
             authModel.repoResults.observe(viewLifecycleOwner, Observer {
                 endProgressBar()
                 login_btn.isEnabled = true
-                authModel.clearRepoResults(viewLifecycleOwner)
-                if (it is Results.Success) {
+                if (it.second is Results.Success) {
                     activity?.drawer_layout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     navController.popBackStack(R.id.homeFragment, false)
-                    showToast("Welcome back")
-                } else super.parseRepoResults(it, "")
+                    showToast("Welcome back!")
+                } else super.parseRepoResults(it.second, "")
+                authModel.clearRepoResults(viewLifecycleOwner)
             })
         }
     }

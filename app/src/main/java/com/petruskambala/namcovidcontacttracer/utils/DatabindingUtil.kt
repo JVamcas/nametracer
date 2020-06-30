@@ -33,27 +33,27 @@ class DatabindingUtil {
                         || reqMail && isValidEmail(mail)
         }
 
-        @JvmStatic
-        @BindingAdapter(value = ["android:errorMsg"])
-        fun emptyEdit(mEditText: EditText, errorMsg: String?) {
-            mEditText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence,
-                    i: Int,
-                    i1: Int,
-                    i2: Int
-                ) {
-                }
-
-                override fun onTextChanged(value: CharSequence, i: Int, i1: Int, i2: Int) {
-                    mEditText.setSelection(value.length)
-                    if (TextUtils.isEmpty(value.toString())) mEditText.error =
-                        errorMsg else mEditText.error = null
-                }
-
-                override fun afterTextChanged(editable: Editable) {}
-            })
-        }
+//        @JvmStatic
+//        @BindingAdapter(value = ["errorMsg"])
+//        fun emptyEdit(mEditText: EditText, errorMsg: String?) {
+//            mEditText.addTextChangedListener(object : TextWatcher {
+//                override fun beforeTextChanged(
+//                    charSequence: CharSequence,
+//                    i: Int,
+//                    i1: Int,
+//                    i2: Int
+//                ) {
+//                }
+//
+//                override fun onTextChanged(value: CharSequence, i: Int, i1: Int, i2: Int) {
+//                    mEditText.setSelection(value.length)
+//                    if (TextUtils.isEmpty(value.toString())) mEditText.error =
+//                        errorMsg else mEditText.error = null
+//                }
+//
+//                override fun afterTextChanged(editable: Editable) {}
+//            })
+//        }
 
         /***
          * Load image from provided url, transform it and set it into the imageview
@@ -77,7 +77,7 @@ class DatabindingUtil {
 
         @JvmStatic
         @BindingAdapter(value = ["errorMsg", "reqCellMail"])
-        fun validateMailCell(
+        fun validateIDMailCell(
             mEditText: TextInputEditText,
             errorMsg: String?,
             reqCellMail: Boolean
