@@ -22,7 +22,7 @@ class AccountRepo {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     mAccount.apply { id = AUTH.currentUser!!.uid }
-                    DB.collection(Docs.ACCOUNT.name).document(mAccount.id)
+                    DB.collection(Docs.ACCOUNTS.name).document(mAccount.id)
                         .set(mAccount)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful)
@@ -34,11 +34,11 @@ class AccountRepo {
     }
 
     fun loadAccountInfo(userId: String, callback: (Account?, Results) -> Unit) {
-        DB.collection(Docs.ACCOUNT.name).document(userId).get()
-            .addOnSuccessListener { shot: DocumentSnapshot ->
-                val mUser = shot.toObject(Account::class.java)
+        DB.collection(Docs.ACCOUNTS.name).document(userId).get()
+            .addOnSuccessListener {
+                val account = it.toObject(Account::class.java)
                 val mResults = Success(Success.CODE.LOAD_SUCCESS)
-                callback(mUser, mResults)
+                callback(account, mResults)
             }
             .addOnFailureListener { exception ->
                 callback(null, Results.Error(exception))
@@ -66,11 +66,11 @@ class AccountRepo {
     ) {
 
         val query = if (email.isNullOrEmpty())
-            DB.collection(Docs.ACCOUNT.name).whereEqualTo("email", email)
+            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("email", email)
         else if (phoneNumber.isNullOrEmpty())
-            DB.collection(Docs.ACCOUNT.name).whereEqualTo("cellphone", phoneNumber)
+            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
         else
-            DB.collection(Docs.ACCOUNT.name).whereEqualTo("nationalId", nationalId)
+            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("nationalId", nationalId)
         query.get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {

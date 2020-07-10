@@ -48,19 +48,29 @@ open class RegistrationFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        new_account_btn.text = if(account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
-        binding.business = account
+        new_account_btn.text = if (account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
+        binding.account = account
 
         val adapter = ArrayAdapter(
             requireContext(),
             R.layout.account_select_auto_layout,
-            AccountType.values().map { it.name })
-        account_type.setAdapter(adapter)
+            AccountType.values().map { it.name }).also {
+            account_type.setAdapter(it)
 
-        account_type.setOnItemClickListener { _, _, pos, _ ->
-            account.accountType = if (pos == 0) AccountType.PERSONAL else AccountType.BUSINESS
-            new_account_btn.text = if(pos == 0) "NEXT" else "CREATE"
         }
+
+        account_type.apply {
+            setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.account_select_auto_layout,
+                    AccountType.values().map { it.name })
+            )
+            setOnItemClickListener { _, _, pos, _ ->
+                new_account_btn.text = if (pos == 0) "NEXT" else "CREATE"
+            }
+        }
+
         new_account_btn.setOnClickListener {
             val password = password.text.toString()
             if (account.accountType == AccountType.PERSONAL) {
@@ -77,13 +87,13 @@ open class RegistrationFragment : AbstractFragment() {
     }
 
     fun createNewUser(account: Account, password: String) {
-        showProgressBar("Creating your account.")
+        showProgressBar("Creating your account... Please wait!")
         authModel.createNewUser(account, password)
         new_account_btn.isEnabled = false
         authModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
             new_account_btn.isEnabled = true
             if (pair.second is Results.Success) {
-                showToast("Account Created.")
+                showToast("Account created successfully.")
                 navController.navigate(R.id.action_global_loginFragment)
             } else super.parseRepoResults(pair.second, "")
             authModel.clearRepoResults(viewLifecycleOwner)

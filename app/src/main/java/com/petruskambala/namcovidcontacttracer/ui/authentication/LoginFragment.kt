@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ObservableField
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentLoginBinding
+import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,15 +35,15 @@ class LoginFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val auth = Auth()
+        binding.auth = auth
 
         create_new_account.setOnClickListener {
             navController.navigate(R.id.action_loginFragment_to_registrationFragment)
         }
         login_btn.setOnClickListener {
             login_btn.isEnabled = false
-            val email = email.text.toString()
-            val password = password.text.toString()
-            authModel.authenticate(email, password)
+            authModel.authenticate(auth.idMailCell, auth.password)
             showProgressBar("Authenticating...")
             authModel.repoResults.observe(viewLifecycleOwner, Observer {
                 endProgressBar()

@@ -16,7 +16,7 @@
     <string name="line_1_address">Line 1 Address</string>
     <string name="town">Town</string>
     <string name="btn_register">Create</string>
-    <string name="cell_or_email">Enter ID or Email or Cellphone Number.</string>
+    <string name="cell_or_email">Enter valid ID, Email or Cellphone Number.</string>
     <string name="user_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="Place">Place</string>
@@ -35,7 +35,7 @@
     <string name="user_avatar">Avatar</string>
     <string name="quarantine_case">Move case to quarantine?</string>
     <string name="no_place">No places found.</string>
-    <string name="account_type">Account Type</string>
+    <string name="account_type">Select account type.</string>
     <string name="cases">Cases</string>
     <string name="search">Search</string>
     <string name="no_cases">No cases found. Click on the + icon to register a case.</string>

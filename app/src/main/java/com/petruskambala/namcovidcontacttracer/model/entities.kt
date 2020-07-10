@@ -2,6 +2,7 @@ package com.petruskambala.namcovidcontacttracer.model
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import androidx.databinding.ObservableField
 import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
@@ -38,7 +39,7 @@ data class CovidCase(
     var person: Account? = null,
     private var _caseState: CaseState = CaseState.NON_QUARANTINE
 ) : AbstractModel() {
-    var personId: String = person?.id?:""
+    var personId: String = person?.id ?: ""
     var caseState: CaseState
         @Bindable get() = _caseState
         set(value) {
@@ -64,18 +65,20 @@ open class Account(
     private var _address_1: String = "",
     private var _town: String = "",
     var admin: Boolean = false,
-    private var _accountType: AccountType = AccountType.PERSONAL,
+    private var _accountType: AccountType? = null,
     private var _nationalId: String? = null,
     private var _gender: Gender? = null,
     private var _birthDate: String? = null
 ) : AbstractModel(id = user?.uid ?: "") {
 
-    var accountType: AccountType
-    @Bindable get() = _accountType
-    set(value) {
-        _accountType = value
-        notifyPropertyChanged(BR.accountType)
-    }
+    var accountType: AccountType?
+        @Bindable get() = _accountType
+        set(value) {
+            if (_accountType != value) {
+                _accountType = value
+                notifyPropertyChanged(BR.accountType)
+            }
+        }
 
     var name: String
         @Bindable get() = _name
@@ -150,6 +153,28 @@ open class Account(
     }
 }
 
+data class Auth(
+    private var _idEmailCell: String = "",
+    private var _password: String = ""
+) : AbstractModel() {
+    var idMailCell: String
+        @Bindable get() = _idEmailCell
+        set(value) {
+            if (_idEmailCell != value) {
+                _idEmailCell = value
+                notifyPropertyChanged(BR.idMailCell)
+            }
+        }
+    var password: String
+        @Bindable get() = _password
+        set(value) {
+            if (_password != value) {
+                _password = value
+                notifyPropertyChanged(BR.password)
+            }
+        }
+}
+
 enum class Gender {
-    Male, Female
+    MALE, FEMALE, UNISEX
 }

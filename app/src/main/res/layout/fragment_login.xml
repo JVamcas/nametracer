@@ -36,12 +36,12 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
                         android:hint="@string/cell_or_email"
-                        android:inputType="textCapWords"
+                        android:inputType="textAutoComplete"
                         android:padding="9dp"
-                        app:reqCellMail="@{true}"
+                        idMailCell="@{auth.idMailCell}"
                         app:errorMsg="@{`Invalid ID, Email or Cellphone number.`}"
                         android:singleLine="true"
-                        android:text="@{cellOrEmail}" />
+                        android:text="@={auth.idMailCell}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -59,8 +59,9 @@
                         android:hint="@string/user_password"
                         android:inputType="textPassword"
                         android:padding="9dp"
+                        password="@{auth.password}"
                         android:singleLine="true"
-                        android:text="@={userPassword}" />
+                        android:text="@={auth.password}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
@@ -69,6 +70,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    password="@{auth.password}"
+                    idMailCell="@{auth.idMailCell}"
                     android:text="@string/btn_login"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/password_layout" />
@@ -83,7 +86,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/create_new_account"
                     app:layout_constraintStart_toStartOf="parent"
                     />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,13 +102,8 @@
     </LinearLayout>
 
     <data>
-
         <variable
-            name="cellOrEmail"
-            type="String" />
-
-        <variable
-            name="userPassword"
-            type="String" />
+            name="auth"
+            type="com.petruskambala.namcovidcontacttracer.model.Auth" />
     </data>
 </layout>

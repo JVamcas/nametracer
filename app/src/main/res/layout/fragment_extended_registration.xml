@@ -26,6 +26,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
+                    android:focusable="false"
+                    android:text="@={BindingUtil.fromGender(account.gender)}"
                     android:hint="@string/select_gender"
                     android:inputType="none"
                     android:singleLine="true"
@@ -45,6 +47,7 @@
                     android:padding="9dp"
                     android:hint="@string/input_id"
                     android:inputType="number"
+                    app:userId="@{account.nationalId}"
                     android:text="@={account.nationalId}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
@@ -77,11 +80,15 @@
                 app:layout_constraintTop_toBottomOf="@id/birth_date_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_register"
+                nationalId="@{account.nationalId}"
+                gender="@{account.gender}"
+                birthDate="@{account.birthDate}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
+        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
         <variable
             name="account"
             type="com.petruskambala.namcovidcontacttracer.model.Account" />

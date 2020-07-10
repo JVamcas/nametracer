@@ -39,7 +39,6 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         binding = FragmentExtendedRegistrationBinding.inflate(inflater,container,false)
         binding.account = account
         return binding.root
@@ -47,14 +46,16 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val adapter = ArrayAdapter(requireContext(), R.layout.account_select_auto_layout,
-        Gender.values().map { it.name })
-        gender.setAdapter(adapter)
+        gender.apply {
+            setAdapter(ArrayAdapter(
+                requireContext(), R.layout.account_select_auto_layout,
+                Gender.values().map { it.name }
+            ))
+        }
 
         birth_date.setOnClickListener {
             DatePickerFragment(birth_date).show(childFragmentManager,"Date of Birth")
         }
-
 
         new_account_btn.setOnClickListener {
             createNewUser(account,password)
@@ -62,7 +63,7 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
     }
 
     class DatePickerFragment(
-        val mview: TextInputEditText
+        private val mView: TextInputEditText
     ): DialogFragment(),DatePickerDialog.OnDateSetListener{
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             // Use the current date as the default date in the picker
@@ -74,7 +75,7 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         }
 
         override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-            mview.setText("$year - ${view.month} - $day")
+            mView.setText("$year - ${view.month} - $day")
         }
     }
 }

@@ -22,14 +22,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username"
+                android:id="@+id/account_name"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
                 android:padding="9dp"
-                android:hint="@{business.accountType == AccountType.PERSONAL?`Full Name`:`Place Name`}"
-                android:inputType="textAutoComplete"
-                android:text="@={business.name}"
+                errorMsg="@{`Enter a valid name.`}"
+                editContent="@{account.name}"
+                android:hint="@{account.accountType == AccountType.PERSONAL?`Full Name`:`Place Name`}"
+                android:inputType="text"
+                android:text="@={account.name}"
                 android:singleLine="true"
                 /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -47,8 +49,11 @@
                     android:padding="9dp"
                     android:hint="@{`Cellphone`}"
                     android:inputType="number"
-                    android:text="@={business.cellphone}"
+                    android:text="@={account.cellphone}"
                     android:singleLine="true"
+                    cellphone="@{account.cellphone}"
+                    emailAddress="@{account.email}"
+                    isEmail="@{false}"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -64,9 +69,12 @@
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@{`Email Address`}"
-                    android:inputType="textAutoComplete"
-                    android:text="@={business.email}"
+                    android:inputType="text"
+                    android:text="@={account.email}"
                     android:singleLine="true"
+                    cellphone="@{account.cellphone}"
+                    emailAddress="@{account.email}"
+                    isEmail="@{true}"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -81,9 +89,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
+                    editContent="@{account.address_1}"
+                    errorMsg="@{`Enter a valid address.`}"
                     android:hint="@string/line_1_address"
-                    android:inputType="textAutoComplete"
-                    android:text="@={business.address_1}"
+                    android:inputType="text"
+                    android:text="@={account.address_1}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -100,8 +110,10 @@
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@string/town"
-                    android:inputType="textAutoComplete"
-                    android:text="@={business.town}"
+                    editContent="@{account.town}"
+                    errorMsg="@{`Enter a valid town name.`}"
+                    android:inputType="text"
+                    android:text="@={account.town}"
                     android:singleLine="true"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -119,8 +131,8 @@
                     android:padding="9dp"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:text="@{password}"
                     android:singleLine="true"
+                    password="@{password.text.toString()}"
                     /></com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -130,16 +142,18 @@
                 app:layout_constraintTop_toBottomOf="@id/password_layout"
                 >
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/re_password"
+                    android:id="@+id/confirm_password"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@string/re_password"
                     android:inputType="textPassword"
-                    android:text="@={confirmPassword}"
+                    password="@{password.text.toString()}"
+                    confirmPassword="@{confirmPassword.text.toString()}"
                     android:singleLine="true"
-                    /></com.google.android.material.textfield.TextInputLayout>
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,7 +166,10 @@
                     android:id="@+id/account_type"
                     android:inputType="none"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:focusable="false"
+                    android:text="@={BindingUtil.fromAccountType(account.accountType)}"
+                    android:layout_height="wrap_content"
+                    tools:ignore="LabelFor" />
 
             </com.google.android.material.textfield.TextInputLayout>
             <!-- Login Button -->
@@ -166,21 +183,23 @@
                 app:layout_constraintTop_toBottomOf="@id/account_type_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/btn_register"
+                accountName="@{account.name}"
+                accountType="@{account.accountType.name()}"
+                town="@{account.town}"
+                address="@{account.address_1}"
+                emailAddress="@{account.email}"
+                cellphone="@{account.cellphone}"
+                password="@{password.text.toString()}"
+                confirmPassword="@{confirmPassword.text.toString()}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
+        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
         <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
         <variable
-            name="password"
-            type="String" />
-
-        <variable
-            name="confirmPassword"
-            type="String" />
-        <variable
-            name="business"
+            name="account"
             type="com.petruskambala.namcovidcontacttracer.model.Account" />
     </data>
 </layout>

@@ -30,7 +30,7 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
             //if auth.currentUser is not null
             auth.currentUser?.let {
                 loadUserProfile(it.uid)
-                _currentUser.postValue(Account(it))
+                _currentUser.postValue(Account(user = it))
                 _mAuthState.postValue(AuthState.AUTHENTICATED)
                 return@AuthStateListener
             }

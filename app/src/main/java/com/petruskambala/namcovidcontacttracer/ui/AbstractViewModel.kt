@@ -15,8 +15,8 @@ abstract class AbstractViewModel<K: AbstractModel> : ViewModel() {
     private var _repoResults: MutableLiveData<Pair<K?,Results>> = MutableLiveData()
     var repoResults: LiveData<Pair<K?,Results>> = _repoResults
         set(value) {
-            _repoResults.postValue(value.value)
             field = value
+            _repoResults.postValue(value.value)
         }
     var modelLoadState = MutableLiveData<LoadState>()
     var modelLoad = MutableLiveData<K>()
