@@ -46,14 +46,16 @@ class LoginFragment : AbstractFragment() {
             authModel.authenticate(auth.idMailCell, auth.password)
             showProgressBar("Authenticating...")
             authModel.repoResults.observe(viewLifecycleOwner, Observer {
-                endProgressBar()
-                login_btn.isEnabled = true
-                if (it.second is Results.Success) {
-                    activity?.drawer_layout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                    navController.popBackStack(R.id.homeFragment, false)
-                    showToast("Welcome back!")
-                } else super.parseRepoResults(it.second, "")
-                authModel.clearRepoResults(viewLifecycleOwner)
+                it?.let {
+                    endProgressBar()
+                    login_btn.isEnabled = true
+                    if (it.second is Results.Success) {
+                        activity?.drawer_layout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                        navController.popBackStack(R.id.homeFragment, false)
+                        showToast("Welcome back!")
+                    } else super.parseRepoResults(it.second, "")
+                    authModel.clearRepoResults(viewLifecycleOwner)
+                }
             })
         }
     }

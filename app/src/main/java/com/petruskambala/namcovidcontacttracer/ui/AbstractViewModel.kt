@@ -12,8 +12,8 @@ abstract class AbstractViewModel<K: AbstractModel> : ViewModel() {
     enum class LoadState {
         LOADED, NO_LOAD, LOADING, LOAD_FAIL
     }
-    private var _repoResults: MutableLiveData<Pair<K?,Results>> = MutableLiveData()
-    var repoResults: LiveData<Pair<K?,Results>> = _repoResults
+    protected var _repoResults: MutableLiveData<Pair<K?,Results>?> = MutableLiveData()
+    var repoResults: LiveData<Pair<K?,Results>?> = _repoResults
         set(value) {
             field = value
             _repoResults.postValue(value.value)
@@ -32,6 +32,6 @@ abstract class AbstractViewModel<K: AbstractModel> : ViewModel() {
 
     open fun clearRepoResults(owner: LifecycleOwner) {
         repoResults.removeObservers(owner)
-        _repoResults = MutableLiveData()
+        _repoResults.postValue(null)
     }
 }

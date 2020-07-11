@@ -53,11 +53,13 @@ open class NewCaseFragment : AbstractFragment() {
             save_btn.isEnabled = false
             caseModel.registerNewCase(case)
             caseModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
-                save_btn.isEnabled = true
-                if(pair.second is Results.Success){
-                    showToast("Case registered successfully.")
-                }else super.parseRepoResults(pair.second,"")
-                caseModel.clearRepoResults(viewLifecycleOwner)
+                pair?.let {
+                    save_btn.isEnabled = true
+                    if (pair.second is Results.Success) {
+                        showToast("Case registered successfully.")
+                    } else super.parseRepoResults(pair.second, "")
+                    caseModel.clearRepoResults(viewLifecycleOwner)
+                }
             })
         }
     }
@@ -67,12 +69,13 @@ open class NewCaseFragment : AbstractFragment() {
         //TODO check if is email or ID or cellphone
         accountModel.findPerson()
         accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-            if (it.second is Results.Success) {
-                case = CovidCase(person = it.first)
-                binding.covidCase = case
+            it?.let {
+                if (it.second is Results.Success) {
+                    case = CovidCase(person = it.first)
+                    binding.covidCase = case
+                } else super.parseRepoResults(it.second, "")
+                accountModel.clearRepoResults(viewLifecycleOwner)
             }
-            else super.parseRepoResults(it.second,"")
-            accountModel.clearRepoResults(viewLifecycleOwner)
         })
     }
 }

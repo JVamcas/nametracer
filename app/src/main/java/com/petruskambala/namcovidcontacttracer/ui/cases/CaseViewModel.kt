@@ -19,7 +19,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
             if (result is Results.Success) {
                 _caseList.postValue(_caseList.value?.apply { add(case) })
             }
-            repoResults = MutableLiveData(Pair(null,result))
+            _repoResults.postValue(Pair(null,result))
         }
     }
 }

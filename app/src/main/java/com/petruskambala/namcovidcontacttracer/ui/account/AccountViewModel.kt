@@ -19,7 +19,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
         accountRepo.findPerson(email,phoneNumber,nationalId){account, results ->
             if(results is Results.Success)
                 _account.postValue(account)
-            repoResults = MutableLiveData(Pair(account,results))
+            _repoResults.postValue(Pair(account,results))
         }
     }
 }

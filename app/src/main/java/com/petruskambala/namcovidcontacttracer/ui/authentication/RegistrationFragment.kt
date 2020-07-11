@@ -91,13 +91,15 @@ open class RegistrationFragment : AbstractFragment() {
         authModel.createNewUser(account, password)
         new_account_btn.isEnabled = false
         authModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
-            new_account_btn.isEnabled = true
-            if (pair.second is Results.Success) {
-                showToast("Account created successfully.")
-                navController.navigate(R.id.action_global_loginFragment)
-            } else super.parseRepoResults(pair.second, "")
-            authModel.clearRepoResults(viewLifecycleOwner)
-            endProgressBar()
+            pair?.let {
+                new_account_btn.isEnabled = true
+                if (pair.second is Results.Success) {
+                    showToast("Account created successfully.")
+                    navController.navigate(R.id.action_global_loginFragment)
+                } else super.parseRepoResults(pair.second, "")
+                authModel.clearRepoResults(viewLifecycleOwner)
+                endProgressBar()
+            }
         })
     }
 
