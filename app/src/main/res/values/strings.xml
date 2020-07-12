@@ -25,7 +25,7 @@
     <string name="password">Choose a password</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="create_new_account">Create New Account?</string>
-    <string name="my_profile">Profile</string>
+    <string name="my_profile">My Profile</string>
     <string name="visits">Place Visited</string>
     <string name="menu_notifications">Notifications</string>
     <string name="user_signout">Logout</string>
@@ -54,4 +54,7 @@
     <string name="new_visit">New Visit</string>
     <string name="visitor_credential">Visitor\'s ID, email or cellphone number</string>
     <string name="visitor_temperature">Visitor\'s temperature</string>
+    <string name="about_developer">About Developer</string>
+    <string name="info">Info</string>
+    <string name="share_app">Share App</string>
 </resources>

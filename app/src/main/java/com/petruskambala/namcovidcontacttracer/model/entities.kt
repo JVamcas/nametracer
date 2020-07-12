@@ -17,7 +17,7 @@ abstract class AbstractModel(
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
-    class NoAccountException: Exception()
+    class NoAccountException : Exception()
 }
 
 /***
@@ -25,10 +25,11 @@ abstract class AbstractModel(
  */
 data class Visit(
     var time: String = "",
-    var person: Account? = null,
+    var person: Person? = null,
     var place: Account? = null,
-    var personId: String = person?.id?:"",
-    var placeId: String = place?.id?:"",
+    var personId: String = person?.id ?: "",
+    var placeId: String = place?.id ?: "",
+    @get:Exclude override var photoUrl: String? = null,
     private var _temperature: String? = null
 ) : AbstractModel(id = "") {
     var temperature: String?
@@ -48,23 +49,19 @@ enum class CaseState {
 
 data class CovidCase(
     var time: String = DateUtil.today(),
-    private var person: Account? = null,
+    private var person: Person? = null,
     private var _inQuarantine: Boolean = false,
     private var _caseState: CaseState? = null,
     override var id: String = person?.id ?: "",
-    override var photoUrl: String? = person?.photoUrl,
+    @get: Exclude override var photoUrl: String? = null,
     @get:Exclude override var accountType: AccountType? = null,
     @get:Exclude override var admin: Boolean = false
-) : Account(
-    _email = person?.email,
-    _cellphone = person?.cellphone,
-    _name = person?.name ?: "",
-    _nationalId = person?.nationalId,
-    _address_1 = person?.address_1 ?: "",
-    _birthDate = person?.birthDate,
+) : Person(
+    account = person,
     _gender = person?.gender,
-    _town = person?.town ?: "",
-    _placeVisted = person?.placeVisited ?: 0
+    _nationalId = person?.nationalId ?: "",
+    _placeVisited = person?.placeVisited ?: 0,
+    _birthDate = person?.birthDate ?: ""
 ) {
     var caseState: CaseState?
         @Bindable get() = _caseState
@@ -101,15 +98,10 @@ open class Account(
     private var _cellphone: String? = user?.phoneNumber,
     private var _email: String? = user?.email,
     private var _address_1: String = "",
-    private var _town: String = "",
+    private var _town: String? = "",
     open var admin: Boolean = false,
-    private var _accountType: AccountType? = null,
-    private var _nationalId: String? = null,
-    private var _gender: Gender? = null,
-    private var _birthDate: String? = null,
-    private var _placeVisted: Int = 0
+    private var _accountType: AccountType? = null
 ) : AbstractModel(id = user?.uid ?: "") {
-
     open var accountType: AccountType?
         @Bindable get() = _accountType
         set(value) {
@@ -117,13 +109,6 @@ open class Account(
                 _accountType = value
                 notifyPropertyChanged(BR.accountType)
             }
-        }
-
-    var placeVisited: Int
-        @Bindable get() = _placeVisted
-        set(value) {
-            _placeVisted = value
-            notifyPropertyChanged(BR.placeVisited)
         }
 
     var name: String
@@ -150,7 +135,7 @@ open class Account(
                 notifyPropertyChanged(BR.email)
             }
         }
-    var town: String
+    var town: String?
         @Bindable get() = _town
         set(value) {
             if (_town != value) {
@@ -167,12 +152,31 @@ open class Account(
             }
         }
 
-    var nationalId: String?
-        @Bindable get() = _nationalId
+    override fun toString(): String {
+        return "$address_1 | $town"
+    }
+}
+
+open class Person(
+    account: Account? = null,
+    private var _birthDate: String = "",
+    private var _nationalId: String = "",
+    private var _gender: Gender? = null,
+    private var _placeVisited: Int = 0
+) : Account(
+    _name = account?.name ?: "",
+    _town = account?.town,
+    _address_1 = account?.address_1 ?: "",
+    _cellphone = account?.cellphone,
+    _email = account?.email,
+    _accountType = account?.accountType
+) {
+    var birthDate: String
+        @Bindable get() = _birthDate
         set(value) {
-            if (_nationalId != value) {
-                _nationalId = value
-                notifyPropertyChanged(BR.nationalId)
+            if (_birthDate != value) {
+                _birthDate = value
+                notifyPropertyChanged(BR.birthDate)
             }
         }
 
@@ -184,14 +188,17 @@ open class Account(
                 notifyPropertyChanged(BR.gender)
             }
         }
-
-    var birthDate: String?
-        @Bindable get() = _birthDate
+    var placeVisited: Int
+        @Bindable get() = _placeVisited
         set(value) {
-            if (_birthDate != value) {
-                _birthDate = value
-                notifyPropertyChanged(BR.birthDate)
-            }
+            _placeVisited = value
+            notifyPropertyChanged(BR.placeVisited)
+        }
+    var nationalId: String
+        @Bindable get() = _nationalId
+        set(value) {
+            _nationalId = value
+            notifyPropertyChanged(BR.nationalId)
         }
 
     override fun toString(): String {

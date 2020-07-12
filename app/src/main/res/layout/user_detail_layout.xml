@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{`Date of birth: `+user.birthDate?? `Unkown`}"
+            android:visibility="@{TextUtils.isEmpty(user.birthDate)? View.GONE:View.VISIBLE}"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +66,10 @@
             app:layout_constraintTop_toBottomOf="@id/email" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
         <variable
             name="user"
-            type="com.petruskambala.namcovidcontacttracer.model.Account" />
+            type="com.petruskambala.namcovidcontacttracer.model.Person" />
     </data>
 </layout>

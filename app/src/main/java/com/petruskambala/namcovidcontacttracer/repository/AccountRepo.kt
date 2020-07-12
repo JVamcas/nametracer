@@ -8,6 +8,7 @@ import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.utils.Docs
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
@@ -65,7 +66,7 @@ class AccountRepo {
         email: String? = null,
         phoneNumber: String? = null,
         nationalId: String? = null,
-        callback: (Account?, Results) -> Unit
+        callback: (Person?, Results) -> Unit
     ) {
 
         val query = if (!email.isNullOrEmpty())
@@ -81,7 +82,7 @@ class AccountRepo {
                 if (it.isSuccessful) {
                     val docs = it.result!!.documents
                     val account =
-                        if (docs.isEmpty()) null else docs.mapNotNull { acc -> acc.toObject(Account::class.java) }
+                        if (docs.isEmpty()) null else docs.mapNotNull { acc -> acc.toObject(Person::class.java) }
                             .first()
                     val results =
                         if (account == null) Results.Error(NoEntityException()) else Success(Success.CODE.LOAD_SUCCESS)

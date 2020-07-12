@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/visitor_temperature"
-                    android:inputType="textAutoComplete"
+                    android:inputType="numberDecimal"
                     android:padding="9dp"
                     android:text="@={visit.temperature}"
                     android:textAlignment="center"

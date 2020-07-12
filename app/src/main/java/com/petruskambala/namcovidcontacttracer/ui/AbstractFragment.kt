@@ -33,15 +33,19 @@ abstract class AbstractFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        authModel.authState.observe(viewLifecycleOwner, Observer { authState->
+        authModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             val currentDest = navController.currentDestination?.id
-            if(authState != AuthState.AUTHENTICATED && currentDest != R.id.loginFragment)
-                navController.navigate(R.id.action_homeFragment_to_loginFragment)
+            if (authState != AuthState.AUTHENTICATED) {
+                if (currentDest == R.id.loginFragment || currentDest == R.id.registrationFragment)
+                    return@Observer
+                navController.navigate(R.id.action_global_loginFragment)
+            }
         })
     }
+
     protected open fun showProgressBar(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-         mProgressbarBinding = ProgressbarBinding.inflate(layoutInflater, null, false)
+        mProgressbarBinding = ProgressbarBinding.inflate(layoutInflater, null, false)
         mProgressbarBinding.progressMsg.text = message
         builder.setView(mProgressbarBinding.root)
 
@@ -50,7 +54,8 @@ abstract class AbstractFragment : Fragment() {
             show()
         }
     }
-    protected fun updateProgressBarMsg(msg: String){
+
+    protected fun updateProgressBarMsg(msg: String) {
         mProgressbarBinding.progressMsg.text = msg
     }
 
@@ -76,7 +81,7 @@ abstract class AbstractFragment : Fragment() {
             when (mResults.code) {
                 PERMISSION_DENIED -> showToast("Err: Permission denied!")
                 NETWORK -> showToast("Err: No internet connection!")
-                ENTITY_EXISTS -> showToast( "Err: $modelName is already registered!")
+                ENTITY_EXISTS -> showToast("Err: $modelName is already registered!")
                 AUTH -> showToast("Err: Invalid login details.")
                 NO_RECORD -> showToast("Err: No record found for your search.")
                 NO_ACCOUNT -> showToast("Err: Visitor has no account.")

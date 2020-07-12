@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/nav_my_profile"
             android:icon="@drawable/ic_account"
@@ -11,4 +11,16 @@
             android:icon="@drawable/ic_notifications"
             android:title="@string/menu_notifications" />
     </group>
+    <item android:title="@string/info">
+        <menu >
+            <item android:title="@string/share_app"
+                android:id="@+id/share_app"
+                android:icon="@drawable/ic_share"
+                />
+            <item android:title="@string/about_developer"
+                android:id="@+id/about_developer"
+                android:icon="@drawable/ic_account"
+                />
+        </menu>
+    </item>
 </menu>

@@ -15,6 +15,7 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentExtendedRegistrationBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.Gender
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.fragment_extended_registration.*
@@ -27,11 +28,13 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
 
     private lateinit var binding: FragmentExtendedRegistrationBinding
     private lateinit var password: String
+    private lateinit var person: Person
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             password = getString(Const.PASSWORD)!!
-            account = ParseUtil.fromJson(getString(Const.ACCOUNT),Account::class.java)
+            val account  = ParseUtil.fromJson(getString(Const.ACCOUNT),Account::class.java)
+            person = Person(account = account)
         }
     }
     override fun onCreateView(
@@ -40,7 +43,7 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentExtendedRegistrationBinding.inflate(inflater,container,false)
-        binding.account = account
+        binding.person = person
         return binding.root
     }
 
@@ -58,7 +61,7 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         }
 
         new_account_btn.setOnClickListener {
-            createNewUser(account,password)
+            createNewUser(person,password)
         }
     }
 

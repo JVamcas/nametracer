@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_registration.*
  */
 open class RegistrationFragment : AbstractFragment() {
     private lateinit var binding: FragmentRegistrationBinding
-    lateinit var account: Account
+    private lateinit var account: Account
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

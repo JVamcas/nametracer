@@ -13,6 +13,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentNewCaseBindin
 import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.utils.*
@@ -102,11 +103,11 @@ open class NewCaseFragment : AbstractFragment() {
         showProgressBar("Loading info...")
         accountModel.findPerson(email = email, phoneNumber = cell, nationalId = nationalID)
         accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.apply {
                 endProgressBar()
                 find_user.isEnabled = true
-                if (it.second is Results.Success) {
-                    case = CovidCase(person = it.first)
+                if (second is Results.Success) {
+                    case = CovidCase(person = first as Person)
                     requireActivity().toolbar.title = "Record New Case"
                     binding.person = it.first
                     binding.covidCase = case

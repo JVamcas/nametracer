@@ -16,7 +16,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             bind:cameraVisible="@{false}"
-            bind:model="@{account}"
+            bind:model="@{person}"
             bind:size="@{300}" />
 
         <include
@@ -27,14 +27,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/user_avatar"
-            bind:user="@{account}" />
+            bind:user="@{person}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
         <import type="android.view.View"/>
 
         <variable
-            name="account"
-            type="com.petruskambala.namcovidcontacttracer.model.Account" />
+            name="person"
+            type="com.petruskambala.namcovidcontacttracer.model.Person" />
     </data>
 </layout>

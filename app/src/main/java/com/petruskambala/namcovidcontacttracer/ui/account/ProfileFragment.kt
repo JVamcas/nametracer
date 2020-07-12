@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentProfileBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 
@@ -32,7 +33,7 @@ class ProfileFragment : AbstractFragment() {
         // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(inflater,container,false)
         authModel.currentAccount.observe(viewLifecycleOwner, Observer {
-            binding.account = account
+            binding.person = Person(account = account)
         })
         return binding.root
     }

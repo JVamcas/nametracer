@@ -15,4 +15,16 @@
             android:icon="@drawable/ic_notifications"
             android:title="@string/menu_notifications" />
     </group>
+    <item android:title="@string/info">
+        <menu >
+            <item android:title="@string/share_app"
+                android:id="@+id/share_app"
+                android:icon="@drawable/ic_share"
+                />
+            <item android:title="@string/about_developer"
+                android:id="@+id/about_developer"
+                android:icon="@drawable/ic_account"
+                />
+        </menu>
+    </item>
 </menu>

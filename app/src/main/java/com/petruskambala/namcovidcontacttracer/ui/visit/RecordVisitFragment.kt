@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentRecordVisitBinding
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
@@ -56,7 +57,7 @@ class RecordVisitFragment : AbstractFragment() {
 
                         accountModel.clearRepoResults(viewLifecycleOwner)
                         val visit = Visit(
-                            person = first,
+                            person = first as Person,
                             place = authModel.currentAccount.value
                         ).apply {
                             time = DateUtil.today()
