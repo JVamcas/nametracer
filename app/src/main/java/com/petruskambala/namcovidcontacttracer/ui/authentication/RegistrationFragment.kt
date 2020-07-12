@@ -51,14 +51,6 @@ open class RegistrationFragment : AbstractFragment() {
         new_account_btn.text = if (account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
         binding.account = account
 
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.account_select_auto_layout,
-            AccountType.values().map { it.name }).also {
-            account_type.setAdapter(it)
-
-        }
-
         account_type.apply {
             setAdapter(
                 ArrayAdapter(

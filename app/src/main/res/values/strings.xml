@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Covid-19 Contact Tracer</string>
+    <string name="app_name">Nam Contact Tracer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -16,7 +16,7 @@
     <string name="line_1_address">Line 1 Address</string>
     <string name="town">Town</string>
     <string name="btn_register">Create</string>
-    <string name="cell_or_email">Enter valid ID, Email or Cellphone Number.</string>
+    <string name="cell_or_email">ID, Email or Cellphone Number.</string>
     <string name="user_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="Place">Place</string>
@@ -26,7 +26,7 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="create_new_account">Create New Account?</string>
     <string name="my_profile">Profile</string>
-    <string name="visits">Visits</string>
+    <string name="visits">Place Visited</string>
     <string name="menu_notifications">Notifications</string>
     <string name="user_signout">Logout</string>
     <string name="save_btn">Register</string>
@@ -36,10 +36,16 @@
     <string name="quarantine_case">Move case to quarantine?</string>
     <string name="no_place">No places found.</string>
     <string name="account_type">Select account type.</string>
-    <string name="cases">Cases</string>
+    <string name="cases">Recorded Cases</string>
     <string name="search">Search</string>
     <string name="no_cases">No cases found. Click on the + icon to register a case.</string>
     <string name="select_gender">Select your gender</string>
     <string name="input_id">Enter your ID number</string>
     <string name="birth_date">Select your date of birth.</string>
+    <string name="view">view</string>
+    <string name="select_case_state">Select case status</string>
+    <string name="export_to_excel">Export To Excel</string>
+    <string name="find_case">Find Case</string>
+    <string name="record_btn">Record</string>
+    <string name="update_btn_txt">UPDATE</string>
 </resources>

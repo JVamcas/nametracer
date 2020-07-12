@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException
 import java.lang.Exception
 import com.google.firebase.firestore.FirebaseFirestoreException.Code.*
+import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.EntityExistException
 
 /**
@@ -18,7 +19,7 @@ sealed class Results {
             LOAD_SUCCESS,
             AUTH_SUCCESS,
             LOGOUT_SUCCESS,
-            DELETE_SUCCESS
+            DELETE_SUCCESS,
         }
     }
 
@@ -28,14 +29,16 @@ sealed class Results {
             PERMISSION_DENIED,
             UNKNOWN,
             ENTITY_EXISTS,
-            AUTH
+            AUTH,
+            NO_RECORD
         }
 
         val code: CODE = when (error) {
             is EntityExistException -> CODE.ENTITY_EXISTS
             is FirebaseAuthException -> CODE.AUTH
             is FirebaseNetworkException -> CODE.NETWORK
-            is FirebaseFirestoreException -> {
+            is AbstractModel.NoEntityException -> CODE.NO_RECORD
+             is FirebaseFirestoreException -> {
                 when (error.code) {
                     PERMISSION_DENIED -> CODE.PERMISSION_DENIED
                     ALREADY_EXISTS -> CODE.ENTITY_EXISTS

@@ -13,9 +13,11 @@ import androidx.databinding.InverseMethod
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidEmail
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidMobile
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
 
 class BindingUtil {
     companion object {
@@ -96,7 +98,10 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if ( isValidMobile(idMailCell) || isValidEmail(idMailCell) || idMailCell?.length?:0 == 11)
+                if (isValidMobile(idMailCell) || isValidEmail(idMailCell) || isValidNationalID(
+                        idMailCell
+                    )
+                )
                     null else errorMsg
         }
 
@@ -195,11 +200,37 @@ class BindingUtil {
         }
 
         @JvmStatic
-        @BindingAdapter(value = ["password","idMailCell"],requireAll = false)
-        fun isValidLogin(mButton: MaterialButton,password: String?, idMailCell: String?) {
-            mButton.isEnabled =  ( password?.length?:0 >= 8 && isValidEmail(idMailCell) || isValidMobile(
-                idMailCell
-            ) || idMailCell?.length?:0 == 11)
+        @BindingAdapter(value = ["password", "idMailCell"], requireAll = false)
+        fun isValidLogin(mButton: MaterialButton, password: String?, idMailCell: String?) {
+            mButton.isEnabled =
+                (password?.length ?: 0 >= 8 && isValidEmail(idMailCell) || isValidMobile(
+                    idMailCell
+                ) || idMailCell?.length ?: 0 == 11)
+        }
+
+        @InverseMethod("toCaseState")
+        @JvmStatic
+        fun fromCaseState(state: CaseState?): String? {
+            return state?.name
+        }
+
+        @JvmStatic
+        fun toCaseState(type: String): CaseState? {
+            return if (type !in CaseState.values()
+                    .map { it.name }
+            ) null else CaseState.valueOf(type)
+        }
+    }
+
+
+    abstract class TextChangeLister : TextWatcher {
+        override fun afterTextChanged(p0: Editable?) {
+        }
+
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         }
     }
 }

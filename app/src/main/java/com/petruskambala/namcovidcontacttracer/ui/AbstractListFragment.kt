@@ -1,6 +1,7 @@
 package com.petruskambala.namcovidcontacttracer.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ abstract class AbstractListFragment<K: AbstractModel, T: RecyclerView.ViewHolder
         super.onCreate(savedInstanceState)
         initAdapter()
     }
+
     fun handleRecycleView(recyclerView: RecyclerView, mListener: AbstractAdapter.ModelViewClickListener<K>) {
 
         recyclerView.adapter = mAdapter

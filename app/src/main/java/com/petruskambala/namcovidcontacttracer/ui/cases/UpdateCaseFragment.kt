@@ -6,18 +6,63 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
+import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.CovidCase
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
+import com.petruskambala.namcovidcontacttracer.utils.Results
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.fragment_new_case.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class UpdateCaseFragment : NewCaseFragment() {
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        record_btn.text = getString(R.string.update_btn_txt)
 
+        find_user.setOnClickListener {
+            find_user.isEnabled = false
+            val idEmailCell = binding.auth!!.idMailCell
+            val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
+            val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
+            val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
+
+            showProgressBar("Loading info...")
+            caseModel.findCase(email = email, cellphone = cell, nationalId = nationalID)
+
+            caseModel.repoResults.observe(viewLifecycleOwner, Observer {
+                it?.apply {
+                    endProgressBar()
+                    find_user.isEnabled = true
+                    if (second is Results.Success) {
+                        binding.covidCase = first
+                        binding.person = Account()
+                        requireActivity().toolbar.title = "Update Case Status"
+                    } else
+                        super.parseRepoResults(it.second, "")
+                    caseModel.clearRepoResults(viewLifecycleOwner)
+                }
+            })
+        }
+
+        record_btn.setOnClickListener {
+            record_btn.isEnabled = false
+            showProgressBar("Updating case status...")
+            caseModel.updateCase(binding.covidCase!!)
+            caseModel.repoResults.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    endProgressBar()
+                    if (it.second is Results.Success)
+                        navController.popBackStack()
+                    super.parseRepoResults(it.second, "Case")
+                    caseModel.clearRepoResults(viewLifecycleOwner)
+                }
+            })
+        }
     }
-
 }

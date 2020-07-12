@@ -22,4 +22,20 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
             _repoResults.postValue(Pair(null,result))
         }
     }
+    fun loadCases(){
+        caseRepo.loadCases { cases, results ->
+
+        }
+    }
+    fun findCase(email:String?= null,cellphone: String? = null,nationalId: String? = null){
+        caseRepo.findCase(email,cellphone,nationalId){case, results ->
+            _repoResults.postValue(Pair(case,results))
+        }
+    }
+
+    fun updateCase(case: CovidCase){
+        caseRepo.updateCase(case){
+            _repoResults.postValue(Pair(null,it))
+        }
+    }
 }

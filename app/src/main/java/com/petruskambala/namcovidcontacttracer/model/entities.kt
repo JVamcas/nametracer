@@ -2,7 +2,6 @@ package com.petruskambala.namcovidcontacttracer.model
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import androidx.databinding.ObservableField
 import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
@@ -13,10 +12,11 @@ enum class AccountType {
 }
 
 abstract class AbstractModel(
-    var id: String = "",
-    var photoUrl: String? = null
+    open var id: String = "",
+    open var photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
+    class NoEntityException : Exception()
 }
 
 /***
@@ -31,16 +31,30 @@ data class Visit(
 ) : AbstractModel(id = "")
 
 enum class CaseState {
-    NON_QUARANTINE, QUARANTINE, ACTIVE, RECOVERED, DEAD
+    ACTIVE, RECOVERED, DEAD
 }
 
 data class CovidCase(
     var time: String = DateUtil.today(),
-    var person: Account? = null,
-    private var _caseState: CaseState = CaseState.NON_QUARANTINE
-) : AbstractModel() {
-    var personId: String = person?.id ?: ""
-    var caseState: CaseState
+    private var person: Account? = null,
+    private var _inQuarantine: Boolean = false,
+    private var _caseState: CaseState? = null,
+    override var id: String = person?.id?:"",
+    override var photoUrl: String? = person?.photoUrl,
+    @get:Exclude override var accountType: AccountType? = null,
+    @get:Exclude override var admin: Boolean = false
+) : Account(
+    _email =  person?.email,
+    _cellphone = person?.cellphone,
+    _name = person?.name?:"",
+    _nationalId = person?.nationalId,
+    _address_1 = person?.address_1?:"",
+    _birthDate = person?.birthDate,
+    _gender = person?.gender,
+    _town = person?.town?:"",
+    _placeVisted = person?.placeVisited?:0
+) {
+    var caseState: CaseState?
         @Bindable get() = _caseState
         set(value) {
             if (_caseState != value) {
@@ -48,6 +62,17 @@ data class CovidCase(
                 notifyPropertyChanged(BR.caseState)
             }
         }
+    var inQuarantine: Boolean
+        @Bindable get() = _inQuarantine
+        set(value) {
+            if (_inQuarantine != value) {
+                _inQuarantine = value
+                notifyPropertyChanged(BR.inQuarantine)
+            }
+        }
+    override fun toString(): String {
+        return "$address_1 | $town"
+    }
 }
 
 data class Alert(
@@ -64,20 +89,28 @@ open class Account(
     private var _email: String? = user?.email,
     private var _address_1: String = "",
     private var _town: String = "",
-    var admin: Boolean = false,
+    open var admin: Boolean = false,
     private var _accountType: AccountType? = null,
     private var _nationalId: String? = null,
     private var _gender: Gender? = null,
-    private var _birthDate: String? = null
+    private var _birthDate: String? = null,
+    private var _placeVisted: Int = 0
 ) : AbstractModel(id = user?.uid ?: "") {
 
-    var accountType: AccountType?
+    open var accountType: AccountType?
         @Bindable get() = _accountType
         set(value) {
             if (_accountType != value) {
                 _accountType = value
                 notifyPropertyChanged(BR.accountType)
             }
+        }
+
+    var placeVisited: Int
+        @Bindable get() = _placeVisted
+        set(value) {
+            _placeVisted = value
+            notifyPropertyChanged(BR.placeVisited)
         }
 
     var name: String

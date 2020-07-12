@@ -4,7 +4,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.petruskambala.namcovidcontacttracer.model.AbstractModel
+import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
 import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.utils.Docs
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
@@ -65,21 +68,27 @@ class AccountRepo {
         callback: (Account?, Results) -> Unit
     ) {
 
-        val query = if (email.isNullOrEmpty())
+        val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("email", email)
-        else if (phoneNumber.isNullOrEmpty())
+        else if (!phoneNumber.isNullOrEmpty())
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
         else
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("nationalId", nationalId)
-        query.get()
+        query.whereEqualTo(
+            "accountType", AccountType.PERSONAL.name
+        ).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
+                    val docs = it.result!!.documents
                     val account =
-                        it.result!!.documents.mapNotNull { acc -> acc.toObject(Account::class.java) }
+                        if (docs.isEmpty()) null else docs.mapNotNull { acc -> acc.toObject(Account::class.java) }
                             .first()
-                    callback(account, Success(Success.CODE.LOAD_SUCCESS))
-                } else callback(null, Results.Error(it.exception))
+                    val results =
+                        if (account == null) Results.Error(NoEntityException()) else Success(Success.CODE.LOAD_SUCCESS)
+                    callback(account, results)
+                } else {
+                    callback(null, Results.Error(it.exception))
+                }
             }
-
     }
 }

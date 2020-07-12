@@ -42,6 +42,9 @@ class ParseUtil {
                 if (!parentDir.exists()) parentDir.mkdirs()
             }
         }
+        fun isValidNationalID(value: String?): Boolean{
+            return value?.length?:0 == 11
+        }
 
         /***
          * Compute relative path for the view's icon

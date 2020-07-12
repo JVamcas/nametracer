@@ -39,26 +39,25 @@
     </fragment>
     <fragment
         android:id="@+id/casesFragment"
-        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.CaseListFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.cases.RecordedCaseFragment"
         android:label="Recorded Cases"
-        tools:layout="@layout/fragment_case_list" >
+        tools:layout="@layout/fragment_recorded_case" >
         <action
             android:id="@+id/action_casesFragment_to_newCaseFragment"
             app:destination="@id/newCaseFragment" />
+        <action
+            android:id="@+id/action_casesFragment_to_updateCaseFragment"
+            app:destination="@id/updateCaseFragment" />
     </fragment>
     <fragment
         android:id="@+id/newCaseFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.cases.NewCaseFragment"
-        android:label="Register New Case"
-        tools:layout="@layout/fragment_new_case" >
-        <action
-            android:id="@+id/action_newCaseFragment_to_updateCaseFragment"
-            app:destination="@id/updateCaseFragment" />
-    </fragment>
+        android:label="Find Person"
+        tools:layout="@layout/fragment_new_case" />
     <fragment
         android:id="@+id/updateCaseFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.cases.UpdateCaseFragment"
-        android:label="Update Case" />
+        android:label="Find Case" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.account.ProfileFragment"

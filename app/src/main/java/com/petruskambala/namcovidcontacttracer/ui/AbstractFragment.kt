@@ -46,7 +46,7 @@ abstract class AbstractFragment : Fragment() {
         Toast.makeText(requireActivity(), msg, Toast.LENGTH_LONG).show()
     }
 
-    protected fun parseRepoResults(mResults: Results, modelName: String) {
+    protected fun parseRepoResults(mResults: Results?, modelName: String) {
         if (mResults is Results.Success) {
             when (mResults.code) {
                 AUTH_SUCCESS -> showToast("Welcome to Covid-19 Contact Tracer!")
@@ -54,7 +54,7 @@ abstract class AbstractFragment : Fragment() {
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
                 DELETE_SUCCESS -> showToast("$modelName deleted successfully.")
-                LOAD_SUCCESS -> showToast("No record found for your search.")
+                LOAD_SUCCESS -> showToast("")
             }
         } else if (mResults is Results.Error) {
             when (mResults.code) {
@@ -62,6 +62,7 @@ abstract class AbstractFragment : Fragment() {
                 NETWORK -> showToast("Err: No internet connection!")
                 ENTITY_EXISTS -> showToast( "Err: $modelName is already registered!")
                 AUTH -> showToast("Invalid login details.")
+                NO_RECORD -> showToast("No record found for your search.")
                 else -> showToast("Err: Unknown error!")
             }
         }

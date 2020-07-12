@@ -17,23 +17,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="40dp"
-            android:visibility="@{covidCase.person == null ? View.VISIBLE:View.GONE}">
+            android:visibility="@{person == null ? View.VISIBLE:View.GONE}">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="10dp"
-                android:padding="5dp"
-                android:text="@string/find_person"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="@color/app_color"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:elevation="10dp"-->
+<!--                android:padding="5dp"-->
+<!--                android:text="@string/find_person"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textAllCaps="true"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Body2"-->
+<!--                android:textColor="@color/app_color"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/transact_layout"
@@ -42,7 +42,8 @@
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view">
+                app:layout_constraintTop_toTopOf="parent"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_cell_id"
@@ -51,6 +52,7 @@
                     android:layout_marginBottom="10dp"
                     android:hint="@string/cell_or_email"
                     android:inputType="textAutoComplete"
+                    android:text="@={auth.idMailCell}"
                     android:padding="9dp"
                     android:textAlignment="center"
                     android:textColor="@color/app_bar" />
@@ -63,7 +65,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:enabled="false"
-                android:onClick="@{()->handler.findPerson()}"
                 android:text="@string/find_user"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/transact_layout" />
@@ -72,7 +73,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{covidCase.person != null ? View.VISIBLE : View.GONE}">
+            android:visibility="@{person != null ? View.VISIBLE : View.GONE}">
 
             <include
                 android:id="@+id/user_avatar"
@@ -84,7 +85,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:cameraVisible="@{false}"
-                bind:model="@{covidCase.person}"
+                bind:model="@{covidCase}"
                 bind:size="@{200}" />
 
             <include
@@ -95,7 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_avatar"
-                bind:user="@{covidCase.person}" />
+                bind:user="@{covidCase}" />
 
             <include
                 android:id="@+id/text_sep2"
@@ -106,76 +107,89 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_details"
                 bind:title="@{`Places Visited`}" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:visibility="@{covidCase.placeVisited > 0?View.VISIBLE: View.GONE}"
+                style="@style/save_btn_outlined"
+                android:text="@string/view"
+                android:id="@+id/view_place_visited"
+                app:layout_constraintTop_toBottomOf="@id/text_sep2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_default="wrap"
-                app:layout_constraintHeight_max="280dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_sep2">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/place_list"
+                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/bottom_sep"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:hint="@string/select_case_state"
+                app:hintTextColor="@color/hint_color"
+                android:id="@+id/case_state_layout"
+                android:layout_margin="20dp"
+                android:layout_marginBottom="40dp"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/case_state"
+                    android:inputType="none"
                     android:layout_width="match_parent"
+                    android:focusable="false"
+                    android:text="@={BindingUtil.fromCaseState(covidCase.caseState)}"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:childDivider="@color/app_color"
-                    android:dividerHeight="0.5dp"
-                    app:layout_constrainedHeight="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_place"
-                    app:layout_constrainedHeight="true"
-                    android:textAlignment="center"
-                    android:textColor="@color/hint_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="@{placeCount > 0? View.GONE: View.VISIBLE}"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="@string/no_place"
+                app:layout_constrainedHeight="true"
+                android:textAlignment="center"
+                android:textColor="@color/hint_color"
+                app:layout_constraintTop_toBottomOf="@id/text_sep2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{covidCase.placeVisited > 0? View.GONE: View.VISIBLE}"
+                />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_margin="5dp"
+                android:id="@+id/bottom_sep"
                 android:background="@color/app_color"
-                app:layout_constraintBottom_toTopOf="@id/save_btn"
+                app:layout_constraintBottom_toTopOf="@id/record_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/save_btn"
+                android:id="@+id/record_btn"
                 style="@style/save_btn_outlined"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/save_btn"
+                android:text="@string/record_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/save_btn"
-                app:layout_constraintBottom_toBottomOf="@id/save_btn"
+                app:layout_constraintTop_toTopOf="@id/record_btn"
+                app:layout_constraintBottom_toBottomOf="@id/record_btn"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="@string/quarantine_case"
+                android:checked="@={covidCase.inQuarantine}"
+                android:text="@{`Move case `+ (covidCase.inQuarantine?`out of quarantine?`:`into quarantine?`)}"
                 android:textColor="@color/hint_color"
-                android:textStyle="bold"
+                android:id="@+id/quarantine_case"
                 />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_margin="5dp"
                 android:background="@color/app_color"
-                app:layout_constraintTop_toBottomOf="@id/save_btn"
+                app:layout_constraintTop_toBottomOf="@id/record_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -184,12 +198,14 @@
 
     <data>
         <import type="android.view.View" />
+        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
+
         <variable
-            name="handler"
-            type="com.petruskambala.namcovidcontacttracer.ui.cases.NewCaseFragment" />
+            name="auth"
+            type="com.petruskambala.namcovidcontacttracer.model.Auth" />
         <variable
-            name="placeCount"
-            type="int" />
+            name="person"
+            type="com.petruskambala.namcovidcontacttracer.model.Account" />
         <variable
             name="covidCase"
             type="com.petruskambala.namcovidcontacttracer.model.CovidCase" />
