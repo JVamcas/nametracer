@@ -53,8 +53,8 @@ open class NewCaseFragment : AbstractFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.auth = Auth()
 
-        case_state.apply {
-            setAdapter(
+        case_state.setOnClickListener {
+            case_state.setAdapter(
                 ArrayAdapter(
                     requireContext(),
                     R.layout.account_select_auto_layout,
