@@ -17,6 +17,7 @@ abstract class AbstractModel(
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
+    class NoAccountException: Exception()
 }
 
 /***
@@ -24,11 +25,22 @@ abstract class AbstractModel(
  */
 data class Visit(
     var time: String = "",
-    var personId: String,
-    var placeId: String,
-    var person: Account,
-    var place: Account
-) : AbstractModel(id = "")
+    var person: Account? = null,
+    var place: Account? = null,
+    var personId: String = person?.id?:"",
+    var placeId: String = place?.id?:"",
+    private var _temperature: String? = null
+) : AbstractModel(id = "") {
+    var temperature: String?
+        @Bindable
+        get() = _temperature
+        set(value) {
+            if (_temperature != value) {
+                _temperature = value
+                notifyPropertyChanged(BR.temperature)
+            }
+        }
+}
 
 enum class CaseState {
     ACTIVE, RECOVERED, DEAD
@@ -39,20 +51,20 @@ data class CovidCase(
     private var person: Account? = null,
     private var _inQuarantine: Boolean = false,
     private var _caseState: CaseState? = null,
-    override var id: String = person?.id?:"",
+    override var id: String = person?.id ?: "",
     override var photoUrl: String? = person?.photoUrl,
     @get:Exclude override var accountType: AccountType? = null,
     @get:Exclude override var admin: Boolean = false
 ) : Account(
-    _email =  person?.email,
+    _email = person?.email,
     _cellphone = person?.cellphone,
-    _name = person?.name?:"",
+    _name = person?.name ?: "",
     _nationalId = person?.nationalId,
-    _address_1 = person?.address_1?:"",
+    _address_1 = person?.address_1 ?: "",
     _birthDate = person?.birthDate,
     _gender = person?.gender,
-    _town = person?.town?:"",
-    _placeVisted = person?.placeVisited?:0
+    _town = person?.town ?: "",
+    _placeVisted = person?.placeVisited ?: 0
 ) {
     var caseState: CaseState?
         @Bindable get() = _caseState
@@ -70,6 +82,7 @@ data class CovidCase(
                 notifyPropertyChanged(BR.inQuarantine)
             }
         }
+
     override fun toString(): String {
         return "$address_1 | $town"
     }

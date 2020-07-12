@@ -30,7 +30,8 @@ sealed class Results {
             UNKNOWN,
             ENTITY_EXISTS,
             AUTH,
-            NO_RECORD
+            NO_RECORD,
+            NO_ACCOUNT
         }
 
         val code: CODE = when (error) {

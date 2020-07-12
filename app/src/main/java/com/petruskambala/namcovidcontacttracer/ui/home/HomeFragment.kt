@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentHomeBinding
+import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -24,33 +26,38 @@ class HomeFragment : AbstractFragment() {
     ): View? {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
-        binding = FragmentHomeBinding.inflate(inflater,container,false)
-        return  binding.root
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authModel.authState.observe(viewLifecycleOwner, Observer { authState->
-            if(authState != AuthState.AUTHENTICATED)
-                navController.navigate(R.id.action_homeFragment_to_loginFragment)
+        authModel.currentAccount.observe(viewLifecycleOwner, Observer {
+            it?.let { binding.account = it }
         })
+
+        record_visit.setOnClickListener {
+            navController.navigate(R.id.action_homeFragment_to_recordVisitFragment)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         authModel.currentAccount.observe(viewLifecycleOwner, Observer {
             it?.apply {
-                if(admin){
+                if (admin) {
                     super.onCreateOptionsMenu(menu, inflater)
-                    inflater.inflate(R.menu.admin_menu,menu)
+                    inflater.inflate(R.menu.admin_menu, menu)
                 }
             }
         })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.cases -> {navController.navigate(R.id.action_homeFragment_to_casesFragment)}
+        when (item.itemId) {
+            R.id.cases -> {
+                navController.navigate(R.id.action_homeFragment_to_casesFragment)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

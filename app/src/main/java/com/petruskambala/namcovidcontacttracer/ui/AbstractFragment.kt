@@ -3,14 +3,17 @@ package com.petruskambala.namcovidcontacttracer.ui
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
+import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
@@ -21,14 +24,24 @@ abstract class AbstractFragment : Fragment() {
     val authModel: AuthenticationViewModel by activityViewModels()
     private lateinit var mDialog: Dialog
     lateinit var navController: NavController
+    private lateinit var mProgressbarBinding: ProgressbarBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        authModel.authState.observe(viewLifecycleOwner, Observer { authState->
+            val currentDest = navController.currentDestination?.id
+            if(authState != AuthState.AUTHENTICATED && currentDest != R.id.loginFragment)
+                navController.navigate(R.id.action_homeFragment_to_loginFragment)
+        })
+    }
     protected open fun showProgressBar(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        val mProgressbarBinding = ProgressbarBinding.inflate(layoutInflater, null, false)
+         mProgressbarBinding = ProgressbarBinding.inflate(layoutInflater, null, false)
         mProgressbarBinding.progressMsg.text = message
         builder.setView(mProgressbarBinding.root)
 
@@ -36,6 +49,9 @@ abstract class AbstractFragment : Fragment() {
             setCancelable(false)
             show()
         }
+    }
+    protected fun updateProgressBarMsg(msg: String){
+        mProgressbarBinding.progressMsg.text = msg
     }
 
     protected open fun endProgressBar() {
@@ -61,8 +77,9 @@ abstract class AbstractFragment : Fragment() {
                 PERMISSION_DENIED -> showToast("Err: Permission denied!")
                 NETWORK -> showToast("Err: No internet connection!")
                 ENTITY_EXISTS -> showToast( "Err: $modelName is already registered!")
-                AUTH -> showToast("Invalid login details.")
-                NO_RECORD -> showToast("No record found for your search.")
+                AUTH -> showToast("Err: Invalid login details.")
+                NO_RECORD -> showToast("Err: No record found for your search.")
+                NO_ACCOUNT -> showToast("Err: Visitor has no account.")
                 else -> showToast("Err: Unknown error!")
             }
         }

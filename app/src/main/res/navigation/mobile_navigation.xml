@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment_to_casesFragment"
             app:destination="@id/casesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_recordVisitFragment"
+            app:destination="@id/recordVisitFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -69,4 +72,9 @@
         android:name="com.petruskambala.namcovidcontacttracer.ui.authentication.ExtendedRegistrationFragment"
         android:label="Create New Account"
         tools:layout="@layout/fragment_extended_registration" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
+    <fragment
+        android:id="@+id/recordVisitFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.visit.RecordVisitFragment"
+        android:label="Record New Visit"
+        tools:layout="@layout/fragment_record_visit" />
 </navigation>

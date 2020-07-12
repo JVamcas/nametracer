@@ -19,22 +19,6 @@
             android:padding="40dp"
             android:visibility="@{person == null ? View.VISIBLE:View.GONE}">
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/view"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:elevation="10dp"-->
-<!--                android:padding="5dp"-->
-<!--                android:text="@string/find_person"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textAllCaps="true"-->
-<!--                android:textAppearance="@style/TextAppearance.AppCompat.Body2"-->
-<!--                android:textColor="@color/app_color"-->
-<!--                android:textStyle="bold"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/transact_layout"
                 android:layout_width="match_parent"
