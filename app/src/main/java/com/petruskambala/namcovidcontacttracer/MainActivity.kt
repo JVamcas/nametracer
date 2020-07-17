@@ -90,6 +90,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_my_profile -> if (curDestId != R.id.profileFragment)
                 navController.navigate(R.id.action_global_profileFragment, bundle)
+            R.id.about_developer -> if (curDestId != R.id.aboutDeveloperFragment)
+                navController.navigate(R.id.action_global_aboutDeveloperFragment, bundle)
 
         }
         return false

@@ -30,6 +30,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/visitor_credential"
                     android:inputType="textAutoComplete"
+                    android:text="@={visit.visitorMailCellId}"
                     android:padding="9dp"
                     android:textAlignment="center"
                     android:textColor="@color/app_bar" />
@@ -49,7 +50,7 @@
                     android:hint="@string/visitor_temperature"
                     android:inputType="numberDecimal"
                     android:padding="9dp"
-                    android:text="@={visit.temperature}"
+                    android:text="@={visit.visitorTemperature}"
                     android:textAlignment="center"
                     android:textColor="@color/app_bar" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -60,6 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:enabled="false"
+                visitorIdMailCell="@{visit.visitorMailCellId}"
+                visitorTemp="@{visit.visitorTemperature}"
                 android:text="@string/record_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/temperature_layout" />
@@ -69,6 +72,6 @@
     <data>
         <variable
             name="visit"
-            type="com.petruskambala.namcovidcontacttracer.model.Visit" />
+            type="com.petruskambala.namcovidcontacttracer.model.RecordVisit" />
     </data>
 </layout>

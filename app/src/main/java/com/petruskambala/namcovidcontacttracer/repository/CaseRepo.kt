@@ -2,7 +2,6 @@ package com.petruskambala.namcovidcontacttracer.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
-import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
 import com.petruskambala.namcovidcontacttracer.utils.Docs
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -21,8 +20,20 @@ class CaseRepo {
             }
     }
 
-    fun loadCases(callback: (ArrayList<CovidCase>, Results) -> Unit) {
-//        DB.collection(Docs.CASES.name).whereEqualTo()
+    fun loadCases(callback: (ArrayList<CovidCase>?, Results) -> Unit) {
+        DB.collection(Docs.CASES.name).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.let {
+                        val stat = if (it.isEmpty) null else
+                            it.documents.mapNotNull { doc -> doc.toObject(CovidCase::class.java) }
+                        callback(
+                            stat as ArrayList<CovidCase>?,
+                            Results.Success(Results.Success.CODE.LOAD_SUCCESS)
+                        )
+                    }
+                } else callback(null, Results.Error(task.exception))
+            }
     }
 
     fun findCase(

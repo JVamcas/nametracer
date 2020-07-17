@@ -57,4 +57,6 @@
     <string name="about_developer">About Developer</string>
     <string name="info">Info</string>
     <string name="share_app">Share App</string>
+    <string name="dev_qualification">BSc in Electrical and Computer Engineering\nUniversity of Cape Town</string>
+    <string name="follow_me_on_twitter">Follow me on Twitter</string>
 </resources>

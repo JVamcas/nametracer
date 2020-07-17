@@ -77,4 +77,9 @@
         android:name="com.petruskambala.namcovidcontacttracer.ui.visit.RecordVisitFragment"
         android:label="Record New Visit"
         tools:layout="@layout/fragment_record_visit" />
+    <fragment
+        android:id="@+id/aboutDeveloperFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.home.AboutDeveloperFragment"
+        android:label="About Developer"
+        tools:layout="@layout/fragment_about_developer" /><action android:id="@+id/action_global_aboutDeveloperFragment" app:destination="@id/aboutDeveloperFragment"/>
 </navigation>

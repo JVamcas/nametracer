@@ -18,6 +18,7 @@ import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidEmail
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidMobile
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidTemperature
 
 class BindingUtil {
     companion object {
@@ -197,6 +198,19 @@ class BindingUtil {
             return if (type !in Gender.values()
                     .map { it.name }
             ) null else Gender.valueOf(type)
+        }
+
+        @JvmStatic
+        @BindingAdapter(value = ["visitorIdMailCell", "visitorTemp"], requireAll = false)
+        fun validateVisitRecording(
+            mButton: MaterialButton,
+            idMailCell: String?,
+            temperature: String?
+        ) {
+            mButton.isEnabled =
+                (isValidNationalID(idMailCell) || isValidEmail(idMailCell) || isValidMobile(
+                    idMailCell
+                )) && isValidTemperature(temperature)
         }
 
         @JvmStatic

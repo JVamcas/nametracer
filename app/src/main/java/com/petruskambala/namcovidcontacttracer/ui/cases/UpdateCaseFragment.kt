@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.google.firebase.firestore.FieldValue
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
+import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -55,9 +57,10 @@ class UpdateCaseFragment : NewCaseFragment() {
         record_btn.setOnClickListener {
             record_btn.isEnabled = false
             showProgressBar("Updating case status...")
-            caseModel.updateCase(binding.covidCase!!)
+            caseModel.updateCase(binding.covidCase!!.also { it.time = DateUtil.today() })
             caseModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.let {
+                    record_btn.isEnabled = true
                     endProgressBar()
                     if (it.second is Results.Success)
                         navController.popBackStack()

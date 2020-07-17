@@ -22,6 +22,7 @@ class ParseUtil {
             val json = ParseUtil.toJson(model)
             return fromJson(json, kClass)
         }
+
         fun <K> toJson(obj: K): String? {
             return Gson().toJson(obj)
         }
@@ -42,9 +43,6 @@ class ParseUtil {
                 if (!parentDir.exists()) parentDir.mkdirs()
             }
         }
-        fun isValidNationalID(value: String?): Boolean{
-            return value?.length?:0 == 11
-        }
 
         /***
          * Compute relative path for the view's icon
@@ -53,28 +51,36 @@ class ParseUtil {
          * @return the relative path
          */
         fun iconPath(rtDir: String?, viewId: String): String {
-            return StringBuilder(rtDir?:"").append("/_").append(viewId).append("_.jpg").toString()
+            return StringBuilder(rtDir ?: "").append("/_").append(viewId).append("_.jpg").toString()
         }
 
         fun isValidEmail(email: String?): Boolean {
-            if(email.isNullOrEmpty())return false
+            if (email.isNullOrEmpty()) return false
             val email1 = email.replace("\\s+".toRegex(), "")
             val EMAIL_STRING = ("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
             return !TextUtils.isEmpty(email1) && Pattern.compile(EMAIL_STRING)
                 .matcher(email1).matches()
         }
+
         fun isValidMobile(phone: String?): Boolean {
             if (phone.isNullOrEmpty()) return false
-            var phone1 = phone
-            phone1 = phone1.replace("\\s+".toRegex(), "")
-            return if (!TextUtils.isEmpty(phone) && !Pattern.matches(
-                    "\\+?[a-zA-Z]+",
-                    phone
-                )
-            ) {
-                phone1.length in 10..13
-            } else false
+            val phone1 = phone.replace("\\s+".toRegex(), "")
+            return phone1.isNotEmpty() && Pattern.matches(
+                "^08\\d{8}",
+                phone1
+            )
+        }
+
+        fun isValidNationalID(value: String?): Boolean {
+            return !value.isNullOrEmpty()
+                    && Pattern.matches("^\\d{11}(\\d{2})?$", value)
+        }
+
+        fun isValidTemperature(value: String?): Boolean {
+            return !value.isNullOrEmpty()
+                    && Pattern.matches("[2-4]\\d(.\\d)?$", value)
+
         }
     }
 }

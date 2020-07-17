@@ -6,6 +6,7 @@ import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
+import java.util.*
 
 enum class AccountType {
     PERSONAL, BUSINESS
@@ -17,7 +18,6 @@ abstract class AbstractModel(
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
-    class NoAccountException : Exception()
 }
 
 /***
@@ -47,12 +47,45 @@ enum class CaseState {
     ACTIVE, RECOVERED, DEAD
 }
 
+data class RecordVisit(
+    private var _visitorMailCellId: String = "",
+    private var _visitorTemperature: String = ""
+) : AbstractModel() {
+    var visitorMailCellId: String
+        @Bindable get() = _visitorMailCellId
+        set(value) {
+            if (_visitorMailCellId != value) {
+                _visitorMailCellId = value.toLowerCase(Locale.ROOT)
+                notifyPropertyChanged(BR.visitorMailCellId)
+            }
+        }
+    var visitorTemperature: String
+        @Bindable get() = _visitorTemperature
+        set(value) {
+            if (_visitorTemperature != value) {
+                _visitorTemperature = value
+                notifyPropertyChanged(BR.visitorTemperature)
+            }
+        }
+}
+
+data class CovidStat(
+    val id: String = "",
+    val tested: Int = 0,
+    val inQuarantine: Int = 0,
+    val recovered: Int = 0,
+    val deaths: Int = 0,
+    val active: Int = 0
+)
+
 data class CovidCase(
     var time: String = DateUtil.today(),
     private var person: Person? = null,
     private var _inQuarantine: Boolean = false,
     private var _caseState: CaseState? = null,
+    val tested: Boolean = false,
     override var id: String = person?.id ?: "",
+    @get: Exclude override var placeVisited: Int = 0,
     @get: Exclude override var photoUrl: String? = null,
     @get:Exclude override var accountType: AccountType? = null,
     @get:Exclude override var admin: Boolean = false
@@ -96,7 +129,7 @@ open class Account(
     @get: Exclude val user: FirebaseUser? = null,
     private var _name: String = user?.displayName ?: "",
     private var _cellphone: String? = user?.phoneNumber,
-    private var _email: String? = user?.email,
+    private var _email: String? = user?.email?.toLowerCase(Locale.ROOT),
     private var _address_1: String = "",
     private var _town: String? = "",
     open var admin: Boolean = false,
@@ -131,7 +164,9 @@ open class Account(
         @Bindable get() = _email
         set(value) {
             if (_email != value) {
-                _email = value
+                if (value != null) {
+                    _email = value.toLowerCase(Locale.ROOT)
+                }
                 notifyPropertyChanged(BR.email)
             }
         }
@@ -168,7 +203,7 @@ open class Person(
     _town = account?.town,
     _address_1 = account?.address_1 ?: "",
     _cellphone = account?.cellphone,
-    _email = account?.email,
+    _email = account?.email?.toLowerCase(Locale.ROOT),
     _accountType = account?.accountType
 ) {
     var birthDate: String
@@ -188,7 +223,7 @@ open class Person(
                 notifyPropertyChanged(BR.gender)
             }
         }
-    var placeVisited: Int
+    open var placeVisited: Int
         @Bindable get() = _placeVisited
         set(value) {
             _placeVisited = value
@@ -214,7 +249,7 @@ data class Auth(
         @Bindable get() = _idEmailCell
         set(value) {
             if (_idEmailCell != value) {
-                _idEmailCell = value
+                _idEmailCell = value.toLowerCase(Locale.ROOT)
                 notifyPropertyChanged(BR.idMailCell)
             }
         }

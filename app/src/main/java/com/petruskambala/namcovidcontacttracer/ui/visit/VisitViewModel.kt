@@ -3,6 +3,7 @@ package com.petruskambala.namcovidcontacttracer.ui.visit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.petruskambala.namcovidcontacttracer.model.Visit
+import com.petruskambala.namcovidcontacttracer.repository.AccountRepo
 import com.petruskambala.namcovidcontacttracer.repository.VisitRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -14,7 +15,7 @@ class VisitViewModel : AbstractViewModel<Visit>() {
     var placesVisited: LiveData<ArrayList<Visit>> = _placesVisited
 
 
-    val visitRepo = VisitRepo()
+    private val visitRepo = VisitRepo()
 
 
     fun loadPlaceVisited(personId: String){
@@ -28,5 +29,4 @@ class VisitViewModel : AbstractViewModel<Visit>() {
             _repoResults.postValue(Pair(null,results))
         }
     }
-
 }
