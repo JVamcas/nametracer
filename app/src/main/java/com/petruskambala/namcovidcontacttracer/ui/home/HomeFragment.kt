@@ -43,47 +43,28 @@ class HomeFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        caseModel.caseList.observe(viewLifecycleOwner, Observer {
-            it?.apply {
-                it.count { case -> case.inQuarantine }
-
-                val recovered = arrayListOf(
-                    BarEntry(
-                        0f,
-                        it.count { case -> case.caseState == CaseState.RECOVERED }.toFloat()
-                    )
-                )
-                val active = arrayListOf(
-                    BarEntry(
-                        1f,
-                        it.count { case -> case.caseState == CaseState.ACTIVE }.toFloat()
-                    )
-                )
-                val deaths = arrayListOf(
-                    BarEntry(
-                        2f,
-                        it.count { case -> case.caseState == CaseState.DEAD }.toFloat()
-                    )
-                )
-                val inQuarantine =
-                    arrayListOf(BarEntry(3f, it.count { case -> case.inQuarantine }.toFloat()))
-
-                val total = arrayListOf(BarEntry(4f,it.count().toFloat()))
-
+        caseModel.repoResults.observe(viewLifecycleOwner, Observer {
+            caseModel.covidStat.value?.apply {
                 val barData = BarData(
-                    BarDataSet(recovered, "Recovered").apply {
+                    BarDataSet(listOf(BarEntry(0f, recovered.toFloat())), "Recovered").apply {
                         color = Color.parseColor("#28B463")
                     },
-                    BarDataSet(active, "Active").apply { color = Color.parseColor("#A93226") },
-                    BarDataSet(deaths, "Deaths").apply { color = Color.parseColor("#5D6D7E") },
-                    BarDataSet(inQuarantine, "In Quarantine").apply {
-                        color = Color.parseColor("#1ABC9C")
+                    BarDataSet(listOf(BarEntry(1f, active.toFloat())), "Active").apply {
+                        color = Color.parseColor("#A93226")
                     },
-                    BarDataSet(total, "Total").apply { color = Color.parseColor("#9A7D0A") }
+                    BarDataSet(listOf(BarEntry(2f, deaths.toFloat())), "Deaths").apply {
+                        color = Color.parseColor("#5D6D7E")
+                    },
+                    BarDataSet(listOf(BarEntry(3f, total.toFloat())), "Cases").apply {
+                        color = Color.parseColor("#9A7D0A")
+                    },
+                    BarDataSet(listOf(BarEntry(4f, tests.toFloat())), "Tested").apply {
+                        color = Color.parseColor("#F68C06")
+                    }
                 ).also {
                     it.setValueFormatter(object : ValueFormatter() {
                         override fun getFormattedValue(value: Float): String {
-                            return if(value.toInt() == 0) "" else "${value.toInt()}"
+                            return if (value.toInt() == 0) "" else "${value.toInt()}"
                         }
                     })
                 }
@@ -99,8 +80,8 @@ class HomeFragment : AbstractFragment() {
                     axisRight.axisMinimum = 0f
                     invalidate()
                 }
-                val caseCount = it.count { case-> DateUtil.isToday(case.time) }
-                binding.newCaseCount  = if(caseCount == 0) "No New Cases" else "+ ${caseCount.toString()}"
+                binding.newCaseCount =
+                    if (this.newCases.toInt() == 0) "No New Cases" else "+ ${this.newCases}"
             }
         })
 

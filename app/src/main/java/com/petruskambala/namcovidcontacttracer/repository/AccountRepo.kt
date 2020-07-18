@@ -4,11 +4,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.petruskambala.namcovidcontacttracer.model.AbstractModel
+import com.petruskambala.namcovidcontacttracer.model.*
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
-import com.petruskambala.namcovidcontacttracer.model.Account
-import com.petruskambala.namcovidcontacttracer.model.AccountType
-import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.utils.Docs
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
@@ -92,4 +89,5 @@ class AccountRepo {
                 }
             }
     }
+
 }

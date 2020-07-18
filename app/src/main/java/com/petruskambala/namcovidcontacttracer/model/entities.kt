@@ -133,6 +133,15 @@ data class Alert(
     var id: String
 )
 
+data class CovidStat(
+    var total: String  = "0",
+    var newCases: String = "0",
+    var deaths: String = "0",
+    var recovered: String = "0",
+    var active: String = "0",
+    var tests: String = "0"
+)
+
 /***
  * Represent app user e.g. a place or person
  */

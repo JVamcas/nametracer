@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.account.PlaceVisitedFragment">
+
+        <ir.androidexception.datatable.DataTable
+            android:id="@+id/place_visited_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            app:header_gravity="center"
+            app:row_gravity="center"
+            app:header_vertical_padding="5dp"
+            app:header_horizontal_padding="0dp"
+            app:row_vertical_padding="5dp"
+            app:header_text_size="9sp"
+            app:row_text_size="8sp"
+            android:visibility="@{placesCount > 0? View.VISIBLE: View.GONE}"
+            app:row_text_color="#000"
+            app:header_text_color="@color/white"
+            app:row_background_color="@color/shimmer_background"
+            app:header_background_color="@color/app_color"
+            app:persian_number="false"
+            app:corner_radius="8dp"
+            app:direction="ltr"
+            app:shadow="8dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/no_place"
+            android:textAlignment="center"
+            android:textColor="@color/hint_color"
+            android:visibility="@{placesCount > 0? View.GONE: View.VISIBLE}"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="placesCount"
+            type="Integer" />
+    </data>
+</layout>

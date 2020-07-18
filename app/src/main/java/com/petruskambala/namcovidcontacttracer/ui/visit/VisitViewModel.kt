@@ -17,15 +17,15 @@ class VisitViewModel : AbstractViewModel<Visit>() {
 
     private val visitRepo = VisitRepo()
 
-
-    fun loadPlaceVisited(personId: String){
-        visitRepo.loadPlacesVisited(personId){visits: ArrayList<Visit>, results: Results ->
-
-        }
-    }
-
     fun recordVisit(visit: Visit) {
         visitRepo.recordVisit(visit){results: Results->
+            _repoResults.postValue(Pair(null,results))
+        }
+    }
+    fun loadPlaceVisited(personId: String) {
+        visitRepo.loadPlaceVisited(personId){visits, results ->
+            if( results is Results.Success)
+                _placesVisited.postValue(visits)
             _repoResults.postValue(Pair(null,results))
         }
     }

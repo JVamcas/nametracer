@@ -82,4 +82,10 @@
         android:name="com.petruskambala.namcovidcontacttracer.ui.home.AboutDeveloperFragment"
         android:label="About Developer"
         tools:layout="@layout/fragment_about_developer" /><action android:id="@+id/action_global_aboutDeveloperFragment" app:destination="@id/aboutDeveloperFragment"/>
+    <fragment
+        android:id="@+id/placeVisitedFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.PlaceVisitedFragment"
+        android:label="Places Visited"
+        tools:layout="@layout/fragment_place_visited" />
+    <action android:id="@+id/action_global_placeVisitedFragment" app:destination="@id/placeVisitedFragment" />
 </navigation>

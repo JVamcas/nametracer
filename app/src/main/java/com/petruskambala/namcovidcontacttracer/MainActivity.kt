@@ -23,6 +23,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.NavHeaderMainBinding
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -92,11 +93,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.action_global_profileFragment, bundle)
             R.id.about_developer -> if (curDestId != R.id.aboutDeveloperFragment)
                 navController.navigate(R.id.action_global_aboutDeveloperFragment, bundle)
+            R.id.nav_visits -> if (curDestId != R.id.aboutDeveloperFragment)
+                navController.navigate(R.id.action_global_placeVisitedFragment, Bundle().apply {
+                    putString(Const.PERSON_ID, authModel.currentAccount.value!!.id)
+                })
 
         }
         return false
     }
 }
-class Auto(context: Context): AppCompatAutoCompleteTextView(context){
+
+class Auto(context: Context) : AppCompatAutoCompleteTextView(context) {
 
 }

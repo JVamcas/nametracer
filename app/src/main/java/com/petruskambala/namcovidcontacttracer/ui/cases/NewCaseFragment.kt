@@ -60,6 +60,13 @@ open class NewCaseFragment : AbstractFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.auth = Auth()
 
+        view_place_visited.setOnClickListener {
+            navController.navigate(
+                R.id.action_global_placeVisitedFragment,
+                //TODO might not work well need to pass in correct ID
+                Bundle().apply { putString(Const.PERSON_ID, case.personId) })
+        }
+
         case_state.setOnClickListener {
             case_state.setAdapter(
                 ArrayAdapter(
@@ -93,7 +100,8 @@ open class NewCaseFragment : AbstractFragment() {
                 email_cell_id.error =
                     if (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value)) null
                     else "Enter a valid ID, email or cellphone number."
-                find_user.isEnabled = (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value))
+                find_user.isEnabled =
+                    (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value))
             }
         })
         find_user.setOnClickListener { findPerson() }
