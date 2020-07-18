@@ -5,8 +5,10 @@ import androidx.databinding.Bindable
 import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
+import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import java.util.*
+import kotlin.collections.ArrayList
 
 enum class AccountType {
     PERSONAL, BUSINESS
@@ -69,33 +71,34 @@ data class RecordVisit(
         }
 }
 
-data class CovidStat(
-    val id: String = "",
-    val tested: Int = 0,
-    val inQuarantine: Int = 0,
-    val recovered: Int = 0,
-    val deaths: Int = 0,
-    val active: Int = 0
-)
-
 data class CovidCase(
     var time: String = DateUtil.today(),
-    private var person: Person? = null,
+    private var _person: Person? = null,
     private var _inQuarantine: Boolean = false,
     private var _caseState: CaseState? = null,
-    val tested: Boolean = false,
-    override var id: String = person?.id ?: "",
-    @get: Exclude override var placeVisited: Int = 0,
-    @get: Exclude override var photoUrl: String? = null,
-    @get:Exclude override var accountType: AccountType? = null,
-    @get:Exclude override var admin: Boolean = false
+    var tested: Boolean = false,
+    var personId: String = _person?.id?:"",
+    @get: Exclude @Transient override var permission: ArrayList<AccessType>? = null,
+    @get:Exclude @Transient override var id: String = "",
+    @get: Exclude @Transient override var placeVisited: Int = 0,
+    @get: Exclude @Transient override var photoUrl: String? = null,
+    @get:Exclude @Transient override var accountType: AccountType? = null,
+    @get:Exclude @Transient override var admin: Boolean = false
 ) : Person(
-    account = person,
-    _gender = person?.gender,
-    _nationalId = person?.nationalId ?: "",
-    _placeVisited = person?.placeVisited ?: 0,
-    _birthDate = person?.birthDate ?: ""
+    account = _person,
+    _gender = _person?.gender,
+    _nationalId = _person?.nationalId ?: "",
+    _placeVisited = _person?.placeVisited ?: 0,
+    _birthDate = _person?.birthDate ?: ""
 ) {
+    @get: Exclude
+    var person: Person?
+        @Bindable get() = _person
+        set(value) {
+            _person = value
+            notifyPropertyChanged(BR.person)
+        }
+
     var caseState: CaseState?
         @Bindable get() = _caseState
         set(value) {
@@ -116,6 +119,14 @@ data class CovidCase(
     override fun toString(): String {
         return "$address_1 | $town"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is CovidCase)
+            return false
+        return (!other.email.isNullOrEmpty() && email == other.email)
+                || (!other.cellphone.isNullOrEmpty() && cellphone == other.cellphone)
+                || (other.nationalId.isNotEmpty() && nationalId == other.nationalId)
+    }
 }
 
 data class Alert(
@@ -126,14 +137,15 @@ data class Alert(
  * Represent app user e.g. a place or person
  */
 open class Account(
-    @get: Exclude val user: FirebaseUser? = null,
+    @get: Exclude @Transient val user: FirebaseUser? = null,
     private var _name: String = user?.displayName ?: "",
     private var _cellphone: String? = user?.phoneNumber,
     private var _email: String? = user?.email?.toLowerCase(Locale.ROOT),
     private var _address_1: String = "",
     private var _town: String? = "",
     open var admin: Boolean = false,
-    private var _accountType: AccountType? = null
+    private var _accountType: AccountType? = null,
+    open var permission: ArrayList<AccessType>? = null
 ) : AbstractModel(id = user?.uid ?: "") {
     open var accountType: AccountType?
         @Bindable get() = _accountType

@@ -7,17 +7,24 @@ import androidx.lifecycle.ViewModel
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.utils.Results
 
-abstract class AbstractViewModel<K: AbstractModel> : ViewModel() {
+abstract class AbstractViewModel<K : AbstractModel> : ViewModel() {
 
     enum class LoadState {
         LOADED, NO_LOAD, LOADING, LOAD_FAIL
     }
-    protected var _repoResults: MutableLiveData<Pair<K?,Results>?> = MutableLiveData()
-    var repoResults: LiveData<Pair<K?,Results>?> = _repoResults
-        set(value) {
-            field = value
-            _repoResults.postValue(value.value)
-        }
+
+    protected var _repoResults: MutableLiveData<Pair<K?, Results>> = MutableLiveData()
+
+    val repoResults: LiveData<Pair<K?, Results>>
+        get() = _repoResults
+
+
+    //    var repoResults: LiveData<Pair<K?,Results>> =
+//        get() = _repoResults
+//        set(value) {
+//            field = value
+//            _repoResults.postValue(value.value)
+//        }
     var modelLoadState = MutableLiveData<LoadState>()
     var modelLoad = MutableLiveData<K>()
 

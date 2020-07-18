@@ -10,15 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
+import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
+import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
-import kotlinx.android.synthetic.main.content_main.*
 
 abstract class AbstractFragment : Fragment() {
     val authModel: AuthenticationViewModel by activityViewModels()
@@ -61,6 +61,14 @@ abstract class AbstractFragment : Fragment() {
 
     protected open fun endProgressBar() {
         mDialog.cancel()
+    }
+
+    fun validateOp(accessType: AccessType):Boolean{
+        return true
+//        authModel.currentAccount.value?.let {
+//            return accessType in it.permission!!
+//        }
+//        return false
     }
 
     fun showToast(msg: String?) {

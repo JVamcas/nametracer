@@ -36,7 +36,7 @@
     <string name="quarantine_case">Move case to quarantine?</string>
     <string name="no_place">No places found.</string>
     <string name="account_type">Select account type.</string>
-    <string name="cases">Recorded Cases</string>
+    <string name="cases">Cases</string>
     <string name="search">Search</string>
     <string name="no_cases">No cases found. Click on the + icon to register a case.</string>
     <string name="select_gender">Select your gender</string>
@@ -59,4 +59,5 @@
     <string name="share_app">Share App</string>
     <string name="dev_qualification">BSc in Electrical and Computer Engineering\nUniversity of Cape Town</string>
     <string name="follow_me_on_twitter">Follow me on Twitter</string>
+    <string name="new_cases">New Cases:</string>
 </resources>

@@ -30,14 +30,20 @@ import kotlinx.android.synthetic.main.fragment_new_case.*
 open class NewCaseFragment : AbstractFragment() {
 
     val caseModel: CaseViewModel by activityViewModels()
-    val accountModel: AccountViewModel by activityViewModels()
+    private val accountModel: AccountViewModel by activityViewModels()
 
-    private lateinit var case: CovidCase
+    lateinit var case: CovidCase
+
+    //    var person: Person? = null
     lateinit var binding: FragmentNewCaseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         case = CovidCase()
+        arguments?.apply {
+            val json = getString(Const.CASE)
+            case = ParseUtil.fromJson(json, CovidCase::class.java).also { it.person = Person() }
+        }
     }
 
     override fun onCreateView(
@@ -46,7 +52,7 @@ open class NewCaseFragment : AbstractFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentNewCaseBinding.inflate(inflater, container, false)
-        binding.covidCase = case
+        binding.covidCase = case //person is non null when we swiped view to update
         return binding.root
     }
 
@@ -66,14 +72,14 @@ open class NewCaseFragment : AbstractFragment() {
         record_btn.setOnClickListener {
             record_btn.isEnabled = false
             case.time = DateUtil.today()
-            showProgressBar("Registering new case...")
+            showProgressBar("Recording new case...")
             caseModel.registerNewCase(case)
             caseModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
                 pair?.let {
                     endProgressBar()
                     record_btn.isEnabled = true
                     if (pair.second is Results.Success) {
-                        showToast("Case registered successfully.")
+                        showToast("Case recorded successfully.")
                         navController.popBackStack()
                     } else super.parseRepoResults(pair.second, "")
                     caseModel.clearRepoResults(viewLifecycleOwner)
@@ -85,36 +91,47 @@ open class NewCaseFragment : AbstractFragment() {
                 super.onTextChanged(p0, p1, p2, p3)
                 val value = p0.toString()
                 email_cell_id.error =
-                    if (isValidMobile(value) || isValidEmail(value)) null
+                    if (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value)) null
                     else "Enter a valid ID, email or cellphone number."
-                find_user.isEnabled = (isValidMobile(value) || isValidEmail(value))
+                find_user.isEnabled = (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value))
             }
         })
         find_user.setOnClickListener { findPerson() }
     }
 
-    private fun findPerson() {
-        find_user.isEnabled = false
+    open fun findPerson() {
+
         val idEmailCell = binding.auth!!.idMailCell
         val email = if (isValidEmail(idEmailCell)) idEmailCell else null
         val cell = if (isValidMobile(idEmailCell)) idEmailCell else null
         val nationalID = if (isValidNationalID(idEmailCell)) idEmailCell else null
 
-        showProgressBar("Loading info...")
-        accountModel.findPerson(email = email, phoneNumber = cell, nationalId = nationalID)
-        accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-            it?.apply {
-                endProgressBar()
-                find_user.isEnabled = true
-                if (second is Results.Success) {
-                    case = CovidCase(person = first as Person)
-                    requireActivity().toolbar.title = "Record New Case"
-                    binding.person = it.first
-                    binding.covidCase = case
-                } else
-                    super.parseRepoResults(it.second, "")
-                accountModel.clearRepoResults(viewLifecycleOwner)
+        caseModel.caseList.value?.apply {
+
+            if (find {
+                    (it.email == email && !email.isNullOrEmpty())
+                            || (it.cellphone == cell && !cell.isNullOrEmpty())
+                            || (it.nationalId == nationalID)
+                } != null)
+                showToast("Case already recorded.")
+            else {
+                find_user.isEnabled = false
+                showProgressBar("Loading info...")
+                accountModel.findPerson(email = email, phoneNumber = cell, nationalId = nationalID)
+                accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+                    it?.apply {
+                        endProgressBar()
+                        find_user.isEnabled = true
+                        if (second is Results.Success) {
+                            case = CovidCase(_person = first as Person)
+                            requireActivity().toolbar.title = "Record New Case"
+                            binding.covidCase = case
+                        } else
+                            super.parseRepoResults(it.second, "")
+                        accountModel.clearRepoResults(viewLifecycleOwner)
+                    }
+                })
             }
-        })
+        }
     }
 }

@@ -50,7 +50,7 @@ abstract class AbstractAdapter<K : AbstractModel, T : RecyclerView.ViewHolder>(
     }
 
     interface ModelViewClickListener<K : AbstractModel?> {
-        fun onEditModel(model: K, isValid: Boolean, pos: Int)
+        fun onEditModel(model: K, pos: Int)
         fun onDeleteModel(modelPos: Int)
         fun onModelClick(model: K)
         fun onModelIconClick(model: K)

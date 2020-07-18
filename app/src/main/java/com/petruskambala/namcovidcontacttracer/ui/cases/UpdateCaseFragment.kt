@@ -26,33 +26,11 @@ class UpdateCaseFragment : NewCaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        //used when swiped on case to update
+        case.person?.let { requireActivity().toolbar.title = "Update Case Status"}
         record_btn.text = getString(R.string.update_btn_txt)
 
-        find_user.setOnClickListener {
-            find_user.isEnabled = false
-            val idEmailCell = binding.auth!!.idMailCell
-            val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
-            val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
-            val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
-
-            showProgressBar("Loading info...")
-            caseModel.findCase(email = email, cellphone = cell, nationalId = nationalID)
-
-            caseModel.repoResults.observe(viewLifecycleOwner, Observer {
-                it?.apply {
-                    endProgressBar()
-                    find_user.isEnabled = true
-                    if (second is Results.Success) {
-                        binding.covidCase = first
-                        binding.person = Account()
-                        requireActivity().toolbar.title = "Update Case Status"
-                    } else
-                        super.parseRepoResults(it.second, "")
-                    caseModel.clearRepoResults(viewLifecycleOwner)
-                }
-            })
-        }
+        find_user.setOnClickListener { findPerson()}
 
         record_btn.setOnClickListener {
             record_btn.isEnabled = false
@@ -69,5 +47,29 @@ class UpdateCaseFragment : NewCaseFragment() {
                 }
             })
         }
+    }
+
+    override fun findPerson(){
+        find_user.isEnabled = false
+        val idEmailCell = binding.auth!!.idMailCell
+        val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
+        val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
+        val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
+
+        showProgressBar("Loading info...")
+        caseModel.findCase(email = email, cellphone = cell, nationalId = nationalID)
+
+        caseModel.repoResults.observe(viewLifecycleOwner, Observer {
+            it?.apply {
+                endProgressBar()
+                find_user.isEnabled = true
+                if (second is Results.Success) {
+                    binding.covidCase = first
+                    requireActivity().toolbar.title = "Update Case Status"
+                } else
+                    super.parseRepoResults(it.second, "")
+                caseModel.clearRepoResults(viewLifecycleOwner)
+            }
+        })
     }
 }

@@ -2,6 +2,7 @@ package com.petruskambala.namcovidcontacttracer.utils
 
 internal interface Const {
     companion object {
+        val MODEL_POS: String = "model_pos"
         val CASE: String = "case"
         val PASSWORD: String = "password"
 

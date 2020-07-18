@@ -16,6 +16,8 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentHomeBinding
 import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.cases.CaseViewModel
+import com.petruskambala.namcovidcontacttracer.utils.DateUtil
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -85,22 +87,22 @@ class HomeFragment : AbstractFragment() {
                         }
                     })
                 }
-
                 covid_stat.apply {
                     data = barData
                     xAxis.setDrawGridLines(false)
                     axisLeft.setDrawGridLines(false)
                     description.isEnabled = false
-                    xAxis.position = XAxis.XAxisPosition.BOTTOM
+                    xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
                     axisRight.isEnabled = false
                     xAxis.setDrawLabels(false)
                     axisLeft.axisMinimum = 0f
                     axisRight.axisMinimum = 0f
                     invalidate()
                 }
+                val caseCount = it.count { case-> DateUtil.isToday(case.time) }
+                binding.newCaseCount  = if(caseCount == 0) "No New Cases" else "+ ${caseCount.toString()}"
             }
         })
-
 
         authModel.currentAccount.observe(viewLifecycleOwner, Observer
         {

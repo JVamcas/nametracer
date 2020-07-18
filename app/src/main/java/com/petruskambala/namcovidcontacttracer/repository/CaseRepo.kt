@@ -11,7 +11,7 @@ class CaseRepo {
     private val DB = FirebaseFirestore.getInstance()
 
     fun registerNewCase(case: CovidCase, callback: (result: Results) -> Unit) {
-        DB.collection(Docs.CASES.name).document(case.id)
+        DB.collection(Docs.CASES.name).document(case.personId)
             .set(case)
             .addOnCompleteListener {
                 if (it.isSuccessful)
@@ -69,7 +69,7 @@ class CaseRepo {
     }
 
     fun updateCase(case: CovidCase, callback: (Results) -> Unit) {
-        DB.collection(Docs.CASES.name).document(case.id)
+        DB.collection(Docs.CASES.name).document(case.personId)
             .update(
                 "caseState", case.caseState!!.name,
                 "inQuarantine", case.inQuarantine

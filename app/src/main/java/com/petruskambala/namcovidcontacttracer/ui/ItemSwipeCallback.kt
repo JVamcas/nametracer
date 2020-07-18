@@ -72,7 +72,7 @@ abstract class ItemSwipeCallback<K : AbstractModel, T : RecyclerView.ViewHolder>
             ItemTouchHelper.LEFT -> mListener.onDeleteModel(viewHolder.adapterPosition)
             ItemTouchHelper.RIGHT -> {
                 val modelPos = viewHolder.adapterPosition
-                mListener.onEditModel(mAdapter.get(modelPos), false, modelPos)
+                mListener.onEditModel(mAdapter.get(modelPos), modelPos)
             }
         }
     }

@@ -70,6 +70,9 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    implementation 'com.github.salehyarahmadi:DataTable:v1.0.0'
+
+
 
 }
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

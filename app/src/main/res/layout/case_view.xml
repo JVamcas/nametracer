@@ -46,8 +46,6 @@
                 android:layout_marginTop="2dp"
                 android:paddingBottom="5dp"
                 android:text="@{covidCase.toString()}"
-                android:layout_marginStart="10dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintStart_toStartOf="@id/user_name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />

@@ -29,5 +29,10 @@ class DateUtil {
         fun getTime(dateStr: String): String? {
             return dateStr.replace(".*(\\d{2}:\\d{2}:\\d{2}).*".toRegex(), "$1")
         }
+        fun isToday(dateStr: String): Boolean{
+            val date = getDate(dateStr)
+            val today = getDate(today())
+            return date == today
+        }
     }
 }
