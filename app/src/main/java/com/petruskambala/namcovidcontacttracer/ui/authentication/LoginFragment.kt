@@ -60,6 +60,10 @@ class LoginFragment : AbstractFragment() {
         }
     }
 
+    override fun onBackClick() {
+        showExitDialog()
+    }
+
     override fun onResume() {
         super.onResume()
         val activity = (activity as MainActivity)

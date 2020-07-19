@@ -5,12 +5,14 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.petruskambala.namcovidcontacttracer.R
+import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
@@ -33,6 +35,8 @@ abstract class AbstractFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handleBackClicks()
+
         authModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             val currentDest = navController.currentDestination?.id
             if (authState != AuthState.AUTHENTICATED) {
@@ -69,6 +73,39 @@ abstract class AbstractFragment : Fragment() {
 //            return accessType in it.permission!!
 //        }
 //        return false
+    }
+
+    protected fun showExitDialog() {
+        with(AppDismissDialogBinding.inflate(layoutInflater, null, false)) {
+            val dialog: AlertDialog = AlertDialog.Builder(requireContext()).let {
+                it.setView(root)
+                it.create()
+            }.apply {
+                setCancelable(false)
+                show()
+            }
+            okExitBtn.setOnClickListener {
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            cancelExitBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+    }
+
+    private fun handleBackClicks() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackClick()
+                }
+            })
+
+    }
+
+    protected open fun onBackClick() {
+        navController.popBackStack()
     }
 
     fun showToast(msg: String?) {

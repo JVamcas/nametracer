@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.petruskambala.namcovidcontacttracer.PlaceVisitedTableAdapter
+import com.petruskambala.namcovidcontacttracer.ui.PlaceVisitedTableAdapter
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentPlaceVisitedBinding
 import com.petruskambala.namcovidcontacttracer.model.Cell
 import com.petruskambala.namcovidcontacttracer.model.ColumnHeader
@@ -85,7 +85,8 @@ class PlaceVisitedFragment : AbstractFragment() {
                     Cell(it.time)
                 )
             }
-            val tableAdapter = PlaceVisitedTableAdapter()
+            val tableAdapter =
+                PlaceVisitedTableAdapter()
             place_visited_table.setAdapter(tableAdapter)
             tableAdapter.setAllItems(columnHeader,rowHeader,cells)
 

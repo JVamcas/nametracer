@@ -111,4 +111,8 @@ class HomeFragment : AbstractFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onBackClick() {
+        showExitDialog()
+    }
 }

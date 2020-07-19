@@ -1,4 +1,4 @@
-package com.petruskambala.namcovidcontacttracer
+package com.petruskambala.namcovidcontacttracer.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
+import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.TableViewCellLayoutBinding
 import com.petruskambala.namcovidcontacttracer.databinding.TableViewColumnHeaderLayoutBinding
 import com.petruskambala.namcovidcontacttracer.databinding.TableViewRowHeaderLayoutBinding
@@ -46,7 +47,9 @@ class PlaceVisitedTableAdapter(
         )
         println("Column header is ")
 
-        return ColumnHeaderViewHolder(binding.root)
+        return ColumnHeaderViewHolder(
+            binding.root
+        )
     }
 
     override fun onBindColumnHeaderViewHolder(
@@ -75,7 +78,9 @@ class PlaceVisitedTableAdapter(
     ): RowHeaderViewHolder {
         val binding = TableViewRowHeaderLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
-        return RowHeaderViewHolder((binding.root))
+        return RowHeaderViewHolder(
+            (binding.root)
+        )
     }
 
     override fun getCellItemViewType(position: Int): Int {
@@ -88,7 +93,9 @@ class PlaceVisitedTableAdapter(
         val binding = TableViewCellLayoutBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return CellViewHolder(binding.root)
+        return CellViewHolder(
+            binding.root
+        )
     }
 
     override fun onCreateCornerView(parent: ViewGroup): View {

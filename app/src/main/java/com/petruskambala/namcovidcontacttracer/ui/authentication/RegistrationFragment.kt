@@ -101,4 +101,8 @@ open class RegistrationFragment : AbstractFragment() {
         activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         activity.toolbar.navigationIcon = null
     }
+
+    override fun onBackClick() {
+        showExitDialog()
+    }
 }

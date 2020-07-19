@@ -16,6 +16,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentExtendedRegis
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.model.Person
+import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.fragment_extended_registration.*
@@ -80,5 +81,9 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
             mView.setText("$year - ${view.month} - $day")
         }
+    }
+
+    override fun onBackClick() {
+        navController.popBackStack()
     }
 }
