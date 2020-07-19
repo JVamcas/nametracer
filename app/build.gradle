@@ -70,7 +70,7 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    implementation 'com.github.salehyarahmadi:DataTable:v1.0.0'
+    implementation 'com.evrencoskun.library:tableview:0.8.9.2'
 
 
 

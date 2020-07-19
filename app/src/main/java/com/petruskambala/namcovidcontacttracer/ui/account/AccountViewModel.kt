@@ -14,12 +14,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
     private var _account = MutableLiveData<Account>()
     val account: LiveData<Account> = _account
 
-    private var _placeVisited: MutableLiveData<ArrayList<Visit>> = MutableLiveData()
-    val placeVisited: LiveData<ArrayList<Visit>>
-        get() = _placeVisited
-
-
-    private val accountRepo = AccountRepo()
+   private val accountRepo = AccountRepo()
 
     fun findPerson(email: String? = null, phoneNumber: String? = null, nationalId: String? = null) {
         accountRepo.findPerson(email, phoneNumber, nationalId) { account, results ->

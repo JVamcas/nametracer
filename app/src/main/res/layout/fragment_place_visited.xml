@@ -10,27 +10,19 @@
         android:layout_height="match_parent"
         tools:context=".ui.account.PlaceVisitedFragment">
 
-        <ir.androidexception.datatable.DataTable
+        <com.evrencoskun.tableview.TableView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/place_visited_table"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            app:header_gravity="center"
-            app:row_gravity="center"
-            app:header_vertical_padding="5dp"
-            app:header_horizontal_padding="0dp"
-            app:row_vertical_padding="5dp"
-            app:header_text_size="9sp"
-            app:row_text_size="8sp"
+            android:layout_height="wrap_content"
             android:visibility="@{placesCount > 0? View.VISIBLE: View.GONE}"
-            app:row_text_color="#000"
-            app:header_text_color="@color/white"
-            app:row_background_color="@color/shimmer_background"
-            app:header_background_color="@color/app_color"
-            app:persian_number="false"
-            app:corner_radius="8dp"
-            app:direction="ltr"
-            app:shadow="8dp"/>
+            app:column_header_height="@dimen/column_header_height"
+            app:row_header_width="@dimen/row_header_width"
+            app:selected_color="@color/selected_background_color"
+            app:shadow_color="@color/shadow_background_color"
+            app:unselected_color="@color/unselected_background_color"
+            />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
@@ -46,10 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <data>
         <import type="android.view.View"/>
         <variable

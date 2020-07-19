@@ -7,16 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.petruskambala.namcovidcontacttracer.R
+import com.petruskambala.namcovidcontacttracer.PlaceVisitedTableAdapter
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentPlaceVisitedBinding
+import com.petruskambala.namcovidcontacttracer.model.Cell
+import com.petruskambala.namcovidcontacttracer.model.ColumnHeader
+import com.petruskambala.namcovidcontacttracer.model.RowHeader
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.visit.VisitViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.Results
-import ir.androidexception.datatable.model.DataTableHeader
-import ir.androidexception.datatable.model.DataTableRow
 import kotlinx.android.synthetic.main.fragment_place_visited.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -65,25 +67,28 @@ class PlaceVisitedFragment : AbstractFragment() {
 
     private fun initTable(visits: ArrayList<Visit>?) {
         visits?.apply {
-            val header = DataTableHeader.Builder()
-                .item("Name", 3)
-                .item("Address", 3)
-                .item("Temperature", 1)
-                .item("Date", 2).build()
+            val columnHeader = arrayListOf(
+                ColumnHeader("Name"),
+                ColumnHeader("Address"),
+                ColumnHeader("Temperature"),
+                ColumnHeader("Date")
+            )
+            val rowHeader = visits.map { t ->
+                RowHeader((indexOfFirst { it.id == t.id }+ 1).toString())
+            } as ArrayList<RowHeader>
 
-            val rows = visits.map {
-                DataTableRow.Builder()
-                    .value(it.place!!.name)
-                    .value(it.place.toString())
-                    .value(it.temperature ?: "Unknown")
-                    .value(it.time).build()
-            } as ArrayList<DataTableRow>
-
-            place_visited_table.apply {
-                this.header = header
-                this.rows = rows
-                inflate(requireContext())
+            val cells = visits.map {
+                arrayListOf(
+                    Cell(it.place?.name?:"No Name"),
+                    Cell(it.place.toString()),
+                    Cell(it.temperature?:"Unknown"),
+                    Cell(it.time)
+                )
             }
+            val tableAdapter = PlaceVisitedTableAdapter()
+            place_visited_table.setAdapter(tableAdapter)
+            tableAdapter.setAllItems(columnHeader,rowHeader,cells)
+
         }
     }
 }

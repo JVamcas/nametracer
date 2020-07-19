@@ -77,7 +77,7 @@ data class CovidCase(
     private var _inQuarantine: Boolean = false,
     private var _caseState: CaseState? = null,
     var tested: Boolean = false,
-    var personId: String = _person?.id?:"",
+    var personId: String = _person?.id ?: "",
     @get: Exclude @Transient override var permission: ArrayList<AccessType>? = null,
     @get:Exclude @Transient override var id: String = "",
     @get: Exclude @Transient override var placeVisited: Int = 0,
@@ -134,7 +134,7 @@ data class Alert(
 )
 
 data class CovidStat(
-    var total: String  = "0",
+    var total: String = "0",
     var newCases: String = "0",
     var deaths: String = "0",
     var recovered: String = "0",
@@ -287,3 +287,11 @@ data class Auth(
 enum class Gender {
     MALE, FEMALE, UNISEX
 }
+
+open class Cell(var value: String)
+
+data class ColumnHeader(var header: String) :
+    Cell(header)
+
+data class RowHeader(var header: String):
+        Cell(header)

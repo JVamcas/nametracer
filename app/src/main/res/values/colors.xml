@@ -17,4 +17,13 @@
     <color name="my_acc_background">#CACFCF</color>
     <color name="app_background">#77B1F1F1</color>
     <color name="black">#000</color>
+
+    <!--    Table colors-->
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="header_line_color">#0a0a0a</color>
+    <color name="table_view_default_text_color">#0a0a0a</color>
+    <color name="selected_background_color">#E91E63</color>
+    <color name="shadow_background_color">@color/white</color>
+    <color name="unselected_background_color">@color/shimmer_background</color>
 </resources>
