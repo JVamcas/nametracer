@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homeFragment_to_recordVisitFragment"
             app:destination="@id/recordVisitFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_findPointOfContactFragment"
+            app:destination="@id/findPointOfContactFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -56,11 +59,19 @@
         android:id="@+id/newCaseFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.cases.NewCaseFragment"
         android:label="Find Person"
-        tools:layout="@layout/fragment_new_case" />
+        tools:layout="@layout/fragment_new_case" >
+        <action
+            android:id="@+id/action_newCaseFragment_to_placeVisitedFragment"
+            app:destination="@id/placeVisitedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateCaseFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.cases.UpdateCaseFragment"
-        android:label="Find Case" />
+        android:label="Find Case" >
+        <action
+            android:id="@+id/action_updateCaseFragment_to_placeVisitedFragment"
+            app:destination="@id/placeVisitedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.account.ProfileFragment"
@@ -88,4 +99,18 @@
         android:label="Places Visited"
         tools:layout="@layout/fragment_place_visited" />
     <action android:id="@+id/action_global_placeVisitedFragment" app:destination="@id/placeVisitedFragment" />
+    <fragment
+        android:id="@+id/findPointOfContactFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.home.PointOfContactFragment"
+        android:label="Find Point of Contact"
+        tools:layout="@layout/fragment_point_of_contact" >
+        <action
+            android:id="@+id/action_findPointOfContactFragment_to_placeVisitorsFragment"
+            app:destination="@id/placeVisitorsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeVisitorsFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.PlaceVisitorsFragment"
+        android:label="fragment_place_visitors"
+        tools:layout="@layout/fragment_place_visitors" />
 </navigation>

@@ -2,9 +2,9 @@ package com.petruskambala.namcovidcontacttracer.model
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import com.petruskambala.namcovidcontacttracer.BR
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.Exclude
+import com.petruskambala.namcovidcontacttracer.BR
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import java.util.*
@@ -43,6 +43,44 @@ data class Visit(
                 notifyPropertyChanged(BR.temperature)
             }
         }
+    val placeColumns: ArrayList<String>
+        @Exclude get() = arrayListOf(
+            "Name of Place",
+            "Address",
+            "Temperature at Time of Visit",
+            "Time of Visit"
+        )
+
+    val placeData: ArrayList<String?>
+        @Exclude get() = arrayListOf(
+            place?.name,
+            place?.toString(),
+            "$temperature \u00B0C",
+            time
+        )
+
+
+    val personData: ArrayList<String?>
+        @Exclude get() = arrayListOf(
+            person?.name,
+            person?.toString(),
+            person?.birthDate,
+            person?.cellphone,
+            person?.email,
+            person?.nationalId,
+            person?.gender?.name
+        )
+
+    val personColumns: ArrayList<String>
+        @Exclude get() = arrayListOf(
+            "Full Name",
+            "Address",
+            "Date of birth",
+            "Cellphone",
+            "Email Address",
+            "National ID",
+            "Gender"
+        )
 }
 
 enum class CaseState {
@@ -293,5 +331,5 @@ open class Cell(var value: String)
 data class ColumnHeader(var header: String) :
     Cell(header)
 
-data class RowHeader(var header: String):
-        Cell(header)
+data class RowHeader(var header: String) :
+    Cell(header)

@@ -10,7 +10,7 @@ import com.petruskambala.namcovidcontacttracer.utils.Results
 abstract class AbstractViewModel<K : AbstractModel> : ViewModel() {
 
     enum class LoadState {
-        LOADED, NO_LOAD, LOADING, LOAD_FAIL
+        LOADED, NO_LOAD, LOADING
     }
 
     protected var _repoResults: MutableLiveData<Pair<K?, Results>> = MutableLiveData()
@@ -18,19 +18,12 @@ abstract class AbstractViewModel<K : AbstractModel> : ViewModel() {
     val repoResults: LiveData<Pair<K?, Results>>
         get() = _repoResults
 
-
-    //    var repoResults: LiveData<Pair<K?,Results>> =
-//        get() = _repoResults
-//        set(value) {
-//            field = value
-//            _repoResults.postValue(value.value)
-//        }
-    var modelLoadState = MutableLiveData<LoadState>()
+    var modelLoadState = MutableLiveData<Pair<LoadState, Results?>>(Pair(LoadState.NO_LOAD,null))
     var modelLoad = MutableLiveData<K>()
 
     open fun clearModelLoad() {
         modelLoad.value = null
-        modelLoadState.value = LoadState.NO_LOAD
+        modelLoadState.value = Pair(LoadState.NO_LOAD,null)
     }
 
     open fun getModelLoad(): LiveData<K> {

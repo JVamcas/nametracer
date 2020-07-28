@@ -19,6 +19,7 @@ import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValid
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidMobile
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidTemperature
+import kotlinx.android.synthetic.main.fragment_new_case.*
 
 class BindingUtil {
     companion object {
@@ -168,6 +169,27 @@ class BindingUtil {
         }
 
         @JvmStatic
+        @BindingAdapter(value = ["email_cell_id", "mButton"])
+        fun validateAuthDetails(
+            mEditText: EditText,
+            email_cell_id: String?,
+            mButton: MaterialButton
+        ) {
+            email_cell_id?.apply {
+                mEditText.error =
+                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) || isValidNationalID(
+                            email_cell_id
+                        )
+                    ) null
+                    else "Enter a valid ID, email or cellphone number."
+                mButton.isEnabled =
+                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) || isValidNationalID(
+                        email_cell_id
+                    ))
+            }
+        }
+
+        @JvmStatic
         @BindingAdapter(value = ["userId"])
         fun validateNationalId(mEditText: EditText, nationalId: String?) {
             mEditText.error =
@@ -177,14 +199,16 @@ class BindingUtil {
         @InverseMethod("toAccountType")
         @JvmStatic
         fun fromAccountType(accountType: AccountType?): String? {
-            return accountType?.name
+            return if (accountType == AccountType.BUSINESS) "POINT OF CONTACT" else accountType?.name
         }
 
         @JvmStatic
         fun toAccountType(type: String): AccountType? {
-            return if (type !in AccountType.values()
-                    .map { it.name }
-            ) null else AccountType.valueOf(type)
+            return when (type) {
+                "POINT OF CONTACT" -> AccountType.BUSINESS
+                "PERSONAL" -> AccountType.PERSONAL
+                else -> null
+            }
         }
 
         @InverseMethod("toGender")

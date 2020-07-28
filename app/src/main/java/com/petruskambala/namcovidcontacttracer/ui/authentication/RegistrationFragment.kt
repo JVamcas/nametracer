@@ -51,12 +51,12 @@ open class RegistrationFragment : AbstractFragment() {
         new_account_btn.text = if (account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
         binding.account = account
 
+        //TODO to be tested
         account_type.apply {
             setAdapter(
                 ArrayAdapter(
                     requireContext(),
-                    R.layout.account_select_auto_layout,
-                    AccountType.values().map { it.name })
+                    R.layout.account_select_auto_layout, arrayListOf("PERSONAL","POINT OF CONTACT"))
             )
             setOnItemClickListener { _, _, pos, _ ->
                 new_account_btn.text = if (pos == 0) "NEXT" else "CREATE"

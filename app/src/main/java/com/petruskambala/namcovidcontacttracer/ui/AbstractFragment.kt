@@ -1,11 +1,17 @@
 package com.petruskambala.namcovidcontacttracer.ui
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,17 +20,21 @@ import androidx.navigation.Navigation
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
-import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
+import jxl.write.Label
+import jxl.write.WritableWorkbook
+import lib.folderpicker.FolderPicker
+
 
 abstract class AbstractFragment : Fragment() {
     val authModel: AuthenticationViewModel by activityViewModels()
-    private lateinit var mDialog: Dialog
+    private var mDialog: Dialog? = null
     lateinit var navController: NavController
     private lateinit var mProgressbarBinding: ProgressbarBinding
 
@@ -63,11 +73,113 @@ abstract class AbstractFragment : Fragment() {
         mProgressbarBinding.progressMsg.text = msg
     }
 
-    protected open fun endProgressBar() {
-        mDialog.cancel()
+    fun isStoragePermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= 23) {
+            if (requireActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED
+            ) {
+                true
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
+                false
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            true
+        }
     }
 
-    fun validateOp(accessType: AccessType):Boolean{
+    fun exportPersonTravelHistory(wkb: WritableWorkbook, visitList: ArrayList<Visit>) {
+        val visit = visitList.first()
+        val person = visit.person
+
+        wkb.createSheet("${person?.name} Travel History", 0).apply {
+            var rowIndex = 0
+            addCell(Label(0, rowIndex, "PERSONAL DETAILS"))
+            mergeCells(0, rowIndex, 6, rowIndex)
+
+            visit.apply { //person column header
+                var colIndex = 0
+                rowIndex += 2
+                personColumns.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+
+                rowIndex++ //person details
+                colIndex = 0
+                personData.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+
+                rowIndex += 2
+                addCell(Label(0, rowIndex, "TRAVEL HISTORY DETAILS"))
+                mergeCells(0, rowIndex, 3, rowIndex)
+
+                colIndex = 0 //place columns headers
+                rowIndex++
+                placeColumns.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+            }
+            visitList.forEach {
+                var colIndex = 0
+                rowIndex++
+                it.placeData.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+            }
+        }
+        wkb.write()
+        wkb.close()
+    }
+
+    fun exportPlaceVisits(wkb: WritableWorkbook, visitList: ArrayList<Visit>) {
+        val visit = visitList.first()
+        val place = visit.place
+
+        wkb.createSheet("${place?.name} Visit History", 0).apply {
+            var rowIndex = 0
+            addCell(Label(0, rowIndex, "VISITORS DETAILS"))
+            mergeCells(0, rowIndex, 3, rowIndex)
+
+            visit.apply {//person column header
+                var colIndex = 0
+                rowIndex += 2
+                personColumns.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+
+                visitList.forEach {//visitors details
+                    colIndex = 0
+                    rowIndex++
+                    it.placeData.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+                }
+            }
+        }
+        wkb.write()
+        wkb.close()
+    }
+
+    private lateinit var callback: (String?) -> Unit
+    private val SELECT_DIR = 0
+    fun getStorageDir(callback: (path: String?) -> Unit) {
+        this.callback = callback
+
+        val intent = Intent(requireContext(), FolderPicker::class.java)
+        intent.putExtra("title", "Select folder");
+        startActivityForResult(intent, SELECT_DIR)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == SELECT_DIR) {
+            data?.apply {
+                val folderLocation: String? = extras?.getString("data")
+                callback(folderLocation)
+            }
+        }
+    }
+
+
+    protected open fun endProgressBar() {
+        mDialog?.cancel()
+    }
+
+    fun validateOp(accessType: AccessType): Boolean {
         return true
 //        authModel.currentAccount.value?.let {
 //            return accessType in it.permission!!
@@ -101,7 +213,6 @@ abstract class AbstractFragment : Fragment() {
                     onBackClick()
                 }
             })
-
     }
 
     protected open fun onBackClick() {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group>
         <item
             android:id="@+id/find_case"
-            android:title="@string/find_case" />
-        <item android:id="@+id/export_to_excel"
-            android:title="@string/export_to_excel"
+            android:icon="@drawable/ic_search"
+            android:title="@string/find_case"
+            app:showAsAction="always"
             />
     </group>
 </menu>

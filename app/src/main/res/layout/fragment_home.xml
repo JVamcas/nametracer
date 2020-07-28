@@ -16,6 +16,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="@{stat == null?View.GONE: View.VISIBLE}"
             />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -38,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/covid_stat"
             android:layout_margin="40dp">
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="@{stat == null?View.GONE: View.VISIBLE}"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_margin="5dp"
@@ -77,5 +79,8 @@
         <variable
             name="new_case_count"
             type="String" />
+        <variable
+            name="stat"
+            type="com.petruskambala.namcovidcontacttracer.model.CovidStat" />
     </data>
 </layout>

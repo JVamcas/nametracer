@@ -36,6 +36,7 @@ class HomeFragment : AbstractFragment() {
     ): View? {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,6 +46,7 @@ class HomeFragment : AbstractFragment() {
 
         caseModel.repoResults.observe(viewLifecycleOwner, Observer {
             caseModel.covidStat.value?.apply {
+                binding.stat = this
                 val barData = BarData(
                     BarDataSet(listOf(BarEntry(0f, recovered.toFloat())), "Recovered").apply {
                         color = Color.parseColor("#28B463")
@@ -105,8 +107,9 @@ class HomeFragment : AbstractFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.cases -> {
-                navController.navigate(R.id.action_homeFragment_to_casesFragment)
+            R.id.cases -> { navController.navigate(R.id.action_homeFragment_to_casesFragment) }
+            R.id.point_of_contact ->{
+                navController.navigate(R.id.action_homeFragment_to_findPointOfContactFragment)
             }
         }
         return super.onOptionsItemSelected(item)

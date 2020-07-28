@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.action_global_profileFragment, bundle)
             R.id.about_developer -> if (curDestId != R.id.aboutDeveloperFragment)
                 navController.navigate(R.id.action_global_aboutDeveloperFragment, bundle)
-            R.id.nav_visits -> if (curDestId != R.id.aboutDeveloperFragment)
+            R.id.nav_visits -> if (curDestId != R.id.placeVisitedFragment)
                 navController.navigate(R.id.action_global_placeVisitedFragment, Bundle().apply {
                     putString(Const.PERSON_ID, authModel.currentAccount.value!!.id)
                 })

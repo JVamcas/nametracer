@@ -1,4 +1,4 @@
-package com.petruskambala.namcovidcontacttracer.ui
+package com.petruskambala.namcovidcontacttracer.ui.account
 
 import android.view.LayoutInflater
 import android.view.View

@@ -58,7 +58,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation 'com.llollox:androidtoggleswitch:2.0.1'
     kapt 'com.android.databinding:compiler:3.1.4'
 
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -72,8 +71,10 @@ dependencies {
 
     implementation 'com.evrencoskun.library:tableview:0.8.9.2'
 
+    // https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl
+    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
 
-
+    implementation 'lib.kashif:folderpicker:2.4'
 
 
 }

@@ -26,4 +26,5 @@
     <color name="selected_background_color">#E91E63</color>
     <color name="shadow_background_color">@color/white</color>
     <color name="unselected_background_color">@color/shimmer_background</color>
+    <color name="cell_layout_clr">#023364</color>
 </resources>

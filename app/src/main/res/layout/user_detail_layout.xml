@@ -14,7 +14,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            bind:title="@{`Personal Details`}" />
+            bind:title="@{title}" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/user_name"
@@ -68,6 +68,9 @@
     <data>
         <import type="android.text.TextUtils"/>
         <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
         <variable
             name="user"
             type="com.petruskambala.namcovidcontacttracer.model.Person" />

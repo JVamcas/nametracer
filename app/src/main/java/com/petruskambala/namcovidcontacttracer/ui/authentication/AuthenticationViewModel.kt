@@ -2,6 +2,7 @@ package com.petruskambala.namcovidcontacttracer.ui.authentication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -16,8 +17,16 @@ enum class AuthState {
 
 class AuthenticationViewModel : AbstractViewModel<Account>() {
 
-    private val _currentUser = MutableLiveData<Account>()
-    val currentAccount: LiveData<Account> = _currentUser
+
+    private val userId = MutableLiveData<String>()
+    private val _currentAccount: MutableLiveData<Account> =
+        Transformations.switchMap(userId) {
+            loadUserProfile(it)
+            MutableLiveData<Account>()
+        } as MutableLiveData<Account>
+
+    val currentAccount: LiveData<Account> = _currentAccount
+
     private var mAuthListener: FirebaseAuth.AuthStateListener
     private var mAccountRepo: AccountRepo = AccountRepo()
 
@@ -29,12 +38,12 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
         mAuthListener = FirebaseAuth.AuthStateListener { auth ->
             //if auth.currentUser is not null
             auth.currentUser?.let {
-                loadUserProfile(it.uid)
-                _currentUser.postValue(Account(user = it))
+                userId.postValue(it.uid)
+                _currentAccount.postValue(Account(user = it))
                 _mAuthState.postValue(AuthState.AUTHENTICATED)
                 return@AuthStateListener
             }
-            _currentUser.value = null
+            _currentAccount.value = null
             _mAuthState.postValue(AuthState.UNAUTHENTICATED)
         }
         Firebase.auth.addAuthStateListener(mAuthListener)
@@ -43,24 +52,24 @@ class AuthenticationViewModel : AbstractViewModel<Account>() {
     private fun loadUserProfile(userId: String) {
         mAccountRepo.loadAccountInfo(userId) { user, mResult ->
             if (mResult is Results.Success)
-                _currentUser.postValue(user)
+                _currentAccount.postValue(user)
         }
     }
 
     fun authenticate(email: String, password: String) {
         mAccountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
-            _repoResults.postValue(Pair(null,mResults))
+            _repoResults.postValue(Pair(null, mResults))
         }
     }
 
     fun createNewUser(account: Account, password: String) {
         mAccountRepo.createNewUserWithEmailAndPassword(account, password) { obj, mResults ->
             if (mResults is Results.Success) {
-                _currentUser.postValue(obj)
+                _currentAccount.postValue(obj)
                 _mAuthState.value = AuthState.AUTHENTICATED
 
             } else _mAuthState.value = AuthState.UNAUTHENTICATED
-            _repoResults.postValue(Pair(obj,mResults))
+            _repoResults.postValue(Pair(obj, mResults))
         }
     }
 

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="40dp"
-            android:visibility="@{covidCase.person == null ? View.VISIBLE:View.GONE}">
+            android:visibility="@{account == null ? View.VISIBLE:View.GONE}">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/transact_layout"
@@ -28,7 +28,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 >
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_cell_id"
                     android:layout_width="match_parent"
@@ -37,6 +36,8 @@
                     android:hint="@string/cell_or_email"
                     android:inputType="textAutoComplete"
                     android:text="@={auth.idMailCell}"
+                    email_cell_id="@{auth.idMailCell}"
+                    mButton="@{findUser}"
                     android:padding="9dp"
                     android:textAlignment="center"
                     android:textColor="@color/app_bar" />
@@ -57,7 +58,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{covidCase.person != null ? View.VISIBLE : View.GONE}">
+            android:visibility="@{account != null ? View.VISIBLE : View.GONE}">
 
             <include
                 android:id="@+id/user_avatar"
@@ -69,7 +70,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:cameraVisible="@{false}"
-                bind:model="@{covidCase}"
+                bind:model="@{account}"
                 bind:size="@{200}" />
 
             <include
@@ -80,8 +81,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_avatar"
-                bind:user="@{covidCase}"
-                bind:title="@{`Personal Details`}"
+                bind:user="@{(Person)account}"
+                bind:title="@{`CONTACT POINT Details`}"
                 />
 
             <include
@@ -92,90 +93,30 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_details"
-                bind:title="@{`Places Visited`}" />
+                bind:title="@{`Visitors in last 14 Days`}" />
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 style="@style/save_btn_outlined"
                 android:text="@string/view"
-                android:id="@+id/view_place_visited"
+                android:id="@+id/view_visitors"
                 app:layout_constraintTop_toBottomOf="@id/text_sep2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/bottom_sep"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:hint="@string/select_case_state"
-                app:hintTextColor="@color/hint_color"
-                android:id="@+id/case_state_layout"
-                android:layout_margin="20dp"
-                android:layout_marginBottom="40dp"
-                >
-                <AutoCompleteTextView
-                    android:id="@+id/case_state"
-                    android:inputType="none"
-                    android:layout_width="match_parent"
-                    android:focusable="false"
-                    android:text="@={BindingUtil.fromCaseState(covidCase.caseState)}"
-                    android:layout_height="wrap_content"
-                    tools:ignore="LabelFor" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_margin="5dp"
-                android:id="@+id/bottom_sep"
-                android:background="@color/app_color"
-                app:layout_constraintBottom_toTopOf="@id/record_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/record_btn"
-                style="@style/save_btn_outlined"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/record_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/record_btn"
-                app:layout_constraintBottom_toBottomOf="@id/record_btn"
-                app:layout_constraintStart_toStartOf="parent"
-                android:checked="@={covidCase.inQuarantine}"
-                android:text="@{`Move case `+ (covidCase.inQuarantine?`out of quarantine?`:`into quarantine?`)}"
-                android:textColor="@color/hint_color"
-                android:id="@+id/quarantine_case"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_margin="5dp"
-                android:background="@color/app_color"
-                app:layout_constraintTop_toBottomOf="@id/record_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <data>
         <import type="android.view.View" />
-        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
+        <import type="com.petruskambala.namcovidcontacttracer.model.Person"/>
 
         <variable
             name="auth"
             type="com.petruskambala.namcovidcontacttracer.model.Auth" />
         <variable
-            name="covidCase"
-            type="com.petruskambala.namcovidcontacttracer.model.CovidCase" />
+            name="account"
+            type="com.petruskambala.namcovidcontacttracer.model.Account" />
     </data>
 </layout>

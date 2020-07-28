@@ -63,6 +63,7 @@ class AccountRepo {
         email: String? = null,
         phoneNumber: String? = null,
         nationalId: String? = null,
+        accountType: AccountType,
         callback: (Person?, Results) -> Unit
     ) {
 
@@ -73,7 +74,7 @@ class AccountRepo {
         else
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("nationalId", nationalId)
         query.whereEqualTo(
-            "accountType", AccountType.PERSONAL.name
+            "accountType", accountType.name
         ).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {

@@ -63,9 +63,9 @@ open class NewCaseFragment : AbstractFragment() {
         view_place_visited.setOnClickListener {
             navController.navigate(
                 R.id.action_global_placeVisitedFragment,
-                //TODO might not work well need to pass in correct ID
                 Bundle().apply { putString(Const.PERSON_ID, case.personId) })
         }
+        //TODO need to use transformation when searching for places visited
 
         case_state.setOnClickListener {
             case_state.setAdapter(
@@ -125,7 +125,7 @@ open class NewCaseFragment : AbstractFragment() {
             else {
                 find_user.isEnabled = false
                 showProgressBar("Loading info...")
-                accountModel.findPerson(email = email, phoneNumber = cell, nationalId = nationalID)
+                accountModel.findAccount(email = email, phoneNumber = cell, nationalId = nationalID)
                 accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                     it?.apply {
                         endProgressBar()

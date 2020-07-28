@@ -19,11 +19,9 @@ import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidTemperature
 import com.petruskambala.namcovidcontacttracer.utils.Results
-import kotlinx.android.synthetic.main.fragment_new_case.*
 import kotlinx.android.synthetic.main.fragment_new_case.email_cell_id
 import kotlinx.android.synthetic.main.fragment_new_case.record_btn
 import kotlinx.android.synthetic.main.fragment_record_visit.*
-import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -54,7 +52,7 @@ class RecordVisitFragment : AbstractFragment() {
             val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
             showProgressBar("Loading visitor's account...")
 
-            accountModel.findPerson(email = email, phoneNumber = cell, nationalId = nationalID)
+            accountModel.findAccount(email = email, phoneNumber = cell, nationalId = nationalID)
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.apply {
                     endProgressBar()

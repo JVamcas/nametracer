@@ -8,11 +8,18 @@ import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentRecordedCaseBinding
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
+import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.AbstractListFragment
+import com.petruskambala.namcovidcontacttracer.ui.visit.VisitViewModel
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
+import com.petruskambala.namcovidcontacttracer.utils.Results
+import jxl.Workbook
+import jxl.write.WritableWorkbook
 import kotlinx.android.synthetic.main.fragment_recorded_case.*
+import java.io.File
+import java.io.FileOutputStream
 
 /**
  * A simple [Fragment] subclass.
@@ -21,6 +28,7 @@ class RecordedCaseFragment : AbstractListFragment<CovidCase, CaseListAdapter.Vie
 
     private lateinit var binding: FragmentRecordedCaseBinding
     private val caseModel: CaseViewModel by activityViewModels()
+    private val visitModel: VisitViewModel by activityViewModels()
 
     override fun initAdapter() {
         mAdapter = CaseListAdapter(this)
@@ -55,11 +63,10 @@ class RecordedCaseFragment : AbstractListFragment<CovidCase, CaseListAdapter.Vie
     override fun onEditModel(model: CovidCase, pos: Int) {
         if (validateOp(AccessType.UPDATE_CASE)) {
             val bundle = Bundle().apply {
-                putString(Const.CASE,ParseUtil.toJson(model))
-                putInt(Const.MODEL_POS,pos)
-                putInt("",0)
+                putString(Const.CASE, ParseUtil.toJson(model))
+                putInt(Const.MODEL_POS, pos)
             }
-            navController.navigate(R.id.action_casesFragment_to_updateCaseFragment,bundle)
+            navController.navigate(R.id.action_casesFragment_to_updateCaseFragment, bundle)
 
         } else showToast("Err: Permission denied.")
     }
@@ -87,6 +94,44 @@ class RecordedCaseFragment : AbstractListFragment<CovidCase, CaseListAdapter.Vie
                 navController.navigate(R.id.action_casesFragment_to_updateCaseFragment)
             }
             R.id.export_to_excel -> {
+//                if (isStoragePermissionGranted()) {
+//                    if (visitModel.allVisits.value == null)
+//                        showProgressBar("Loading data...")
+//                    visitModel.allVisits.observe(viewLifecycleOwner, Observer { allVisits ->
+//                        allVisits?.apply {
+//
+//                            val file =
+//                                File(
+//                                    requireActivity().getExternalFilesDir(null),
+//                                    "Nam Covid-19 Contact Tracer.xlsx"
+//                                )
+//                            val wkb = Workbook.createWorkbook(file)
+//
+//                            //group all visits by personId and add to wkb
+//                            var sheetIndex = 0
+//                            groupBy { it.personId }.forEach {
+//                                val personVisits = it.value as ArrayList<Visit>
+//                                val person = personVisits.first().person
+//                                addExcelSheet(
+//                                    wkb.createSheet(
+//                                        person?.name + " Travel History",
+//                                        sheetIndex++
+//                                    ), personVisits
+//                                )
+//                            }
+//                            wkb.write()
+//                            wkb.close()
+//                        }
+//                    })
+//                    visitModel.repoResults.observe(viewLifecycleOwner, Observer {
+//                        it?.apply {
+//                            endProgressBar()
+//                            if (second is Results.Error)
+//                                parseRepoResults(second, "")
+//                            visitModel.clearRepoResults(viewLifecycleOwner)
+//                        }
+//                    })
+//                }
             }
         }
         return super.onOptionsItemSelected(item)

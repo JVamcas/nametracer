@@ -11,5 +11,5 @@
 
     <!-- Overriding the default values of the tableView -->
     <dimen name="row_header_width">55dp</dimen>
-    <dimen name="column_header_height">20dp</dimen>
+    <dimen name="column_header_height">30dp</dimen>
 </resources>
