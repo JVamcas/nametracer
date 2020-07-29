@@ -65,13 +65,14 @@ class VisitRepo {
     fun loadPlaceVisitors(placeId: String, callback: (ArrayList<Visit>?, Results) -> Unit) {
         //TODO should only return visits in last 14 days
         DB.collection(Docs.VISITS.name).whereEqualTo("placeId", placeId)
-            .whereEqualTo("accountType", AccountType.PERSONAL)
             .get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     it.result?.let {
                         val stat = if (it.isEmpty) null else
-                            it.documents.mapNotNull { doc -> doc.toObject(Visit::class.java) }
+                            it.documents.mapNotNull {
+                                    doc -> doc.toObject(Visit::class.java)
+                            }.distinctBy { it.person?.id }
                         callback(
                             stat as ArrayList<Visit>?,
                             Results.Success(Results.Success.CODE.LOAD_SUCCESS)

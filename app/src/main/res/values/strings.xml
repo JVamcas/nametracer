@@ -65,4 +65,7 @@
     <string name="follow_me_on_twitter">Follow me on Twitter</string>
     <string name="new_cases">New Cases:</string>
     <string name="point_of_contact">Find Point of Contact</string>
+    <string name="name">Name</string>
+    <string name="cellphone">Cellphone</string>
+    <string name="email_address">Email Address</string>
 </resources>

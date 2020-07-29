@@ -110,7 +110,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeVisitorsFragment"
-        android:name="com.petruskambala.namcovidcontacttracer.ui.account.PlaceVisitorsFragment"
-        android:label="fragment_place_visitors"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.VisitorsListFragment"
+        android:label="Possible Contacts"
         tools:layout="@layout/fragment_place_visitors" />
 </navigation>

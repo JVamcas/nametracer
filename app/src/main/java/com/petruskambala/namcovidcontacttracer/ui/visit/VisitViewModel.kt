@@ -13,18 +13,18 @@ class VisitViewModel : AbstractViewModel<Visit>() {
     private val personId = MutableLiveData<String>()
     private val placeId = MutableLiveData<String>()
 
-    private val _placeVisitors: MutableLiveData<ArrayList<Visit>> =
+    private val _visitorsList: MutableLiveData<ArrayList<Visit>> =
         Transformations.switchMap(placeId){
             loadPlaceVisitors(it)
-            MutableLiveData<ArrayList<Visit>>(ArrayList())
+            MutableLiveData<ArrayList<Visit>>()
         }as MutableLiveData<ArrayList<Visit>>
 
-    val placeVisitors: LiveData<ArrayList<Visit>> = _placeVisitors
+    val visitorsList: LiveData<ArrayList<Visit>> = _visitorsList
 
     private val _personVisits: MutableLiveData<ArrayList<Visit>> =
         Transformations.switchMap(personId) {
             loadVisits(it)
-            MutableLiveData<ArrayList<Visit>>(ArrayList())
+            MutableLiveData<ArrayList<Visit>>()
         } as MutableLiveData<ArrayList<Visit>>
     val personVisits: LiveData<ArrayList<Visit>> = _personVisits
 
@@ -58,12 +58,16 @@ class VisitViewModel : AbstractViewModel<Visit>() {
     }
 
     fun switchPerson(id: String) {
-        if (personId.value == null || personId.value != id)
+        if (personId.value == null || personId.value != id) {
             personId.postValue(id)
+            _personVisits.postValue(null)
+        }
     }
-    fun loadPlace(id: String){
-        if (placeId.value == null || placeId.value != id)
+    fun switchPlace(id: String){
+        if (placeId.value == null || placeId.value != id) {
             placeId.postValue(id)
+            _visitorsList.postValue(null)
+        }
     }
 
     /***
@@ -78,8 +82,11 @@ class VisitViewModel : AbstractViewModel<Visit>() {
     }
 
     private fun loadPlaceVisitors(placeId: String){
+        modelLoadState.postValue(Pair(LoadState.LOADING, null))
         visitRepo.loadPlaceVisitors(placeId){visits, results ->
-
+            if(results is Results.Success)
+                _visitorsList.postValue(visits)
+            modelLoadState.postValue(Pair(LoadState.LOADED, results))
         }
     }
 }

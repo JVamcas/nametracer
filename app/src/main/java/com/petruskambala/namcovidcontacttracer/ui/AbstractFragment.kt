@@ -132,7 +132,7 @@ abstract class AbstractFragment : Fragment() {
         val visit = visitList.first()
         val place = visit.place
 
-        wkb.createSheet("${place?.name} Visit History", 0).apply {
+        wkb.createSheet("${place?.name} Visitors Details", 0).apply {
             var rowIndex = 0
             addCell(Label(0, rowIndex, "VISITORS DETAILS"))
             mergeCells(0, rowIndex, 3, rowIndex)
@@ -145,7 +145,7 @@ abstract class AbstractFragment : Fragment() {
                 visitList.forEach {//visitors details
                     colIndex = 0
                     rowIndex++
-                    it.placeData.forEach { addCell(Label(colIndex++, rowIndex, it)) }
+                    it.personData.forEach { addCell(Label(colIndex++, rowIndex, it)) }
                 }
             }
         }

@@ -14,6 +14,7 @@ import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -69,7 +70,9 @@ class PointOfContactFragment : AbstractFragment() {
         }
 
         view_visitors.setOnClickListener {
-            navController.navigate(R.id.action_findPointOfContactFragment_to_placeVisitorsFragment)
+            val bundle = Bundle()
+            bundle.putString(Const.PERSON_ID,binding.account!!.id)
+            navController.navigate(R.id.action_findPointOfContactFragment_to_placeVisitorsFragment,bundle)
         }
     }
 }

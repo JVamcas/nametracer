@@ -26,18 +26,15 @@ import java.io.File
  */
 open class PlaceVisitedFragment : AbstractFragment() {
 
-    private lateinit var binding: FragmentPlaceVisitedBinding
-    private val visitModel: VisitViewModel by activityViewModels()
-    private lateinit var personId: String
+    lateinit var binding: FragmentPlaceVisitedBinding
+    val visitModel: VisitViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            personId = getString(Const.PERSON_ID)!!
-            visitModel.switchPerson(personId)
+            getString(Const.PERSON_ID)?.let { visitModel.switchPerson(it) }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +52,14 @@ open class PlaceVisitedFragment : AbstractFragment() {
         binding.placesCount = 0
         visitModel.personVisits.observe(viewLifecycleOwner, Observer {
             binding.placesCount = it?.size ?: 0
-            it?.let {
-                initTable(it)
+            it?.apply {
+                val visit = first()
+                val colHeader = visit.placeColumns.map { ColumnHeader(it) } as ArrayList
+                val rows = map { it.placeData.map { Cell(it ?: "Unknown") } as ArrayList}
+                val rowHeader = map { t ->
+                    RowHeader((indexOfFirst { it.id == t.id } + 1).toString())
+                } as ArrayList<RowHeader>
+                initTable(colHeader,rows,rowHeader)
             }
         })
 
@@ -74,32 +77,11 @@ open class PlaceVisitedFragment : AbstractFragment() {
         })
     }
 
-    private fun initTable(visits: ArrayList<Visit>?) {
-        visits?.apply {
-            val columnHeader = arrayListOf(
-                ColumnHeader("Name"),
-                ColumnHeader("Address"),
-                ColumnHeader("Temperature"),
-                ColumnHeader("Date")
-            )
-            val rowHeader = visits.map { t ->
-                RowHeader((indexOfFirst { it.id == t.id } + 1).toString())
-            } as ArrayList<RowHeader>
-
-            val cells = visits.map {
-                arrayListOf(
-                    Cell(it.place?.name ?: "No Name"),
-                    Cell(it.place.toString()),
-                    Cell(if (it.temperature != null) it.temperature + "\u00B0C" else "Unknown"),
-                    Cell(it.time)
-                )
-            }
+    fun initTable(colHeader: ArrayList<ColumnHeader>,rows: List<ArrayList<Cell>>,rowHeader: ArrayList<RowHeader>) {
             val tableAdapter =
                 PlaceVisitedTableAdapter()
             place_visited_table.setAdapter(tableAdapter)
-            tableAdapter.setAllItems(columnHeader, rowHeader, cells)
-
-        }
+            tableAdapter.setAllItems(colHeader, rowHeader, rows)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,27 +91,14 @@ open class PlaceVisitedFragment : AbstractFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.export_to_excel) {
-            if (isStoragePermissionGranted()) {//permission must have been granted                                                                              
+            if (isStoragePermissionGranted()) {//permission must have been granted
                 getStorageDir { path ->
                     path?.let {
-                        if (visitModel.personVisits.value == null)
-                            showProgressBar("Loading your travel history...")
-                        visitModel.personVisits.observe(viewLifecycleOwner, Observer { visits ->
-                            visits?.apply {
-                                val file = File(path, "${first().person?.name} Travel History.xlsx")
-
-                                exportPersonTravelHistory(Workbook.createWorkbook(file), this)
-                                showToast("Saved to: ${file.absolutePath}")
-                            }
-                        })
-                        visitModel.repoResults.observe(viewLifecycleOwner, Observer {
-                            it?.apply {
-                                endProgressBar()
-                                if (second is Results.Error)
-                                    parseRepoResults(second, "")
-                                visitModel.clearRepoResults(viewLifecycleOwner)
-                            }
-                        })
+                        visitModel.personVisits.value?.apply {
+                            val file = File(path, "${first().person?.name} Travel History.xlsx")
+                            exportPersonTravelHistory(Workbook.createWorkbook(file), this)
+                            showToast("Saved to: ${file.absolutePath}")
+                        }
                     }
                 }
             }
