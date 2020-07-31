@@ -30,7 +30,6 @@ class RecordVisitFragment : AbstractFragment() {
 
     private lateinit var binding: FragmentRecordVisitBinding
     private val visitModel: VisitViewModel by activityViewModels()
-    private val accountModel: AccountViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,39 +50,39 @@ class RecordVisitFragment : AbstractFragment() {
             val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
             val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
             showProgressBar("Loading visitor's account...")
-
             accountModel.findAccount(email = email, phoneNumber = cell, nationalId = nationalID)
+
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+                println("")
                 it?.apply {
                     endProgressBar()
                     if (second is Results.Success) {
-
                         accountModel.clearRepoResults(viewLifecycleOwner)
                         val visit = Visit(
                             person = (first as Person).apply { placeVisited++ },
-                            place = authModel.currentAccount.value
+                            place = accountModel.currentAccount.value
                         ).apply {
                             time = DateUtil.today()
                             temperature = binding.visit?.visitorTemperature
-
                         }
                         updateProgressBarMsg("Recording visit...")
                         visitModel.recordVisit(visit)
-                        visitModel.repoResults.observe(viewLifecycleOwner, Observer { res ->
-                            res?.apply {
-                                endProgressBar()
-                                if (second is Results.Success)
-                                    navController.popBackStack()
-                                super.parseRepoResults(second, "Visit")
-                                visitModel.clearRepoResults(viewLifecycleOwner)
-                            }
-                        })
                     } else
                         super.parseRepoResults(second, "")
                     accountModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
+            visitModel.repoResults.observe(viewLifecycleOwner, Observer { res ->
+                res?.apply {
+                    endProgressBar()
+                    if (second is Results.Success)
+                        navController.popBackStack()
+                    super.parseRepoResults(second, "Visit")
+                    visitModel.clearRepoResults(viewLifecycleOwner)
+                }
+            })
         }
+
         visitor_temperature.addTextChangedListener(object : BindingUtil.TextChangeLister() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 super.onTextChanged(p0, p1, p2, p3)

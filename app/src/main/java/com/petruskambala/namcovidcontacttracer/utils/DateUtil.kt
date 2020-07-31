@@ -1,5 +1,6 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
+import android.text.format.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +34,10 @@ class DateUtil {
             val date = getDate(dateStr)
             val today = getDate(today())
             return date == today
+        }
+
+        fun parseDate(long: Long):String{
+            return DateFormat.format("dd MMMM yyyy",Date(long)).toString()
         }
     }
 }

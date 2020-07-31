@@ -1,11 +1,10 @@
 package com.petruskambala.namcovidcontacttracer.ui.account
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentProfileBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.Person
@@ -31,10 +30,27 @@ class ProfileFragment : AbstractFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true)
         binding = FragmentProfileBinding.inflate(inflater,container,false)
-        authModel.currentAccount.observe(viewLifecycleOwner, Observer {
-            binding.person = Person(account = account)
+
+        accountModel.currentAccount.observe(viewLifecycleOwner, Observer {
+            it.apply {
+                binding.person = it
+            }
         })
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.profile_menu,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            R.id.update_account -> {navController.navigate(R.id.action_profileFragment_to_updateProfileFragment)}
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

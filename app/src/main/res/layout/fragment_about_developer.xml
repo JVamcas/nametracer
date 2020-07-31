@@ -31,12 +31,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/user_avatar"
-            bind:user="@{person}" />
+            bind:user="@{person}"
+            bind:title="{`Personal Details`}"
+            />
 
         <include layout="@layout/text_separator_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:title="@{`Qualifications`}"
+            bind:title="@{`Education`}"
             android:id="@+id/qualification_text"
             app:layout_constraintTop_toBottomOf="@id/user_details"
             />
@@ -52,23 +54,11 @@
         <include layout="@layout/text_separator_line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            bind:title="@{`SOcial Media`}"
+            bind:title="@{``}"
             android:id="@+id/social_media"
             app:layout_constraintTop_toBottomOf="@id/qualifications"
             />
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/follow_on_twitter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textAlignment="center"
-            android:text="@string/follow_me_on_twitter"
-            android:drawablePadding="10dp"
-            android:textColor="@color/app_color"
-            android:drawableLeft="@drawable/ic_twitter_bird"
-            app:layout_constraintTop_toBottomOf="@id/social_media"
-            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <data>
         <variable

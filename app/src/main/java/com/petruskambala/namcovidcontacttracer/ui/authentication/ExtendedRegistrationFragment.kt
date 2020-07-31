@@ -34,16 +34,17 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             password = getString(Const.PASSWORD)!!
-            val account  = ParseUtil.fromJson(getString(Const.ACCOUNT),Account::class.java)
+            val account = ParseUtil.fromJson(getString(Const.ACCOUNT), Account::class.java)
             person = Person(account = account)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentExtendedRegistrationBinding.inflate(inflater,container,false)
+        binding = FragmentExtendedRegistrationBinding.inflate(inflater, container, false)
         binding.person = person
         return binding.root
     }
@@ -57,29 +58,10 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
             ))
         }
 
-        birth_date.setOnClickListener {
-            DatePickerFragment(birth_date).show(childFragmentManager,"Date of Birth")
-        }
+        birth_date.setOnClickListener { selectDate { birth_date.setText(it) } }
 
         new_account_btn.setOnClickListener {
-            createNewUser(person,password)
-        }
-    }
-
-    class DatePickerFragment(
-        private val mView: TextInputEditText
-    ): DialogFragment(),DatePickerDialog.OnDateSetListener{
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            // Use the current date as the default date in the picker
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-            return DatePickerDialog(requireActivity(),this,year,month,day)
-        }
-
-        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-            mView.setText("$year - ${view.month} - $day")
+            createNewUser(person, password)
         }
     }
 

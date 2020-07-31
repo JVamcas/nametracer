@@ -31,6 +31,8 @@ class VisitorsListFragment : PlaceVisitedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         visitModel.visitorsList.observe(viewLifecycleOwner, Observer {
             binding.placesCount = it?.size ?: 0
+            if (it == null)
+
             it?.apply {
                 val visit = first()
                 val colHeader = visit.personColumns.map { ColumnHeader(it) } as ArrayList

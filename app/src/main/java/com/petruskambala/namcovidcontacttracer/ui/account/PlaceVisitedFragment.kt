@@ -52,14 +52,16 @@ open class PlaceVisitedFragment : AbstractFragment() {
         binding.placesCount = 0
         visitModel.personVisits.observe(viewLifecycleOwner, Observer {
             binding.placesCount = it?.size ?: 0
+            no_places.text = if (it == null) "No possible contacts" else null
+
             it?.apply {
                 val visit = first()
                 val colHeader = visit.placeColumns.map { ColumnHeader(it) } as ArrayList
-                val rows = map { it.placeData.map { Cell(it ?: "Unknown") } as ArrayList}
+                val rows = map { it.placeData.map { Cell(it ?: "Unknown") } as ArrayList }
                 val rowHeader = map { t ->
                     RowHeader((indexOfFirst { it.id == t.id } + 1).toString())
                 } as ArrayList<RowHeader>
-                initTable(colHeader,rows,rowHeader)
+                initTable(colHeader, rows, rowHeader)
             }
         })
 
@@ -77,11 +79,15 @@ open class PlaceVisitedFragment : AbstractFragment() {
         })
     }
 
-    fun initTable(colHeader: ArrayList<ColumnHeader>,rows: List<ArrayList<Cell>>,rowHeader: ArrayList<RowHeader>) {
-            val tableAdapter =
-                PlaceVisitedTableAdapter()
-            place_visited_table.setAdapter(tableAdapter)
-            tableAdapter.setAllItems(colHeader, rowHeader, rows)
+    fun initTable(
+        colHeader: ArrayList<ColumnHeader>,
+        rows: List<ArrayList<Cell>>,
+        rowHeader: ArrayList<RowHeader>
+    ) {
+        val tableAdapter =
+            PlaceVisitedTableAdapter()
+        place_visited_table.setAdapter(tableAdapter)
+        tableAdapter.setAllItems(colHeader, rowHeader, rows)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

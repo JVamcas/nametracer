@@ -76,7 +76,11 @@
         android:id="@+id/profileFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.account.ProfileFragment"
         android:label="My Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+    </fragment>
     <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment" />
     <fragment
         android:id="@+id/extendedRegistrationFragment"
@@ -113,4 +117,8 @@
         android:name="com.petruskambala.namcovidcontacttracer.ui.account.VisitorsListFragment"
         android:label="Possible Contacts"
         tools:layout="@layout/fragment_place_visitors" />
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment"
+        android:label="Update Profile" /><action android:id="@+id/action_global_placeVisitorsFragment" app:destination="@id/placeVisitorsFragment"/>
 </navigation>

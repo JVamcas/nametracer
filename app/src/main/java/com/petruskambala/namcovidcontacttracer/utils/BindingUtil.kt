@@ -156,6 +156,36 @@ class BindingUtil {
         }
 
         @JvmStatic
+        @BindingAdapter(value = ["accountName", "accountType", "address", "town", "nationalId", "birthDate"])
+        fun validateAccountUpdate(
+            mButton: MaterialButton,
+            accountName: String?,
+            accountType: AccountType?,
+            address: String?,
+            town: String?,
+            nationalId: String?,
+            birthDate: String?
+        ) {
+            mButton.isEnabled =
+                (accountType == AccountType.PERSONAL
+                        && isValidNationalID(nationalId)
+                        && !listOf(
+                    accountName,
+                    address,
+                    town,
+                    birthDate
+                ).any { it.isNullOrEmpty() })
+
+                        || (accountType == AccountType.BUSINESS &&
+                        !listOf(
+                            accountName,
+                            address,
+                            town
+                        ).any { it.isNullOrEmpty() })
+
+        }
+
+        @JvmStatic
         @BindingAdapter(value = ["birthDate", "nationalId", "gender"], requireAll = false)
         fun validatePersonalAccount(
             mButton: MaterialButton,
@@ -203,7 +233,7 @@ class BindingUtil {
         }
 
         @JvmStatic
-        fun toAccountType(type: String): AccountType? {
+        fun toAccountType(type: String?): AccountType? {
             return when (type) {
                 "POINT OF CONTACT" -> AccountType.BUSINESS
                 "PERSONAL" -> AccountType.PERSONAL

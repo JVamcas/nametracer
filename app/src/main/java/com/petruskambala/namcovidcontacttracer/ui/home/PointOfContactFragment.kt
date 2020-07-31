@@ -26,7 +26,8 @@ import kotlinx.android.synthetic.main.fragment_point_of_contact.*
 class PointOfContactFragment : AbstractFragment() {
 
     private lateinit var binding: FragmentPointOfContactBinding
-    private val accountModel: AccountViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -26,7 +26,7 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="create_new_account">Create New Account?</string>
     <string name="my_profile">My Profile</string>
-    <string name="visits">Place Visited</string>
+    <string name="visits">Places Visited</string>
     <string name="menu_notifications">Notifications</string>
     <string name="user_signout">Logout</string>
     <string name="save_btn">Register</string>
@@ -68,4 +68,9 @@
     <string name="name">Name</string>
     <string name="cellphone">Cellphone</string>
     <string name="email_address">Email Address</string>
+    <string name="social_media">Social Media</string>
+    <string name="follow_me">Twitter</string>
+    <string name="linked_in">LinkedIn</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="contacts">Possible Contacts</string>
 </resources>

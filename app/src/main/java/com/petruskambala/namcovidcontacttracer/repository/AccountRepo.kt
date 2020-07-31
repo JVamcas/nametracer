@@ -17,27 +17,28 @@ class AccountRepo {
     fun createNewUserWithEmailAndPassword(
         mAccount: Account,
         password: String,
-        callback: (Account?, Results) -> Unit
+        callback: (Person?, Results) -> Unit
     ) {
+        val person = Person(account = mAccount)
         AUTH.createUserWithEmailAndPassword(mAccount.email!!, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    mAccount.apply { id = AUTH.currentUser!!.uid }
-                    DB.collection(Docs.ACCOUNTS.name).document(mAccount.id)
-                        .set(mAccount)
+                    person.apply { id = AUTH.currentUser!!.uid }
+                    DB.collection(Docs.ACCOUNTS.name).document(person.id)
+                        .set(person)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful)
-                                callback(mAccount, Success(Success.CODE.WRITE_SUCCESS))
-                            else callback(mAccount, Results.Error(task.exception))
+                                callback(person, Success(Success.CODE.WRITE_SUCCESS))
+                            else callback(person, Results.Error(task.exception))
                         }
                 } else callback(null, Results.Error(it.exception))
             }
     }
 
-    fun loadAccountInfo(userId: String, callback: (Account?, Results) -> Unit) {
+    fun loadAccountInfo(userId: String, callback: (Person?, Results) -> Unit) {
         DB.collection(Docs.ACCOUNTS.name).document(userId).get()
             .addOnSuccessListener {
-                val account = it.toObject(Account::class.java)
+                val account = it.toObject(Person::class.java)
                 val mResults = Success(Success.CODE.LOAD_SUCCESS)
                 callback(account, mResults)
             }
@@ -91,4 +92,38 @@ class AccountRepo {
             }
     }
 
+    fun updateAccount(account: Account, callback: (Results) -> Unit) {
+        DB.collection(Docs.ACCOUNTS.name).document(account.id)
+            .apply {
+                val task = if (account.accountType == AccountType.BUSINESS)
+                    update(
+                        "name", account.name,
+                        "accountType", account.accountType?.name,
+                        "address_1", account.address_1,
+                        "town", account.town,
+                        "gender", null,
+                        "nationalId", null,
+                        "birthDate", null
+                    )
+                else
+                    (account as Person).let {
+                        update(
+                            "name", it.name,
+                            "accountType", it.accountType?.name,
+                            "address_1", it.address_1,
+                            "town", it.town,
+                            "gender", it.gender?.name,
+                            "nationalId", it.nationalId,
+                            "birthDate", it.birthDate
+                        )
+                    }
+                task.addOnCompleteListener {
+                    val results =
+                        if (it.isSuccessful) Success(Success.CODE.UPDATE_SUCCESS) else Results.Error(
+                            it.exception
+                        )
+                    callback(results)
+                }
+            }
+    }
 }

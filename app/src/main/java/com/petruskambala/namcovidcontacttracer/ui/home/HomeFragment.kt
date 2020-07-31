@@ -13,11 +13,9 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentHomeBinding
-import com.petruskambala.namcovidcontacttracer.model.CaseState
+import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.ui.cases.CaseViewModel
-import com.petruskambala.namcovidcontacttracer.utils.DateUtil
-import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -87,7 +85,7 @@ class HomeFragment : AbstractFragment() {
             }
         })
 
-        authModel.currentAccount.observe(viewLifecycleOwner, Observer
+        accountModel.currentAccount.observe(viewLifecycleOwner, Observer
         {
             it?.let { binding.account = it }
         })
@@ -95,9 +93,9 @@ class HomeFragment : AbstractFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        authModel.currentAccount.observe(viewLifecycleOwner, Observer {
+        accountModel.currentAccount.observe(viewLifecycleOwner, Observer {
             it?.apply {
-                if (admin) {
+                if (admin && accountType == AccountType.PERSONAL) {
                     super.onCreateOptionsMenu(menu, inflater)
                     inflater.inflate(R.menu.admin_menu, menu)
                 }

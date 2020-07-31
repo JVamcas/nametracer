@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ObservableField
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.MainActivity
@@ -43,9 +42,9 @@ class LoginFragment : AbstractFragment() {
         }
         login_btn.setOnClickListener {
             login_btn.isEnabled = false
-            authModel.authenticate(auth.idMailCell, auth.password)
+            accountModel.authenticate(auth.idMailCell, auth.password)
             showProgressBar("Authenticating...")
-            authModel.repoResults.observe(viewLifecycleOwner, Observer {
+            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     endProgressBar()
                     login_btn.isEnabled = true
@@ -54,7 +53,7 @@ class LoginFragment : AbstractFragment() {
                         navController.popBackStack(R.id.homeFragment, false)
                         showToast("Welcome back!")
                     } else super.parseRepoResults(it.second, "")
-                    authModel.clearRepoResults(viewLifecycleOwner)
+                    accountModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
         }

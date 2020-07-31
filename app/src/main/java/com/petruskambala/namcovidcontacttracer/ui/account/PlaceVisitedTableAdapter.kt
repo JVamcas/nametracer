@@ -14,12 +14,7 @@ import com.petruskambala.namcovidcontacttracer.model.Cell
 import com.petruskambala.namcovidcontacttracer.model.ColumnHeader
 import com.petruskambala.namcovidcontacttracer.model.RowHeader
 
-class PlaceVisitedTableAdapter(
-
-//    var columnHeaders: ArrayList<ColumnHeader>,
-//    var rowHeaders: ArrayList<RowHeader>,
-//    var cells: ArrayList<ArrayList<Cell>>
-) : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
+class PlaceVisitedTableAdapter : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
 
     class CellViewHolder(
         var view: View,

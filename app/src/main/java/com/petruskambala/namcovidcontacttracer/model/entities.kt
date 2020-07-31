@@ -163,7 +163,7 @@ data class CovidCase(
             return false
         return (!other.email.isNullOrEmpty() && email == other.email)
                 || (!other.cellphone.isNullOrEmpty() && cellphone == other.cellphone)
-                || (other.nationalId.isNotEmpty() && nationalId == other.nationalId)
+                || (!other.nationalId.isNullOrEmpty() && nationalId == other.nationalId)
     }
 }
 
@@ -192,8 +192,9 @@ open class Account(
     private var _town: String? = "",
     open var admin: Boolean = false,
     private var _accountType: AccountType? = null,
-    open var permission: ArrayList<AccessType>? = null
-) : AbstractModel(id = user?.uid ?: "") {
+    open var permission: ArrayList<AccessType>? = null,
+    _id: String = ""
+) : AbstractModel(id = user?.uid ?: _id) {
     open var accountType: AccountType?
         @Bindable get() = _accountType
         set(value) {
@@ -253,8 +254,8 @@ open class Account(
 
 open class Person(
     account: Account? = null,
-    private var _birthDate: String = "",
-    private var _nationalId: String = "",
+    private var _birthDate: String? = "",
+    private var _nationalId: String? = "",
     private var _gender: Gender? = null,
     private var _placeVisited: Int = 0
 ) : Account(
@@ -263,9 +264,10 @@ open class Person(
     _address_1 = account?.address_1 ?: "",
     _cellphone = account?.cellphone,
     _email = account?.email?.toLowerCase(Locale.ROOT),
-    _accountType = account?.accountType
+    _accountType = account?.accountType,
+    _id = account?.id?:""
 ) {
-    var birthDate: String
+    var birthDate: String?
         @Bindable get() = _birthDate
         set(value) {
             if (_birthDate != value) {
@@ -288,7 +290,7 @@ open class Person(
             _placeVisited = value
             notifyPropertyChanged(BR.placeVisited)
         }
-    var nationalId: String
+    var nationalId: String?
         @Bindable get() = _nationalId
         set(value) {
             _nationalId = value

@@ -18,7 +18,7 @@ class ParseUtil {
             return path.toString()
         }
 
-        fun <K : AbstractModel?> modelCrone(model: K, kClass: Class<K>): K {
+        fun <K : AbstractModel?> copyOf(model: K, kClass: Class<K>): K {
             val json = ParseUtil.toJson(model)
             return fromJson(json, kClass)
         }

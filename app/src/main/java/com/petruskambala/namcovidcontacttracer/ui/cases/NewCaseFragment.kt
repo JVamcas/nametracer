@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.fragment_new_case.*
 open class NewCaseFragment : AbstractFragment() {
 
     val caseModel: CaseViewModel by activityViewModels()
-    private val accountModel: AccountViewModel by activityViewModels()
 
     lateinit var case: CovidCase
 

@@ -17,23 +17,26 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
 import com.petruskambala.namcovidcontacttracer.model.Visit
-import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
-import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
+import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
 import jxl.write.Label
 import jxl.write.WritableWorkbook
 import lib.folderpicker.FolderPicker
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 abstract class AbstractFragment : Fragment() {
-    val authModel: AuthenticationViewModel by activityViewModels()
+    val accountModel: AccountViewModel by activityViewModels()
     private var mDialog: Dialog? = null
     lateinit var navController: NavController
     private lateinit var mProgressbarBinding: ProgressbarBinding
@@ -47,9 +50,9 @@ abstract class AbstractFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         handleBackClicks()
 
-        authModel.authState.observe(viewLifecycleOwner, Observer { authState ->
+        accountModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             val currentDest = navController.currentDestination?.id
-            if (authState != AuthState.AUTHENTICATED) {
+            if (authState != AccountViewModel.AuthState.AUTHENTICATED) {
                 if (currentDest == R.id.loginFragment || currentDest == R.id.registrationFragment)
                     return@Observer
                 navController.navigate(R.id.action_global_loginFragment)
@@ -127,6 +130,7 @@ abstract class AbstractFragment : Fragment() {
         wkb.write()
         wkb.close()
     }
+
 
     fun exportPlaceVisits(wkb: WritableWorkbook, visitList: ArrayList<Visit>) {
         val visit = visitList.first()
@@ -243,6 +247,15 @@ abstract class AbstractFragment : Fragment() {
                 NO_ACCOUNT -> showToast("Err: Visitor has no account.")
                 else -> showToast("Err: Unknown error!")
             }
+        }
+    }
+
+    protected fun selectDate(callback: (date: String) -> Unit) {
+        MaterialDatePicker.Builder.datePicker().apply {
+            setSelection(Calendar.getInstance().timeInMillis)
+            val picker = build()
+            picker.show(requireActivity().supportFragmentManager,"")
+            picker.addOnPositiveButtonClickListener { callback(DateUtil.parseDate(it)) }
         }
     }
 }

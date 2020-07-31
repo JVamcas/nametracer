@@ -6,11 +6,28 @@
             android:id="@+id/nav_my_profile"
             android:icon="@drawable/ic_account"
             android:title="@string/my_profile" />
+        <item android:id="@+id/possible_contacts"
+            android:icon="@drawable/ic_contacts"
+            android:title="@string/contacts"
+            />
         <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_notifications"
             android:title="@string/menu_notifications" />
+
     </group>
+    <item android:title="@string/social_media">
+        <menu >
+            <item android:title="@string/follow_me"
+                android:id="@+id/follow_on_twitter"
+                android:icon="@drawable/ic_twitter_bird"
+                />
+            <item android:title="@string/linked_in"
+                android:id="@+id/follow_on_linked_in"
+                android:icon="@drawable/ic_linkedin"
+                />
+        </menu>
+    </item>
     <item android:title="@string/info">
         <menu >
             <item android:title="@string/share_app"

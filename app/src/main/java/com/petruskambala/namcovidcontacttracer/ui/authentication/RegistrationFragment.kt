@@ -51,7 +51,6 @@ open class RegistrationFragment : AbstractFragment() {
         new_account_btn.text = if (account.accountType == AccountType.PERSONAL) "NEXT" else "CREATE"
         binding.account = account
 
-        //TODO to be tested
         account_type.apply {
             setAdapter(
                 ArrayAdapter(
@@ -80,16 +79,16 @@ open class RegistrationFragment : AbstractFragment() {
 
     fun createNewUser(account: Account, password: String) {
         showProgressBar("Creating your account... Please wait!")
-        authModel.createNewUser(account, password)
+        accountModel.createNewUser(account, password)
         new_account_btn.isEnabled = false
-        authModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
+        accountModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
             pair?.let {
                 new_account_btn.isEnabled = true
                 if (pair.second is Results.Success) {
                     showToast("Account created successfully.")
                     navController.navigate(R.id.action_global_loginFragment)
                 } else super.parseRepoResults(pair.second, "")
-                authModel.clearRepoResults(viewLifecycleOwner)
+                accountModel.clearRepoResults(viewLifecycleOwner)
                 endProgressBar()
             }
         })

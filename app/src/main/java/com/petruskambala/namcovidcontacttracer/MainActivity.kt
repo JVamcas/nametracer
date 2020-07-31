@@ -1,10 +1,11 @@
 package com.petruskambala.namcovidcontacttracer
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -21,8 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.FirebaseApp
 import com.petruskambala.namcovidcontacttracer.databinding.NavHeaderMainBinding
 import com.petruskambala.namcovidcontacttracer.model.AccountType
-import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthState
-import com.petruskambala.namcovidcontacttracer.ui.authentication.AuthenticationViewModel
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var authModel: AuthenticationViewModel
+    private lateinit var accountModel: AccountViewModel
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +39,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        authModel = ViewModelProvider(this).get(AuthenticationViewModel::class.java)
+        accountModel = ViewModelProvider(this).get(AccountViewModel::class.java)
 
-        authModel.currentAccount.observe(this, Observer {
-            it?.apply {
-                nav_view.menu.clear()
-                if (it.accountType == AccountType.PERSONAL)
-                    nav_view.inflateMenu(R.menu.person_menu)
-                else nav_view.inflateMenu(R.menu.place_menu)
-            }
-        })
+
         navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -58,7 +51,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         val navBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(nav_view.getHeaderView(0))
-        authModel.currentAccount.observe(this, Observer { navBinding.user = it })
+        accountModel.currentAccount.observe(this, Observer {
+            navBinding.user = it
+            it?.apply {
+                nav_view.menu.clear()
+                if (it.accountType == AccountType.PERSONAL)
+                    nav_view.inflateMenu(R.menu.person_menu)
+                else nav_view.inflateMenu(R.menu.place_menu)
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -68,10 +69,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun onSignOut(view: View) {
         drawer_layout.closeDrawer(GravityCompat.START)
-        authModel.signOut()
-        authModel.authState.observe(this, Observer { authState ->
-            if (authState === AuthState.UNAUTHENTICATED) {
-                authModel.authState.removeObservers(this)
+        accountModel.signOut()
+        accountModel.authState.observe(this, Observer { authState ->
+            if (authState === AccountViewModel.AuthState.UNAUTHENTICATED) {
+                accountModel.authState.removeObservers(this)
                 Toast.makeText(this@MainActivity, "Logout Successfully!", Toast.LENGTH_SHORT).show()
             }
         })
@@ -87,7 +88,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.closeDrawer(GravityCompat.START)
         val curDestId = navController.currentDestination?.id
         val bundle = Bundle()
-        bundle.putString("account", ParseUtil.toJson(authModel.currentAccount.value))
+        bundle.putString("account", ParseUtil.toJson(accountModel.currentAccount.value))
+
         when (item.itemId) {
             R.id.nav_my_profile -> if (curDestId != R.id.profileFragment)
                 navController.navigate(R.id.action_global_profileFragment, bundle)
@@ -95,9 +97,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.action_global_aboutDeveloperFragment, bundle)
             R.id.nav_visits -> if (curDestId != R.id.placeVisitedFragment)
                 navController.navigate(R.id.action_global_placeVisitedFragment, Bundle().apply {
-                    putString(Const.PERSON_ID, authModel.currentAccount.value!!.id)
+                    putString(Const.PERSON_ID, accountModel.currentAccount.value!!.id)
                 })
 
+            R.id.possible_contacts ->{
+                if (curDestId != R.id.placeVisitorsFragment) {
+                    bundle.putString(Const.PERSON_ID, accountModel.currentAccount.value!!.id)
+                    navController.navigate(R.id.action_global_placeVisitorsFragment, bundle)
+                }
+            }
+
+            R.id.share_app -> {
+
+            }
+            R.id.follow_on_twitter -> {
+                startActivity(Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://twitter.com/intent/follow?user_id=48101720")
+                })
+            }
+            R.id.follow_on_linked_in -> {
+                startActivity(Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://www.linkedin.com/in/petrus-kambala-2178789a/")
+                })
+            }
         }
         return false
     }

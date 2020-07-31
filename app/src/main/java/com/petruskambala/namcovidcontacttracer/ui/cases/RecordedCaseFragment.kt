@@ -93,46 +93,6 @@ class RecordedCaseFragment : AbstractListFragment<CovidCase, CaseListAdapter.Vie
             R.id.find_case -> {
                 navController.navigate(R.id.action_casesFragment_to_updateCaseFragment)
             }
-            R.id.export_to_excel -> {
-//                if (isStoragePermissionGranted()) {
-//                    if (visitModel.allVisits.value == null)
-//                        showProgressBar("Loading data...")
-//                    visitModel.allVisits.observe(viewLifecycleOwner, Observer { allVisits ->
-//                        allVisits?.apply {
-//
-//                            val file =
-//                                File(
-//                                    requireActivity().getExternalFilesDir(null),
-//                                    "Nam Covid-19 Contact Tracer.xlsx"
-//                                )
-//                            val wkb = Workbook.createWorkbook(file)
-//
-//                            //group all visits by personId and add to wkb
-//                            var sheetIndex = 0
-//                            groupBy { it.personId }.forEach {
-//                                val personVisits = it.value as ArrayList<Visit>
-//                                val person = personVisits.first().person
-//                                addExcelSheet(
-//                                    wkb.createSheet(
-//                                        person?.name + " Travel History",
-//                                        sheetIndex++
-//                                    ), personVisits
-//                                )
-//                            }
-//                            wkb.write()
-//                            wkb.close()
-//                        }
-//                    })
-//                    visitModel.repoResults.observe(viewLifecycleOwner, Observer {
-//                        it?.apply {
-//                            endProgressBar()
-//                            if (second is Results.Error)
-//                                parseRepoResults(second, "")
-//                            visitModel.clearRepoResults(viewLifecycleOwner)
-//                        }
-//                    })
-//                }
-            }
         }
         return super.onOptionsItemSelected(item)
     }
