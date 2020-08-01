@@ -13,13 +13,14 @@ import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import jxl.Workbook
+import kotlinx.android.synthetic.main.fragment_place_visited.*
 import java.io.File
 
 /**
- * A [Fragment] subclass that loads and displays information of visitors for
+ * A [PlaceVisitedFragment] subclass that loads and displays information of visitors
  * who visited a specific place within the last 14 days
  */
-class VisitorsListFragment : PlaceVisitedFragment() {
+class PossibleContactListFragment : AbstractContactFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +30,11 @@ class VisitorsListFragment : PlaceVisitedFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         visitModel.visitorsList.observe(viewLifecycleOwner, Observer {
             binding.placesCount = it?.size ?: 0
-            if (it == null)
+            no_places.text = if (it == null) "No possible contacts." else null
 
             it?.apply {
                 val visit = first()
@@ -46,7 +49,7 @@ class VisitorsListFragment : PlaceVisitedFragment() {
 
         visitModel.modelLoadState.observe(viewLifecycleOwner, Observer {
             when (it.first) {
-                AbstractViewModel.LoadState.LOADING -> showProgressBar("Loading visitors...")
+                AbstractViewModel.LoadState.LOADING -> showProgressBar("Loading possible contacts...")
                 AbstractViewModel.LoadState.LOADED -> {
                     endProgressBar()
                     if (it.second is Results.Error)
@@ -72,6 +75,6 @@ class VisitorsListFragment : PlaceVisitedFragment() {
                 }
             }
         }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 }

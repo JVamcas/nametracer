@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_registrationFragment_to_extendedRegistrationFragment"
             app:destination="@id/extendedRegistrationFragment" />
+        <action
+            android:id="@+id/action_registrationFragment_to_verifyEmailFragment"
+            app:destination="@id/verifyEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -42,6 +45,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_verifyEmailFragment"
+            app:destination="@id/verifyEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/casesFragment"
@@ -86,7 +92,11 @@
         android:id="@+id/extendedRegistrationFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.authentication.ExtendedRegistrationFragment"
         android:label="Create New Account"
-        tools:layout="@layout/fragment_extended_registration" /><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
+        tools:layout="@layout/fragment_extended_registration" >
+        <action
+            android:id="@+id/action_extendedRegistrationFragment_to_verifyEmailFragment"
+            app:destination="@id/verifyEmailFragment" />
+    </fragment><action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
     <fragment
         android:id="@+id/recordVisitFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.visit.RecordVisitFragment"
@@ -114,11 +124,16 @@
     </fragment>
     <fragment
         android:id="@+id/placeVisitorsFragment"
-        android:name="com.petruskambala.namcovidcontacttracer.ui.account.VisitorsListFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.ui.account.PossibleContactListFragment"
         android:label="Possible Contacts"
         tools:layout="@layout/fragment_place_visitors" />
     <fragment
         android:id="@+id/updateProfileFragment"
         android:name="com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment"
         android:label="Update Profile" /><action android:id="@+id/action_global_placeVisitorsFragment" app:destination="@id/placeVisitorsFragment"/>
+    <fragment
+        android:id="@+id/verifyEmailFragment"
+        android:name="com.petruskambala.namcovidcontacttracer.VerifyEmailFragment"
+        android:label="Verify Email Address"
+        tools:layout="@layout/fragment_verify_email" />
 </navigation>

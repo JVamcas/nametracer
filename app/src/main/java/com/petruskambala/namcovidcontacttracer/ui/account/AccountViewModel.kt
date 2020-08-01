@@ -16,7 +16,7 @@ import com.petruskambala.namcovidcontacttracer.utils.Results
 
 class AccountViewModel : AbstractViewModel<Account>() {
     enum class AuthState {
-        AUTHENTICATED, UNAUTHENTICATED
+        AUTHENTICATED, UNAUTHENTICATED, EMAIL_NOT_VERIFIED
     }
 
     private val accountRepo = AccountRepo()
@@ -40,9 +40,15 @@ class AccountViewModel : AbstractViewModel<Account>() {
         mAuthListener = FirebaseAuth.AuthStateListener { auth ->
             //if auth.currentUser is not null
             auth.currentUser?.let {
-                userId.postValue(it.uid)
-                _currentAccount.postValue(Person(account = Account(user = it)))
-                _mAuthState.postValue(AuthState.AUTHENTICATED)
+                if (!it.isEmailVerified) {
+                    Firebase.auth.signOut()
+                    _mAuthState.postValue(AuthState.EMAIL_NOT_VERIFIED)
+                }
+                else {
+                    userId.postValue(it.uid)
+                    _currentAccount.postValue(Person(account = Account(user = it)))
+                    _mAuthState.postValue(AuthState.AUTHENTICATED)
+                }
                 return@AuthStateListener
             }
             _currentAccount.value = null
@@ -60,18 +66,25 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     fun authenticate(email: String, password: String) {
         accountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
+
             _repoResults.postValue(Pair(null, mResults))
         }
     }
 
     fun createNewUser(account: Account, password: String) {
         accountRepo.createNewUserWithEmailAndPassword(account, password) { obj, mResults ->
-            if (mResults is Results.Success) {
-                _currentAccount.postValue(obj)
-                _mAuthState.value = AuthState.AUTHENTICATED
-
-            } else _mAuthState.value = AuthState.UNAUTHENTICATED
+//            if (mResults is Results.Success) {
+//                _currentAccount.postValue(obj)
+//                _mAuthState.value = AuthState.AUTHENTICATED
+//
+//            } else _mAuthState.value = AuthState.UNAUTHENTICATED
             _repoResults.postValue(Pair(obj, mResults))
+        }
+    }
+
+    fun sendVerificationEmail(){
+        accountRepo.sendVerificationEmail{
+            _repoResults.postValue(Pair(null,it))
         }
     }
 

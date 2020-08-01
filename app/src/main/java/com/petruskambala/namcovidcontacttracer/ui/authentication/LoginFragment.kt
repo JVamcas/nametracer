@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentLoginBinding
@@ -48,11 +50,12 @@ class LoginFragment : AbstractFragment() {
                 it?.let {
                     endProgressBar()
                     login_btn.isEnabled = true
-                    if (it.second is Results.Success) {
+                    if (it.second is Results.Success && Firebase.auth.currentUser?.isEmailVerified == true) {
                         activity?.drawer_layout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                        navController.popBackStack(R.id.homeFragment, false)
+                        navController.popBackStack(R.id.homeFragment, true)
                         showToast("Welcome back!")
-                    } else super.parseRepoResults(it.second, "")
+                    }
+                    else super.parseRepoResults(it.second, "")
                     accountModel.clearRepoResults(viewLifecycleOwner)
                 }
             })

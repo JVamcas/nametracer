@@ -53,7 +53,6 @@ class RecordVisitFragment : AbstractFragment() {
             accountModel.findAccount(email = email, phoneNumber = cell, nationalId = nationalID)
 
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                println("")
                 it?.apply {
                     endProgressBar()
                     if (second is Results.Success) {

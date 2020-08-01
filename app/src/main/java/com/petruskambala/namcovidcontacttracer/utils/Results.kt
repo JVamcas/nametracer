@@ -12,7 +12,7 @@ import com.petruskambala.namcovidcontacttracer.model.AbstractModel.EntityExistEx
  * Represent results of an async operation
  */
 sealed class Results {
-    class Success(val code: CODE) : Results() {
+        class Success(val code: CODE) : Results() {
         enum class CODE {
             WRITE_SUCCESS,
             UPDATE_SUCCESS,
@@ -20,6 +20,7 @@ sealed class Results {
             AUTH_SUCCESS,
             LOGOUT_SUCCESS,
             DELETE_SUCCESS,
+            VERIFICATION_EMAIL_SENT
         }
     }
 

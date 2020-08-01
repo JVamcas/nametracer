@@ -20,6 +20,7 @@ abstract class AbstractModel(
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
+    class EmailNotVerifiedException : Exception()
 }
 
 /***

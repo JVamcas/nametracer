@@ -53,10 +53,10 @@ class AccountRepo {
         callback: (Results) -> Unit
     ) {
         AUTH.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (!task.isSuccessful)
-                    callback(Results.Error(task.exception))
-                else callback(Success(Success.CODE.AUTH_SUCCESS))
+            .addOnCompleteListener {
+                if (it.isSuccessful)
+                    callback(Success(Success.CODE.AUTH_SUCCESS))
+                else callback(Results.Error(it.exception))
             }
     }
 
@@ -125,5 +125,16 @@ class AccountRepo {
                     callback(results)
                 }
             }
+    }
+
+    fun sendVerificationEmail(callback: (Results) -> Unit) {
+        val user = Firebase.auth.currentUser
+        user?.sendEmailVerification()?.addOnCompleteListener {
+            callback(
+                if (it.isSuccessful)
+                    Success(Success.CODE.VERIFICATION_EMAIL_SENT)
+                else Results.Error(it.exception)
+            )
+        }
     }
 }

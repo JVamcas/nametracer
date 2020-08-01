@@ -21,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
+import com.petruskambala.namcovidcontacttracer.databinding.WarningDialogBinding
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
@@ -32,6 +33,7 @@ import jxl.write.Label
 import jxl.write.WritableWorkbook
 import lib.folderpicker.FolderPicker
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 
 
@@ -52,7 +54,9 @@ abstract class AbstractFragment : Fragment() {
 
         accountModel.authState.observe(viewLifecycleOwner, Observer { authState ->
             val currentDest = navController.currentDestination?.id
-            if (authState != AccountViewModel.AuthState.AUTHENTICATED) {
+            if(authState == AccountViewModel.AuthState.EMAIL_NOT_VERIFIED)
+                showToast("Err: Email not verified. Please check email inbox to verify.")
+            if (authState != AccountViewModel.AuthState.AUTHENTICATED && currentDest != R.id.loginFragment) {
                 if (currentDest == R.id.loginFragment || currentDest == R.id.registrationFragment)
                     return@Observer
                 navController.navigate(R.id.action_global_loginFragment)
@@ -131,7 +135,6 @@ abstract class AbstractFragment : Fragment() {
         wkb.close()
     }
 
-
     fun exportPlaceVisits(wkb: WritableWorkbook, visitList: ArrayList<Visit>) {
         val visit = visitList.first()
         val place = visit.place
@@ -165,7 +168,6 @@ abstract class AbstractFragment : Fragment() {
         val intent = Intent(requireContext(), FolderPicker::class.java)
         intent.putExtra("title", "Select folder");
         startActivityForResult(intent, SELECT_DIR)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -177,7 +179,6 @@ abstract class AbstractFragment : Fragment() {
             }
         }
     }
-
 
     protected open fun endProgressBar() {
         mDialog?.cancel()
@@ -230,7 +231,7 @@ abstract class AbstractFragment : Fragment() {
     protected fun parseRepoResults(mResults: Results?, modelName: String) {
         if (mResults is Results.Success) {
             when (mResults.code) {
-                AUTH_SUCCESS -> showToast("Welcome to Covid-19 Contact Tracer!")
+                AUTH_SUCCESS -> showToast("Welcome to Nam Covid-19 Contact Tracer!")
                 WRITE_SUCCESS -> showToast("$modelName registered successfully.")
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
@@ -250,6 +251,25 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
+    protected fun showWarningDialog(warningTxt: String?, mListener: WarningDialogListener) {
+        with(WarningDialogBinding.inflate(layoutInflater, null, false))
+        {
+            val dialog = AlertDialog.Builder(requireContext()).let {
+                it.setView(root)
+                it.create()
+            }.apply { show() }
+            title.text = warningTxt
+            val okBtnClicked = AtomicBoolean(false)
+            okBtn.setOnClickListener {
+                okBtnClicked.set(true)
+                dialog.dismiss()
+                mListener.onOkWarning()
+            }
+            cancelBtn.setOnClickListener { dialog.dismiss() }
+            dialog.setOnDismissListener { if (!okBtnClicked.get()) mListener.onCancelWarning() }
+        }
+    }
+
     protected fun selectDate(callback: (date: String) -> Unit) {
         MaterialDatePicker.Builder.datePicker().apply {
             setSelection(Calendar.getInstance().timeInMillis)
@@ -257,5 +277,17 @@ abstract class AbstractFragment : Fragment() {
             picker.show(requireActivity().supportFragmentManager,"")
             picker.addOnPositiveButtonClickListener { callback(DateUtil.parseDate(it)) }
         }
+    }
+
+    interface WarningDialogListener {
+        /***
+         * Called when user Ok the delete Op
+         */
+        fun onOkWarning()
+        /***
+         * Called when user explicitly cancelled the op or when dialog dismissed
+         * by touching elsewhere in the device screen
+         */
+        fun onCancelWarning()
     }
 }
