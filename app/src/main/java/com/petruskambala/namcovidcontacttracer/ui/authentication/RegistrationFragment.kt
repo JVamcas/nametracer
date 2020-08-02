@@ -13,7 +13,7 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentRegistrationBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
-import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_registration.*
 /**
  * A simple [Fragment] subclass.
  */
-open class RegistrationFragment : AbstractFragment() {
+open class RegistrationFragment : AbstractAuthFragment() {
     private lateinit var binding: FragmentRegistrationBinding
     private lateinit var account: Account
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,8 @@ open class RegistrationFragment : AbstractFragment() {
             setAdapter(
                 ArrayAdapter(
                     requireContext(),
-                    R.layout.account_select_auto_layout, arrayListOf("PERSONAL","POINT OF CONTACT"))
+                    R.layout.account_select_auto_layout, arrayListOf("PERSONAL", "POINT OF CONTACT")
+                )
             )
             setOnItemClickListener { _, _, pos, _ ->
                 new_account_btn.text = if (pos == 0) "NEXT" else "CREATE"
@@ -83,16 +84,22 @@ open class RegistrationFragment : AbstractFragment() {
         new_account_btn.isEnabled = false
         accountModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
             pair?.let {
+                endProgressBar()
                 new_account_btn.isEnabled = true
                 if (pair.second is Results.Success) {
                     showToast("Account created successfully.")
-                    navController.navigate(R.id.action_global_loginFragment)
+                    if (accountModel.authState.value == EMAIL_NOT_VERIFIED)
+                        navController.navigate(R.id.action_global_verifyEmailFragment)
+                    else {
+                        requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                        navController.popBackStack(R.id.action_global_homeFragment, false)
+                    }
                 } else super.parseRepoResults(pair.second, "")
                 accountModel.clearRepoResults(viewLifecycleOwner)
-                endProgressBar()
             }
         })
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -100,8 +107,8 @@ open class RegistrationFragment : AbstractFragment() {
         activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         activity.toolbar.navigationIcon = null
     }
-
-    override fun onBackClick() {
-        showExitDialog()
-    }
+//
+//    override fun onBackClick() {
+//        showExitDialog()
+//    }
 }

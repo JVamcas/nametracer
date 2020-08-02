@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -24,6 +25,12 @@ import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
 import com.petruskambala.namcovidcontacttracer.databinding.WarningDialogBinding
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
+import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
+import com.petruskambala.namcovidcontacttracer.ui.authentication.LoginFragment
+import com.petruskambala.namcovidcontacttracer.ui.authentication.VerifyEmailFragment
+import com.petruskambala.namcovidcontacttracer.ui.home.HomeFragment
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -31,6 +38,7 @@ import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
 import jxl.write.Label
 import jxl.write.WritableWorkbook
+import kotlinx.android.synthetic.main.activity_main.*
 import lib.folderpicker.FolderPicker
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -52,16 +60,18 @@ abstract class AbstractFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         handleBackClicks()
 
-        accountModel.authState.observe(viewLifecycleOwner, Observer { authState ->
-            val currentDest = navController.currentDestination?.id
-            if(authState == AccountViewModel.AuthState.EMAIL_NOT_VERIFIED)
-                showToast("Err: Email not verified. Please check email inbox to verify.")
-            if (authState != AccountViewModel.AuthState.AUTHENTICATED && currentDest != R.id.loginFragment) {
-                if (currentDest == R.id.loginFragment || currentDest == R.id.registrationFragment)
-                    return@Observer
-                navController.navigate(R.id.action_global_loginFragment)
+        accountModel.authState.observe(viewLifecycleOwner, Observer {
+            it?.apply {
+                if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment)
+                    navController.navigate(R.id.action_global_loginFragment)
             }
         })
+    }
+
+
+    protected fun endAuthFlow() {
+        endProgressBar()
+        accountModel.clearRepoResults(viewLifecycleOwner)
     }
 
     protected open fun showProgressBar(message: String) {
@@ -236,7 +246,8 @@ abstract class AbstractFragment : Fragment() {
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
                 DELETE_SUCCESS -> showToast("$modelName deleted successfully.")
-                LOAD_SUCCESS -> showToast("")
+                VERIFICATION_EMAIL_SENT -> showToast("Verification email sent.")
+                else -> showToast("")
             }
         } else if (mResults is Results.Error) {
             when (mResults.code) {
@@ -274,7 +285,7 @@ abstract class AbstractFragment : Fragment() {
         MaterialDatePicker.Builder.datePicker().apply {
             setSelection(Calendar.getInstance().timeInMillis)
             val picker = build()
-            picker.show(requireActivity().supportFragmentManager,"")
+            picker.show(requireActivity().supportFragmentManager, "")
             picker.addOnPositiveButtonClickListener { callback(DateUtil.parseDate(it)) }
         }
     }
@@ -284,6 +295,7 @@ abstract class AbstractFragment : Fragment() {
          * Called when user Ok the delete Op
          */
         fun onOkWarning()
+
         /***
          * Called when user explicitly cancelled the op or when dialog dismissed
          * by touching elsewhere in the device screen

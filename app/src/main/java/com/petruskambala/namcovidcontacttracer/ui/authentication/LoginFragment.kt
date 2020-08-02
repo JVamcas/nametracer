@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentLoginBinding
 import com.petruskambala.namcovidcontacttracer.model.Auth
-import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment : AbstractFragment() {
+class LoginFragment : AbstractAuthFragment() {
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
@@ -42,6 +41,7 @@ class LoginFragment : AbstractFragment() {
         create_new_account.setOnClickListener {
             navController.navigate(R.id.action_loginFragment_to_registrationFragment)
         }
+
         login_btn.setOnClickListener {
             login_btn.isEnabled = false
             accountModel.authenticate(auth.idMailCell, auth.password)
@@ -50,15 +50,21 @@ class LoginFragment : AbstractFragment() {
                 it?.let {
                     endProgressBar()
                     login_btn.isEnabled = true
-                    if (it.second is Results.Success && Firebase.auth.currentUser?.isEmailVerified == true) {
-                        activity?.drawer_layout?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                        navController.popBackStack(R.id.homeFragment, true)
-                        showToast("Welcome back!")
-                    }
-                    else super.parseRepoResults(it.second, "")
+                    if (it.second is Results.Success) {
+                        if (accountModel.authState.value == EMAIL_NOT_VERIFIED)
+                            navController.navigate(R.id.action_global_verifyEmailFragment)
+                        else {
+                            requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                            navController.popBackStack(R.id.homeFragment, false)
+                        }
+                    } else (it.second is Results.Error)
+                    super.parseRepoResults(it.second, "")
                     accountModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
+        }
+        reset_password.setOnClickListener {
+            navController.navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
     }
 

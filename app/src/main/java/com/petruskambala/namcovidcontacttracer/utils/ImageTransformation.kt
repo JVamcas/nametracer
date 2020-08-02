@@ -1,7 +1,6 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
 import android.graphics.*
-import android.text.TextUtils
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import com.squareup.picasso.Transformation

@@ -136,7 +136,7 @@
                     android:padding="9dp"
                     android:singleLine="true"
                     android:text="@={account.nationalId}"
-                    app:userId="@{account.nationalId}" />
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -187,7 +187,6 @@
                 accountType="@{BindingUtil.toAccountType(accountType.text)}"
                 address="@{account.address_1}"
                 town="@{account.town}"
-                nationalId="@{account.nationalId}"
                 birthDate="@{account.birthDate}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

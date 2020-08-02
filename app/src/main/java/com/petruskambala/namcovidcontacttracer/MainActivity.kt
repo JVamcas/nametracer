@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         accountModel = ViewModelProvider(this).get(AccountViewModel::class.java)
 
-
         navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -97,7 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.action_global_aboutDeveloperFragment, bundle)
             R.id.nav_visits -> if (curDestId != R.id.placeVisitedFragment)
                 navController.navigate(R.id.action_global_placeVisitedFragment, Bundle().apply {
-                    putString(Const.PERSON_ID, accountModel.currentAccount.value!!.id)
+                    putString(Const.PERSON_ID, accountModel.currentAccount.value?.id)
                 })
 
             R.id.possible_contacts ->{
@@ -123,8 +122,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         return false
     }
-}
-
-class Auto(context: Context) : AppCompatAutoCompleteTextView(context) {
-
 }

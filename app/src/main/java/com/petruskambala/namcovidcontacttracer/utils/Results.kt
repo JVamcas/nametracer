@@ -20,7 +20,8 @@ sealed class Results {
             AUTH_SUCCESS,
             LOGOUT_SUCCESS,
             DELETE_SUCCESS,
-            VERIFICATION_EMAIL_SENT
+            VERIFICATION_EMAIL_SENT,
+            PASSWORD_RESET_LINK_SENT
         }
     }
 

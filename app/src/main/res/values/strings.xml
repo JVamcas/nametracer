@@ -16,7 +16,7 @@
     <string name="line_1_address">Line 1 Address</string>
     <string name="town">Town</string>
     <string name="btn_register">Create</string>
-    <string name="cell_or_email">ID, Email or Cellphone Number.</string>
+    <string name="cell_or_email">Email or Cellphone Number.</string>
     <string name="user_password">Password</string>
     <string name="btn_login">Login</string>
     <string name="Place">Place</string>
@@ -73,5 +73,9 @@
     <string name="linked_in">LinkedIn</string>
     <string name="update_profile">Update Profile</string>
     <string name="contacts">Possible Contacts</string>
-    <string name="OK">Ok</string>
+    <string name="OK">OK</string>
+    <string name="verify_email">Email verification link has been sent to your email. Click on link to verify your email address.</string>
+    <string name="resend_link">Resend Link</string>
+    <string name="reset_btn">Reset</string>
+    <string name="email_hint">Input your email address.</string>
 </resources>

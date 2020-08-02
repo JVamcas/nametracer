@@ -78,8 +78,8 @@ class ParseUtil {
         }
 
         fun isValidTemperature(value: String?): Boolean {
-            return !value.isNullOrEmpty()
-                    && Pattern.matches("[2-4]\\d(.\\d)?$", value)
+            return value.isNullOrEmpty()
+                    || Pattern.matches("[2-4]\\d(.\\d)?$", value)
 
         }
     }

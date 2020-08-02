@@ -100,9 +100,9 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (isValidMobile(idMailCell) || isValidEmail(idMailCell) || isValidNationalID(
+                if (isValidMobile(idMailCell) || isValidEmail(idMailCell) /**|| isValidNationalID(
                         idMailCell
-                    )
+                    )**/
                 )
                     null else errorMsg
         }
@@ -156,19 +156,17 @@ class BindingUtil {
         }
 
         @JvmStatic
-        @BindingAdapter(value = ["accountName", "accountType", "address", "town", "nationalId", "birthDate"])
+        @BindingAdapter(value = ["accountName", "accountType", "address", "town", "birthDate"])
         fun validateAccountUpdate(
             mButton: MaterialButton,
             accountName: String?,
             accountType: AccountType?,
             address: String?,
             town: String?,
-            nationalId: String?,
             birthDate: String?
         ) {
             mButton.isEnabled =
                 (accountType == AccountType.PERSONAL
-                        && isValidNationalID(nationalId)
                         && !listOf(
                     accountName,
                     address,
@@ -186,15 +184,13 @@ class BindingUtil {
         }
 
         @JvmStatic
-        @BindingAdapter(value = ["birthDate", "nationalId", "gender"], requireAll = false)
+        @BindingAdapter(value = ["birthDate", "gender"], requireAll = false)
         fun validatePersonalAccount(
             mButton: MaterialButton,
             birthDate: String?,
-            nationalId: String?,
             gender: Gender?
         ) {
             mButton.isEnabled = !birthDate.isNullOrEmpty()
-                    && !nationalId.isNullOrEmpty() && nationalId.length == 11
                     && gender in Gender.values()
         }
 
@@ -207,15 +203,15 @@ class BindingUtil {
         ) {
             email_cell_id?.apply {
                 mEditText.error =
-                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) || isValidNationalID(
+                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) /**|| isValidNationalID(
                             email_cell_id
-                        )
+                        )**/
                     ) null
                     else "Enter a valid ID, email or cellphone number."
                 mButton.isEnabled =
-                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) || isValidNationalID(
+                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) /**|| isValidNationalID(
                         email_cell_id
-                    ))
+                    )**/)
             }
         }
 
@@ -262,7 +258,7 @@ class BindingUtil {
             temperature: String?
         ) {
             mButton.isEnabled =
-                (isValidNationalID(idMailCell) || isValidEmail(idMailCell) || isValidMobile(
+                (isValidEmail(idMailCell) || isValidMobile(
                     idMailCell
                 )) && isValidTemperature(temperature)
         }

@@ -137,4 +137,12 @@ class AccountRepo {
             )
         }
     }
+
+    fun resetPassword(email: String, callback: (Results) -> Unit) {
+        Firebase.auth.sendPasswordResetEmail(email).addOnCompleteListener {
+            val results = if (it.isSuccessful) Success(Success.CODE.PASSWORD_RESET_LINK_SENT)
+            else Results.Error(it.exception)
+            callback(results)
+        }
+    }
 }

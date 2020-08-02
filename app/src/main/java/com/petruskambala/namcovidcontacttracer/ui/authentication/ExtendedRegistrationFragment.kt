@@ -1,26 +1,19 @@
 package com.petruskambala.namcovidcontacttracer.ui.authentication
 
-import android.app.DatePickerDialog
-import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputEditText
+import androidx.fragment.app.Fragment
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentExtendedRegistrationBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.model.Person
-import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import kotlinx.android.synthetic.main.fragment_extended_registration.*
-import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -63,9 +56,5 @@ class ExtendedRegistrationFragment : RegistrationFragment() {
         new_account_btn.setOnClickListener {
             createNewUser(person, password)
         }
-    }
-
-    override fun onBackClick() {
-        navController.popBackStack()
     }
 }

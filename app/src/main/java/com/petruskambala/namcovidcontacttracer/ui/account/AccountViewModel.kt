@@ -13,6 +13,7 @@ import com.petruskambala.namcovidcontacttracer.repository.AccountRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
+import java.util.concurrent.atomic.AtomicBoolean
 
 class AccountViewModel : AbstractViewModel<Account>() {
     enum class AuthState {
@@ -32,7 +33,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     private var mAuthListener: FirebaseAuth.AuthStateListener
 
-    private val _mAuthState = MutableLiveData<AuthState>()
+    private val _mAuthState = MutableLiveData<AuthState>(AuthState.UNAUTHENTICATED)
     val authState: LiveData<AuthState> = _mAuthState
 
     init {
@@ -40,10 +41,8 @@ class AccountViewModel : AbstractViewModel<Account>() {
         mAuthListener = FirebaseAuth.AuthStateListener { auth ->
             //if auth.currentUser is not null
             auth.currentUser?.let {
-                if (!it.isEmailVerified) {
-                    Firebase.auth.signOut()
+                if (!it.isEmailVerified)
                     _mAuthState.postValue(AuthState.EMAIL_NOT_VERIFIED)
-                }
                 else {
                     userId.postValue(it.uid)
                     _currentAccount.postValue(Person(account = Account(user = it)))
@@ -53,6 +52,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
             }
             _currentAccount.value = null
             _mAuthState.postValue(AuthState.UNAUTHENTICATED)
+
         }
         Firebase.auth.addAuthStateListener(mAuthListener)
     }
@@ -73,18 +73,13 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     fun createNewUser(account: Account, password: String) {
         accountRepo.createNewUserWithEmailAndPassword(account, password) { obj, mResults ->
-//            if (mResults is Results.Success) {
-//                _currentAccount.postValue(obj)
-//                _mAuthState.value = AuthState.AUTHENTICATED
-//
-//            } else _mAuthState.value = AuthState.UNAUTHENTICATED
             _repoResults.postValue(Pair(obj, mResults))
         }
     }
 
-    fun sendVerificationEmail(){
-        accountRepo.sendVerificationEmail{
-            _repoResults.postValue(Pair(null,it))
+    fun sendVerificationEmail() {
+        accountRepo.sendVerificationEmail {
+            _repoResults.postValue(Pair(null, it))
         }
     }
 
@@ -117,6 +112,13 @@ class AccountViewModel : AbstractViewModel<Account>() {
     ) {
         accountRepo.findPerson(email, phoneNumber, nationalId, accountType) { account, results ->
             _repoResults.postValue(Pair(account, results))
+        }
+    }
+
+    fun resetPassword(email: String) {
+
+        accountRepo.resetPassword(email = email) {
+            _repoResults.postValue(Pair(null, it))
         }
     }
 }
