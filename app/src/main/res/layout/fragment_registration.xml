@@ -38,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cellphone_layout"
+                android:visibility="@{authType == AuthType.PHONE?View.VISIBLE: View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/name_layout"
                 >
@@ -59,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/email_layout"
+                android:visibility="@{authType == AuthType.EMAIL?View.VISIBLE: View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cellphone_layout"
                 >
@@ -120,6 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/password_layout"
+                android:visibility="@{authType == AuthType.EMAIL?View.VISIBLE: View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/town_layout"
                 >
@@ -137,6 +140,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="@{authType == AuthType.EMAIL?View.VISIBLE: View.GONE}"
                 android:id="@+id/re_password_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/password_layout"
@@ -196,8 +200,14 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
+        <import type="android.view.View"/>
         <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
         <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
+        <import type="com.petruskambala.namcovidcontacttracer.model.AuthType"/>
+        <variable
+            name="authType"
+            type="com.petruskambala.namcovidcontacttracer.model.AuthType" />
+
         <variable
             name="account"
             type="com.petruskambala.namcovidcontacttracer.model.Account" />

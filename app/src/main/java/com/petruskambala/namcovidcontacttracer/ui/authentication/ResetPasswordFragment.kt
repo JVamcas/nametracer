@@ -11,8 +11,8 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentResetPassword
 import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.reset_password
+import kotlinx.android.synthetic.main.fragment_email_auth.*
+import kotlinx.android.synthetic.main.fragment_email_auth.reset_password
 import kotlinx.android.synthetic.main.fragment_new_case.*
 import kotlinx.android.synthetic.main.fragment_reset_password.*
 
@@ -47,7 +47,7 @@ class ResetPasswordFragment : AbstractAuthFragment() {
                     it?.apply {
                         reset_password_btn.isEnabled = true
                         if (it.second is Results.Success) {
-                            showToast("A password reset link has been sent to your email")
+                            showToast("A password reset link has been sent to your email.")
                             navController.popBackStack()
                         }
                         else super.parseRepoResults(it.second, "")

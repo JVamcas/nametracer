@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "197858767739-22bcjpk6c0ali3e7jc0n7bdi5s7ud9t8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petruskambala.namcovidcontacttracer",
+            "certificate_hash": "9eca4016b48ece89d5ab2c8321705a7f7477a722"
+          }
+        },
+        {
           "client_id": "197858767739-487n9rri07ian4dlu1lb9loshth0bfg2.apps.googleusercontent.com",
           "client_type": 3
         }

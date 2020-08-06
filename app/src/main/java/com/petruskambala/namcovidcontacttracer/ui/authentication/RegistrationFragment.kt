@@ -13,6 +13,7 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentRegistrationBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.AuthType
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
@@ -27,13 +28,16 @@ import kotlinx.android.synthetic.main.fragment_registration.*
 open class RegistrationFragment : AbstractAuthFragment() {
     private lateinit var binding: FragmentRegistrationBinding
     private lateinit var account: Account
+    var authType: AuthType = AuthType.EMAIL
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         account = Account()
-        arguments?.let {
-            val json = it.getString(Const.ACCOUNT)
-            account = ParseUtil.fromJson(json, Account::class.java)
+        arguments?.apply {
+            val json = getString(Const.ACCOUNT)
+            account = if (json != null) ParseUtil.fromJson(json, Account::class.java) else Account()
+
+            authType = AuthType.valueOf(getString(Const.AUTH_TYPE)!!)
         }
     }
 
@@ -43,6 +47,7 @@ open class RegistrationFragment : AbstractAuthFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+        binding.authType = authType
         return binding.root
     }
 
@@ -99,16 +104,4 @@ open class RegistrationFragment : AbstractAuthFragment() {
             }
         })
     }
-
-
-    override fun onResume() {
-        super.onResume()
-        val activity = (activity as MainActivity)
-        activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        activity.toolbar.navigationIcon = null
-    }
-//
-//    override fun onBackClick() {
-//        showExitDialog()
-//    }
 }

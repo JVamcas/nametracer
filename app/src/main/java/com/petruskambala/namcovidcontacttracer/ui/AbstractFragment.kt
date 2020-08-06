@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -25,12 +24,8 @@ import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
 import com.petruskambala.namcovidcontacttracer.databinding.WarningDialogBinding
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
-import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
-import com.petruskambala.namcovidcontacttracer.ui.authentication.LoginFragment
-import com.petruskambala.namcovidcontacttracer.ui.authentication.VerifyEmailFragment
-import com.petruskambala.namcovidcontacttracer.ui.home.HomeFragment
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -38,7 +33,6 @@ import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
 import jxl.write.Label
 import jxl.write.WritableWorkbook
-import kotlinx.android.synthetic.main.activity_main.*
 import lib.folderpicker.FolderPicker
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -63,11 +57,10 @@ abstract class AbstractFragment : Fragment() {
         accountModel.authState.observe(viewLifecycleOwner, Observer {
             it?.apply {
                 if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment)
-                    navController.navigate(R.id.action_global_loginFragment)
+                    navController.navigate(R.id.action_global_navigation)
             }
         })
     }
-
 
     protected fun endAuthFlow() {
         endProgressBar()

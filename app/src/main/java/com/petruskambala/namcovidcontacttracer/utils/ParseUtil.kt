@@ -67,7 +67,7 @@ class ParseUtil {
             if (phone.isNullOrEmpty()) return false
             val phone1 = phone.replace("\\s+".toRegex(), "")
             return phone1.isNotEmpty() && Pattern.matches(
-                "^08\\d{8}",
+                "^\\+2648\\d{8}",
                 phone1
             )
         }
@@ -81,6 +81,9 @@ class ParseUtil {
             return value.isNullOrEmpty()
                     || Pattern.matches("[2-4]\\d(.\\d)?$", value)
 
+        }
+        fun isValidAuthCode(code:String?): Boolean{
+            return code?.length?:0 == 6
         }
     }
 }

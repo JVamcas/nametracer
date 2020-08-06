@@ -3,6 +3,7 @@ package com.petruskambala.namcovidcontacttracer.model
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.firestore.Exclude
 import com.petruskambala.namcovidcontacttracer.BR
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
@@ -14,13 +15,22 @@ enum class AccountType {
     PERSONAL, BUSINESS
 }
 
+data class PhoneAuthCred(
+    var phoneAuthCredential: PhoneAuthCredential? = null,
+    var verificationId: String? = null
+) : Account()
+
+enum class AuthType {
+    EMAIL, PHONE
+}
+
 abstract class AbstractModel(
     open var id: String = "",
     open var photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
-    class EmailNotVerifiedException : Exception()
+    class PhoneVerificationCodeExpired : Exception()
 }
 
 /***
@@ -266,7 +276,7 @@ open class Person(
     _cellphone = account?.cellphone,
     _email = account?.email?.toLowerCase(Locale.ROOT),
     _accountType = account?.accountType,
-    _id = account?.id?:""
+    _id = account?.id ?: ""
 ) {
     var birthDate: String?
         @Bindable get() = _birthDate

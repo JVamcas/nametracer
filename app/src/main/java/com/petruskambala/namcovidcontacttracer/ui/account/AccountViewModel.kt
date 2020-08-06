@@ -1,19 +1,21 @@
 package com.petruskambala.namcovidcontacttracer.ui.account
 
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.petruskambala.namcovidcontacttracer.model.Account
-import com.petruskambala.namcovidcontacttracer.model.AccountType
-import com.petruskambala.namcovidcontacttracer.model.Person
+import com.petruskambala.namcovidcontacttracer.model.*
 import com.petruskambala.namcovidcontacttracer.repository.AccountRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
-import java.util.concurrent.atomic.AtomicBoolean
 
 class AccountViewModel : AbstractViewModel<Account>() {
     enum class AuthState {
@@ -41,7 +43,8 @@ class AccountViewModel : AbstractViewModel<Account>() {
         mAuthListener = FirebaseAuth.AuthStateListener { auth ->
             //if auth.currentUser is not null
             auth.currentUser?.let {
-                if (!it.isEmailVerified)
+
+                if (it.providerId == EmailAuthProvider.PROVIDER_ID && !it.isEmailVerified)
                     _mAuthState.postValue(AuthState.EMAIL_NOT_VERIFIED)
                 else {
                     userId.postValue(it.uid)
@@ -64,11 +67,65 @@ class AccountViewModel : AbstractViewModel<Account>() {
         }
     }
 
-    fun authenticate(email: String, password: String) {
+    fun authenticateWithEmail(email: String, password: String) {
         accountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
 
             _repoResults.postValue(Pair(null, mResults))
         }
+    }
+
+    fun authenticateWithPhoneNumber(phoneCredential: PhoneAuthCredential) {
+        accountRepo.signInWithPhoneAuthCredential(phoneCredential) { results ->
+
+            _repoResults.postValue(Pair(null, results))
+        }
+    }
+
+    fun verifyPhoneNumber(phoneNumber: String, activity: FragmentActivity) {
+        accountRepo.verifyPhoneNumber(
+            phoneNumber,
+            activity,
+            object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(p0: PhoneAuthCredential) {
+                    val accountCred = PhoneAuthCred(p0)
+                    _repoResults.postValue(
+                        Pair(
+                            accountCred,
+                            Results.Success(Results.Success.CODE.PHONE_VERIFY_SUCCESS)
+                        )
+                    )
+                }
+
+                override fun onVerificationFailed(p0: FirebaseException) {
+                    _repoResults.postValue(Pair(null, Results.Error(p0)))
+                }
+
+                override fun onCodeSent(
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken
+                ) {
+                    // The SMS verification code has been sent to the provided phone number, we
+                    // now need to ask the user to enter the code and then construct a credential
+                    // by combining the code with a verification ID.
+                    _repoResults.postValue(
+                        Pair(
+                            PhoneAuthCred(verificationId = verificationId),
+                            Results.Success(Results.Success.CODE.PHONE_VERIFY_CODE_SENT)
+                        )
+                    )
+                }
+
+                override fun onCodeAutoRetrievalTimeOut(p0: String) {
+                    super.onCodeAutoRetrievalTimeOut(p0)
+                    _repoResults.postValue(
+                        Pair(
+                            PhoneAuthCred(verificationId = p0), Results.Error(
+                                AbstractModel.PhoneVerificationCodeExpired()
+                            )
+                        )
+                    )
+                }
+            })
     }
 
     fun createNewUser(account: Account, password: String) {

@@ -1,14 +1,20 @@
 package com.petruskambala.namcovidcontacttracer.repository
 
+import android.icu.util.TimeUnit
+import androidx.fragment.app.FragmentActivity
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.model.*
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
 import com.petruskambala.namcovidcontacttracer.utils.Docs
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
+import java.lang.Error
+import javax.xml.datatype.DatatypeConstants.SECONDS
 
 class AccountRepo {
     private val DB = FirebaseFirestore.getInstance()
@@ -57,6 +63,19 @@ class AccountRepo {
                 if (it.isSuccessful)
                     callback(Success(Success.CODE.AUTH_SUCCESS))
                 else callback(Results.Error(it.exception))
+            }
+    }
+
+    fun signInWithPhoneAuthCredential(
+        credential: PhoneAuthCredential,
+        callback: (Results) -> Unit
+    ) {
+        AUTH.signInWithCredential(credential)
+            .addOnCompleteListener {
+                val results =
+                    if (it.isSuccessful) Success(Success.CODE.AUTH_SUCCESS)
+                    else Results.Error(it.exception)
+                callback(results)
             }
     }
 
@@ -144,5 +163,19 @@ class AccountRepo {
             else Results.Error(it.exception)
             callback(results)
         }
+    }
+
+    fun verifyPhoneNumber(
+        phone: String,
+        activity: FragmentActivity,
+        callback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    ) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            phone, // Phone number to verify
+            60, // Timeout duration
+            java.util.concurrent.TimeUnit.SECONDS, // Unit of timeout
+            activity, // Activity (for callback binding)
+            callback
+        ) // OnVerificationStateChangedCallbacks
     }
 }
