@@ -9,6 +9,9 @@ import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthProvider
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentVerifyPhoneBinding
+import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.model.PhoneAuthCred
 import com.petruskambala.namcovidcontacttracer.utils.BindingUtil
 import com.petruskambala.namcovidcontacttracer.utils.Const
@@ -27,11 +30,18 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
 
     private lateinit var binding: FragmentVerifyPhoneBinding
     private lateinit var phone: String
+    private var account: Person? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            phone = getString(Const.PHONE_NUMBER)!!
+            val json = getString(Const.ACCOUNT)
+            account = ParseUtil.fromJson(json, Person::class.java)
+            json?.apply {
+                if (account!!.accountType == AccountType.PERSONAL)
+                    account = ParseUtil.fromJson(this, Person::class.java)
+            }
+            phone = getString(Const.PHONE_NUMBER) ?: account!!.cellphone!!
         }
     }
 
@@ -59,8 +69,8 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
             accountModel.repoResults.value?.apply {
                 if ((second as? Results.Success)?.code == PHONE_VERIFY_CODE_SENT) {
                     val verificationId = (first as? PhoneAuthCred)?.verificationId
-                    accountModel.authenticateWithPhoneNumber(
-                        PhoneAuthProvider.getCredential(
+                    accountModel.signInWithPhoneAuthCredential(account = account,
+                        phoneCredential = PhoneAuthProvider.getCredential(
                             verificationId!!,
                             code
                         )
@@ -69,7 +79,7 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
             }
         }
 
-        accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+        accountModel.repoResults.observe(viewLifecycleOwner, Observer { it ->
             it?.apply {
                 endProgressBar()
                 submit_btn.isEnabled = true
@@ -80,25 +90,33 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
                 }
                 (second as? Results.Success)?.code.apply {
                     when {
+                        this == PHONE_VERIFY_CODE_SENT -> showToast("Verification code sent.")
+
                         this == PHONE_VERIFY_SUCCESS -> {
                             val phoneCred = (first as PhoneAuthCred).phoneAuthCredential
-                            accountModel.authenticateWithPhoneNumber(phoneCred!!)
+                            accountModel.signInWithPhoneAuthCredential(account = account,
+                                phoneCredential = phoneCred!!
+                            )
                         }
-                        this == PHONE_VERIFY_CODE_SENT -> showToast("Verification code sent.")
-                        this == AUTH_SUCCESS -> navController.popBackStack(R.id.selectLoginModeFragment,true)
+                        this == AUTH_SUCCESS -> {
+                            endAuthFlow()
+                            navController.popBackStack(R.id.selectLoginModeFragment, true)
+                        }
                     }
                 }
             }
         })
 
-        verification_code.addTextChangedListener(object : BindingUtil.TextChangeLister() {
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                super.onTextChanged(p0, p1, p2, p3)
-                val code = p0.toString()
-                val isValidPhone = (code.isEmpty() || ParseUtil.isValidAuthCode(code))
-                verification_code.error = if (isValidPhone) null else "Invalid verification code."
-                submit_btn.isEnabled = ParseUtil.isValidAuthCode(code)
-            }
-        })
+        verification_code.addTextChangedListener(
+            object : BindingUtil.TextChangeLister() {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    super.onTextChanged(p0, p1, p2, p3)
+                    val code = p0.toString()
+                    val isValidPhone = (code.isEmpty() || ParseUtil.isValidAuthCode(code))
+                    verification_code.error =
+                        if (isValidPhone) null else "Invalid verification code."
+                    submit_btn.isEnabled = ParseUtil.isValidAuthCode(code)
+                }
+            })
     }
 }

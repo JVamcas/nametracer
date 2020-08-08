@@ -16,7 +16,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical"
-            tools:context=".ui.authentication.RegistrationFragment">
+            tools:context=".ui.authentication.EmailRegistrationFragment">
 
             <include
                 android:id="@+id/user_avatar"

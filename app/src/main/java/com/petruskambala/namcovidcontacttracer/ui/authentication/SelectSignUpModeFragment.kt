@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentSelectSignUpModeBinding
 import com.petruskambala.namcovidcontacttracer.model.AuthType
-import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import kotlinx.android.synthetic.main.fragment_select_sign_up_mode.*
 
@@ -32,14 +31,14 @@ open class SelectSignUpModeFragment : AbstractAuthFragment() {
         super.onViewCreated(view, savedInstanceState)
         with_email_btn.setOnClickListener {
             navController.navigate(
-                R.id.action_selectSignUpModeFragment_to_registrationFragment,
+                R.id.action_selectSignUpModeFragment_to_emailRegistrationFragment,
                 Bundle().apply {
                     putString(Const.AUTH_TYPE, AuthType.EMAIL.name)
                 })
         }
         with_phone_btn.setOnClickListener {
             navController.navigate(
-                R.id.action_selectSignUpModeFragment_to_registrationFragment,
+                R.id.action_selectSignUpModeFragment_to_phoneRegistrationFragment,
                 Bundle().apply {
                     putString(Const.AUTH_TYPE, AuthType.PHONE.name)
                 })

@@ -12,7 +12,6 @@ import com.petruskambala.namcovidcontacttracer.utils.Const
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_select_sign_up_mode.*
-
 /**
  * Subclass of [SelectSignUpModeFragment].
  */
@@ -52,8 +51,6 @@ class SelectLoginModeFragment : SelectSignUpModeFragment() {
     }
     override fun onResume() {
         super.onResume()
-        val activity = (activity as MainActivity)
-        activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        activity.toolbar.navigationIcon = null
+         (activity as MainActivity).toolbar.navigationIcon = null
     }
 }

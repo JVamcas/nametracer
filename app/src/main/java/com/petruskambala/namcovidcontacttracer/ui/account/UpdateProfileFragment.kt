@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentUpdateProfileBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
@@ -17,6 +19,7 @@ import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_update_profile.*
 import kotlinx.android.synthetic.main.fragment_update_profile.account_type
 import kotlinx.android.synthetic.main.fragment_update_profile.gender
@@ -48,24 +51,20 @@ class UpdateProfileFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gender.setOnClickListener {
-            gender.apply {
-                setAdapter(ArrayAdapter(
-                    requireContext(), R.layout.account_select_auto_layout,
-                    Gender.values().map { it.name }
-                ))
-            }
+        gender.apply {
+            setAdapter(ArrayAdapter(
+                requireContext(), R.layout.account_select_auto_layout,
+                Gender.values().map { it.name }
+            ))
         }
-        account_type.setOnClickListener {
-            account_type.apply {
-                setAdapter(
-                    ArrayAdapter(
-                        requireContext(),
-                        R.layout.account_select_auto_layout,
-                        arrayListOf("PERSONAL", "POINT OF CONTACT")
-                    )
+        account_type.apply {
+            setAdapter(
+                ArrayAdapter(
+                    requireContext(),
+                    R.layout.account_select_auto_layout,
+                    arrayListOf("PERSONAL", "POINT OF CONTACT")
                 )
-            }
+            )
         }
 
         birth_date.setOnClickListener { selectDate { birth_date.setText(it) } }
@@ -78,13 +77,18 @@ class UpdateProfileFragment : AbstractFragment() {
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.apply {
                     update_account.isEnabled = true
-                    endProgressBar()
                     if (it.second is Results.Success)
                         navController.popBackStack()
                     super.parseRepoResults(it.second, "Profile")
-                    accountModel.clearRepoResults(viewLifecycleOwner)
+                    endAuthFlow()
                 }
             })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val activity = (activity as MainActivity)
+        activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 }

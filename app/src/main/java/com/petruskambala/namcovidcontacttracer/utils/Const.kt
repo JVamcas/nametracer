@@ -2,6 +2,7 @@ package com.petruskambala.namcovidcontacttracer.utils
 
 internal interface Const {
     companion object {
+        val PERSON: String = "person"
         val PHONE_NUMBER: String = "phone number"
         val PERSON_ID: String = "personId"
         val MODEL_POS: String = "model_pos"

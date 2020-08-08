@@ -1,20 +1,19 @@
 package com.petruskambala.namcovidcontacttracer.repository
 
-import android.icu.util.TimeUnit
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.petruskambala.namcovidcontacttracer.MainActivity
-import com.petruskambala.namcovidcontacttracer.model.*
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
+import com.petruskambala.namcovidcontacttracer.model.Account
+import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.utils.Docs
-import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
-import java.lang.Error
-import javax.xml.datatype.DatatypeConstants.SECONDS
+import com.petruskambala.namcovidcontacttracer.utils.Results
+import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
 
 class AccountRepo {
     private val DB = FirebaseFirestore.getInstance()
@@ -34,18 +33,32 @@ class AccountRepo {
                         .set(person)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful)
-                                callback(person, Success(Success.CODE.WRITE_SUCCESS))
+                                callback(person, Success(WRITE_SUCCESS))
                             else callback(person, Results.Error(task.exception))
                         }
                 } else callback(null, Results.Error(it.exception))
             }
     }
 
+
+    fun createUserWithPhone(account: Person, callback: (Person?, Results) -> Unit) {
+        account.let { it.id = AUTH.currentUser?.uid ?: "" }
+
+        DB.collection(Docs.ACCOUNTS.name).document(account.id)
+            .set(account)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    callback(account, Success(WRITE_SUCCESS))
+                else callback(null, Results.Error(task.exception))
+            }
+
+    }
+
     fun loadAccountInfo(userId: String, callback: (Person?, Results) -> Unit) {
         DB.collection(Docs.ACCOUNTS.name).document(userId).get()
             .addOnSuccessListener {
                 val account = it.toObject(Person::class.java)
-                val mResults = Success(Success.CODE.LOAD_SUCCESS)
+                val mResults = Success(LOAD_SUCCESS)
                 callback(account, mResults)
             }
             .addOnFailureListener { exception ->
@@ -61,7 +74,7 @@ class AccountRepo {
         AUTH.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful)
-                    callback(Success(Success.CODE.AUTH_SUCCESS))
+                    callback(Success(AUTH_SUCCESS))
                 else callback(Results.Error(it.exception))
             }
     }
@@ -72,14 +85,14 @@ class AccountRepo {
     ) {
         AUTH.signInWithCredential(credential)
             .addOnCompleteListener {
-                val results =
-                    if (it.isSuccessful) Success(Success.CODE.AUTH_SUCCESS)
+                callback(
+                    if (it.isSuccessful) Success(AUTH_SUCCESS)
                     else Results.Error(it.exception)
-                callback(results)
+                )
             }
     }
 
-    fun findPerson(
+    fun findAccount(
         email: String? = null,
         phoneNumber: String? = null,
         nationalId: String? = null,
@@ -93,9 +106,7 @@ class AccountRepo {
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
         else
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("nationalId", nationalId)
-        query.whereEqualTo(
-            "accountType", accountType.name
-        ).get()
+        query.whereEqualTo("accountType", accountType).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     val docs = it.result!!.documents
@@ -138,7 +149,7 @@ class AccountRepo {
                     }
                 task.addOnCompleteListener {
                     val results =
-                        if (it.isSuccessful) Success(Success.CODE.UPDATE_SUCCESS) else Results.Error(
+                        if (it.isSuccessful) Success(UPDATE_SUCCESS) else Results.Error(
                             it.exception
                         )
                     callback(results)
@@ -172,7 +183,7 @@ class AccountRepo {
     ) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
             phone, // Phone number to verify
-            60, // Timeout duration
+            120, // Timeout duration
             java.util.concurrent.TimeUnit.SECONDS, // Unit of timeout
             activity, // Activity (for callback binding)
             callback

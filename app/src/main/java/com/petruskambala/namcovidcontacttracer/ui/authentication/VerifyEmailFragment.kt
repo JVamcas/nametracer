@@ -44,16 +44,4 @@ class VerifyEmailFragment : AbstractAuthFragment() {
             })
         }
     }
-
-    override fun onBackClick() {
-        if(accountModel.authState.value == AccountViewModel.AuthState.AUTHENTICATED)
-            navController.popBackStack(R.id.homeFragment,false)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val activity = (activity as MainActivity)
-        activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        activity.toolbar.navigationIcon = null
-    }
 }

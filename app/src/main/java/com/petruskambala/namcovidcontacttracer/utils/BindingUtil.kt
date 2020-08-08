@@ -13,6 +13,7 @@ import androidx.databinding.InverseMethod
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.petruskambala.namcovidcontacttracer.model.AccountType
+import com.petruskambala.namcovidcontacttracer.model.AuthType
 import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidEmail
@@ -100,9 +101,10 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (isValidMobile(idMailCell) || isValidEmail(idMailCell) /**|| isValidNationalID(
-                        idMailCell
-                    )**/
+                if (isValidMobile(idMailCell) || isValidEmail(idMailCell)
+                /**|| isValidNationalID(
+                idMailCell
+                )**/
                 )
                     null else errorMsg
         }
@@ -117,12 +119,10 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (!isValidMobile(cellphone) && !isValidEmail(emailAddress))
-                    "Enter a valid email address or cellphone number."
-                else if (isEmail && !isValidEmail(emailAddress) && !emailAddress.isNullOrEmpty())
-                    "Enter valid email address or leave field empty."
-                else if (!isEmail && !isValidMobile(cellphone) && !cellphone.isNullOrEmpty())
-                    "Enter valid cellphone number or leave field empty."
+                if (isEmail && (emailAddress.isNullOrEmpty() || !isValidEmail(emailAddress)))
+                    "Enter a valid email address."
+                else if (cellphone.isNullOrEmpty() || !isValidMobile(cellphone))
+                    "Enter valid phone number."
                 else null
         }
 
@@ -130,7 +130,7 @@ class BindingUtil {
         @JvmStatic
         @BindingAdapter(
             value = ["accountName", "accountType", "address",
-                "emailAddress", "cellphone", "town", "password", "confirmPassword"],
+                "emailAddress", "cellphone", "town", "password", "confirmPassword", "authType"],
             requireAll = false
         )
         fun validateBusinessAccount(
@@ -142,16 +142,16 @@ class BindingUtil {
             cellphone: String?,
             town: String?,
             password: String?,
-            confirmPassword: String?
+            confirmPassword: String?,
+            authType: String?
         ) {
             mButton.isEnabled = true
 
             mButton.isEnabled = AccountType.values()
                 .map { it.name }.contains(accountType)
-                    && ((isValidMobile(cellphone) && isValidEmail(emailAddress)
-                    || (isValidMobile(cellphone) && emailAddress.isNullOrEmpty())
-                    || (isValidEmail(emailAddress) && cellphone.isNullOrEmpty())))
-                    && (!password.isNullOrEmpty() && password.length >= 8 && password == confirmPassword)
+                    && ((isValidMobile(cellphone) && authType == AuthType.PHONE.name)
+                    || (isValidEmail(emailAddress) && authType == AuthType.EMAIL.name))
+                    && (authType == AuthType.PHONE.name || (!password.isNullOrEmpty() && password.length >= 8 && password == confirmPassword))
                     && !listOf(accountName, address, town).any { it.isNullOrEmpty() }
         }
 
@@ -183,6 +183,7 @@ class BindingUtil {
 
         }
 
+
         @JvmStatic
         @BindingAdapter(value = ["birthDate", "gender"], requireAll = false)
         fun validatePersonalAccount(
@@ -203,15 +204,18 @@ class BindingUtil {
         ) {
             email_cell_id?.apply {
                 mEditText.error =
-                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) /**|| isValidNationalID(
-                            email_cell_id
-                        )**/
+                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
+                    /**|| isValidNationalID(
+                    email_cell_id
+                    )**/
                     ) null
                     else "Enter a valid ID, email or cellphone number."
                 mButton.isEnabled =
-                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id) /**|| isValidNationalID(
-                        email_cell_id
-                    )**/)
+                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
+                            /**|| isValidNationalID(
+                            email_cell_id
+                            )**/
+                            )
             }
         }
 
@@ -235,6 +239,11 @@ class BindingUtil {
                 "PERSONAL" -> AccountType.PERSONAL
                 else -> null
             }
+        }
+
+        @JvmStatic
+        fun formatPhone(phoneNumber: String?):String{
+            return "+264"
         }
 
         @InverseMethod("toGender")

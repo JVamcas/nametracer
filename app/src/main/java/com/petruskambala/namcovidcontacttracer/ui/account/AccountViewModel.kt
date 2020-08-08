@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.model.*
@@ -19,7 +16,8 @@ import com.petruskambala.namcovidcontacttracer.utils.Results
 
 class AccountViewModel : AbstractViewModel<Account>() {
     enum class AuthState {
-        AUTHENTICATED, UNAUTHENTICATED, EMAIL_NOT_VERIFIED
+        AUTHENTICATED, UNAUTHENTICATED, EMAIL_NOT_VERIFIED, ACCOUNT_INFO_MISSING
+
     }
 
     private val accountRepo = AccountRepo()
@@ -44,12 +42,13 @@ class AccountViewModel : AbstractViewModel<Account>() {
             //if auth.currentUser is not null
             auth.currentUser?.let {
 
-                if (it.providerId == EmailAuthProvider.PROVIDER_ID && !it.isEmailVerified)
-                    _mAuthState.postValue(AuthState.EMAIL_NOT_VERIFIED)
-                else {
-                    userId.postValue(it.uid)
-                    _currentAccount.postValue(Person(account = Account(user = it)))
-                    _mAuthState.postValue(AuthState.AUTHENTICATED)
+                when {
+                    isEmailAuth() && !it.isEmailVerified -> _mAuthState.postValue(AuthState.EMAIL_NOT_VERIFIED)
+                    else -> {
+                        _currentAccount.postValue(Person(account = Account(user = it)))
+                        userId.postValue(it.uid)//trigger account data load
+                        _mAuthState.postValue(AuthState.AUTHENTICATED)
+                    }
                 }
                 return@AuthStateListener
             }
@@ -60,23 +59,63 @@ class AccountViewModel : AbstractViewModel<Account>() {
         Firebase.auth.addAuthStateListener(mAuthListener)
     }
 
+    private fun isAccountInfoMissing(account: Person?): Boolean {
+        return account?.name.isNullOrEmpty() || account?.accountType == null
+    }
+
+    private fun isEmailAuth(): Boolean {
+        val user = Firebase.auth.currentUser
+        return user?.providerData?.get(1)?.providerId  == EmailAuthProvider.PROVIDER_ID
+    }
+
+    private fun isPhoneAuth(): Boolean {
+        val user = Firebase.auth.currentUser
+        return user?.providerData?.get(1)?.providerId  == PhoneAuthProvider.PROVIDER_ID
+    }
+
     private fun loadUserProfile(userId: String) {
-        accountRepo.loadAccountInfo(userId) { user, mResult ->
-            if (mResult is Results.Success)
-                _currentAccount.postValue(user)
+        accountRepo.apply {
+            loadAccountInfo(userId) { mUser, mResult ->
+                if (mResult is Results.Success) {
+                    mUser?.let { _currentAccount.postValue(it) }
+                    if (isPhoneAuth()) {
+                        when {
+                            mUser == null -> {
+                                createUserWithPhone(phoneAuthAccount!!) { account, results ->
+                                    if (results is Results.Success) {
+                                        _currentAccount.postValue(account)
+                                        if (isAccountInfoMissing(account))
+                                            _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
+                                    }
+                                    _repoResults.postValue(Pair(null, results))
+                                }
+                            }
+                            isAccountInfoMissing(mUser) -> _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
+                        }
+                    }
+                }
+            }
         }
     }
 
     fun authenticateWithEmail(email: String, password: String) {
         accountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
-
             _repoResults.postValue(Pair(null, mResults))
         }
     }
 
-    fun authenticateWithPhoneNumber(phoneCredential: PhoneAuthCredential) {
-        accountRepo.signInWithPhoneAuthCredential(phoneCredential) { results ->
-
+    /**
+     * Account passed via phone auth to be created
+     * */
+    private var phoneAuthAccount: Person? = null
+    fun signInWithPhoneAuthCredential(
+        account: Person? = null,
+        phoneCredential: PhoneAuthCredential
+    ) {
+        phoneAuthAccount = account
+        accountRepo.signInWithPhoneAuthCredential(
+            credential = phoneCredential
+        ) { results ->
             _repoResults.postValue(Pair(null, results))
         }
     }
@@ -134,6 +173,14 @@ class AccountViewModel : AbstractViewModel<Account>() {
         }
     }
 
+//    fun createNewUser(account: Person) {
+//        accountRepo.createUserWithPhone(account) { acc, mResults ->
+//            if (acc != null)
+//                _currentAccount.postValue(acc)
+//            _repoResults.postValue(Pair(null, mResults))
+//        }
+//    }
+
     fun sendVerificationEmail() {
         accountRepo.sendVerificationEmail {
             _repoResults.postValue(Pair(null, it))
@@ -143,22 +190,22 @@ class AccountViewModel : AbstractViewModel<Account>() {
     fun updateAccount(account: Account) {
         accountRepo.updateAccount(account) { results ->
             if (results is Results.Success)
-                _currentAccount.postValue(
-                    if (account.accountType == AccountType.BUSINESS)
-                        Person(
-                            account = ParseUtil.copyOf(
-                                account,
-                                Account::class.java
-                            )
-                        ) else account as Person
-                )
+                _mAuthState.postValue(AuthState.AUTHENTICATED)
+            _currentAccount.postValue(
+                if (account.accountType == AccountType.BUSINESS)
+                    Person(
+                        account = ParseUtil.copyOf(
+                            account,
+                            Account::class.java
+                        )
+                    ) else account as Person
+            )
             _repoResults.postValue(Pair(null, results))
         }
     }
 
     fun signOut() {
         Firebase.auth.signOut()
-//            signInProviderID.value = null
     }
 
     fun findAccount(
@@ -167,7 +214,12 @@ class AccountViewModel : AbstractViewModel<Account>() {
         nationalId: String? = null,
         accountType: AccountType = AccountType.PERSONAL
     ) {
-        accountRepo.findPerson(email, phoneNumber, nationalId, accountType) { account, results ->
+        accountRepo.findAccount(
+            email,
+            phoneNumber,
+            nationalId,
+            accountType
+        ) { account, results ->
             _repoResults.postValue(Pair(account, results))
         }
     }

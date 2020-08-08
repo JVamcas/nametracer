@@ -111,12 +111,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.follow_on_twitter -> {
                 startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://twitter.com/intent/follow?user_id=48101720")
+                    data = Uri.parse(getString(R.string.twitter_url))
                 })
             }
             R.id.follow_on_linked_in -> {
                 startActivity(Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://www.linkedin.com/in/petrus-kambala-2178789a/")
+                    data = Uri.parse(getString(R.string.linkedin_url))
                 })
             }
         }

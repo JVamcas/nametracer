@@ -49,7 +49,7 @@ class ProfileFragment : AbstractFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId){
-            R.id.update_account -> {navController.navigate(R.id.action_profileFragment_to_updateProfileFragment)}
+            R.id.update_account -> {navController.navigate(R.id.action_global_updateProfileFragment)}
         }
         return super.onOptionsItemSelected(item)
     }

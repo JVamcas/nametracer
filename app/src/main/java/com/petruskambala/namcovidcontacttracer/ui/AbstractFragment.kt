@@ -25,7 +25,9 @@ import com.petruskambala.namcovidcontacttracer.databinding.WarningDialogBinding
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
+import com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
+import com.petruskambala.namcovidcontacttracer.ui.authentication.SelectLoginModeFragment
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -56,8 +58,22 @@ abstract class AbstractFragment : Fragment() {
 
         accountModel.authState.observe(viewLifecycleOwner, Observer {
             it?.apply {
-                if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment)
-                    navController.navigate(R.id.action_global_navigation)
+                if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment){
+                    endAuthFlow()
+                    navController.navigate(R.id.action_global_to_auth)
+                }
+                else if (this == ACCOUNT_INFO_MISSING && this@AbstractFragment !is UpdateProfileFragment) {
+                    endAuthFlow()
+                    showToast("Please update your account.")
+                    navController.navigate(R.id.action_global_updateProfileFragment)
+                }
+                else if(this ==  AUTHENTICATED
+                    && this@AbstractFragment !is SelectLoginModeFragment
+                    && this@AbstractFragment !is UpdateProfileFragment
+                ){
+                    endAuthFlow()
+                    navController.popBackStack(R.id.selectLoginModeFragment,true)
+                }
             }
         })
     }
@@ -240,7 +256,6 @@ abstract class AbstractFragment : Fragment() {
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
                 DELETE_SUCCESS -> showToast("$modelName deleted successfully.")
                 VERIFICATION_EMAIL_SENT -> showToast("Verification email sent.")
-                else -> showToast("")
             }
         } else if (mResults is Results.Error) {
             when (mResults.code) {

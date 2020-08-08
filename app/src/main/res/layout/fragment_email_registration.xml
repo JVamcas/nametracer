@@ -12,7 +12,7 @@
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            tools:context=".ui.authentication.RegistrationFragment">
+            tools:context=".ui.authentication.EmailRegistrationFragment">
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
@@ -49,7 +49,8 @@
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@string/cellphone"
-                    android:inputType="number"
+                    android:inputType="phone"
+                    android:digits="01234567890+"
                     android:text="@={account.cellphone}"
                     android:singleLine="true"
                     cellphone="@{account.cellphone}"
@@ -71,7 +72,7 @@
                     android:layout_marginBottom="10dp"
                     android:padding="9dp"
                     android:hint="@string/email_address"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:text="@={account.email}"
                     android:singleLine="true"
                     cellphone="@{account.cellphone}"
@@ -195,6 +196,7 @@
                 cellphone="@{account.cellphone}"
                 password="@{password.text.toString()}"
                 confirmPassword="@{confirmPassword.text.toString()}"
+                authType="@{authType.name()}"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

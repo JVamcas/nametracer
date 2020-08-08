@@ -1,12 +1,15 @@
 package com.petruskambala.namcovidcontacttracer.ui.authentication
 
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.telephony.PhoneNumberUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
+import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.PhoneAuthCred
 import com.petruskambala.namcovidcontacttracer.utils.BindingUtil
 import com.petruskambala.namcovidcontacttracer.utils.Const
@@ -34,17 +37,19 @@ class PhoneAuthFragment : AbstractAuthFragment() {
         login_btn.setOnClickListener {
             accountModel.clearRepoResults(viewLifecycleOwner)
             login_btn.isEnabled = false
-            val phone = phone_number.text.toString()
+            val phone = ParseUtil.formatPhone(phone_number.text.toString())
 
             val repoResults = accountModel.repoResults.value
             val resultCode = (repoResults?.second as? Results.Error)?.code
 
-            if(repoResults == null || resultCode == PHONE_VERIFICATION_CODE_EXPIRED)
+            if (repoResults == null || resultCode == PHONE_VERIFICATION_CODE_EXPIRED)
                 accountModel.verifyPhoneNumber(phone, requireActivity())
+
+            val account = Account().also { it.cellphone = phone }
             navController.navigate(R.id.action_phoneAuthFragment_to_verifyPhoneFragment,
-                Bundle().apply { putString(Const.PHONE_NUMBER,phone) })
+                Bundle().apply { putString(Const.ACCOUNT, ParseUtil.toJson(account)) })
         }
-        phone_number.addTextChangedListener(object : BindingUtil.TextChangeLister() {
+        phone_number.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 super.onTextChanged(p0, p1, p2, p3)
                 val phone = phone_number.text.toString()

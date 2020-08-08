@@ -1,8 +1,10 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
 import android.content.Context
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import com.google.gson.Gson
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import java.io.File
 import java.util.regex.Pattern
@@ -67,9 +69,13 @@ class ParseUtil {
             if (phone.isNullOrEmpty()) return false
             val phone1 = phone.replace("\\s+".toRegex(), "")
             return phone1.isNotEmpty() && Pattern.matches(
-                "^\\+2648\\d{8}",
+                "^0?8\\d{8}",
                 phone1
             )
+        }
+        fun formatPhone(phone: String):String{
+
+            return "+264${phone.trimStart { it == '0' }}"
         }
 
         fun isValidNationalID(value: String?): Boolean {
