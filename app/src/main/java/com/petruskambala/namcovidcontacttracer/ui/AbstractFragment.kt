@@ -1,6 +1,7 @@
 package com.petruskambala.namcovidcontacttracer.ui
 
 import android.Manifest
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
@@ -18,10 +19,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.owambo.jvamcas.stokkman.ui.camera.CameraCaptureActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
 import com.petruskambala.namcovidcontacttracer.databinding.WarningDialogBinding
+import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
@@ -29,14 +32,15 @@ import com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.SelectLoginModeFragment
 import com.petruskambala.namcovidcontacttracer.ui.home.HomeFragment
-import com.petruskambala.namcovidcontacttracer.utils.AccessType
-import com.petruskambala.namcovidcontacttracer.utils.DateUtil
-import com.petruskambala.namcovidcontacttracer.utils.Results
+import com.petruskambala.namcovidcontacttracer.utils.*
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
+import com.squareup.picasso.Picasso
 import jxl.write.Label
 import jxl.write.WritableWorkbook
 import lib.folderpicker.FolderPicker
+import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
@@ -182,14 +186,40 @@ abstract class AbstractFragment : Fragment() {
         startActivityForResult(intent, SELECT_DIR)
     }
 
+    private lateinit var model: AbstractModel
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == SELECT_DIR) {
-            data?.apply {
-                val folderLocation: String? = extras?.getString("data")
-                callback(folderLocation)
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_DIR) {
+                data?.apply {
+                    val folderLocation: String? = extras?.getString("data")
+                    callback(folderLocation)
+                }
+            } else if (requestCode == Const.CAPTURE_PICTURE) {
+                val absPath = File(
+                    requireActivity().getExternalFilesDir(null),
+                    data?.getStringExtra(Const.ICON_PATH)
+                ).absolutePath
+                model.photoUrl = absPath //force update of model icon
+                Picasso.get().invalidate("file:$absPath") //force picasso to reload pic
             }
         }
+    }
+
+    fun renameTempImageFile(dir: String?, from: String, to: String) {
+        val sourcePath = ParseUtil.iconPath(dir, from)
+        val destPath = ParseUtil.iconPath(dir, to)
+        val source = File(requireActivity().getExternalFilesDir(null), sourcePath)
+        if (source.exists()) {
+            val dest = File(requireActivity().getExternalFilesDir(null), destPath)
+            source.renameTo(dest)
+        }
+    }
+
+    open fun deleteFile(dir: String?, name: String?) {
+        var filePath = ParseUtil.iconPath(dir, name!!)
+        filePath = File(requireActivity().getExternalFilesDir(null), filePath).absolutePath
+        File(filePath).delete()
     }
 
     protected open fun endProgressBar() {
@@ -243,7 +273,8 @@ abstract class AbstractFragment : Fragment() {
     protected fun parseRepoResults(mResults: Results?, modelName: String) {
         if (mResults is Results.Success) {
             when (mResults.code) {
-                AUTH_SUCCESS -> {}
+                AUTH_SUCCESS -> {
+                }
                 WRITE_SUCCESS -> showToast("$modelName registered successfully.")
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
@@ -258,7 +289,7 @@ abstract class AbstractFragment : Fragment() {
                 AUTH -> showToast("Err: Authentication.")
                 NO_RECORD -> showToast("Err: No record found for your search.")
                 NO_ACCOUNT -> showToast("Err: Visitor has no account.")
-                NO_SUCH_USER ->showToast("Err: No account with such email.")
+                NO_SUCH_USER -> showToast("Err: No account with such email.")
                 DUPLICATE_ACCOUNT -> showToast("Err: Account already exist.")
                 INCORRECT_EMAIL_PASSWORD_COMBO -> showToast("Err: Incorrect email or password.")
                 INVALID_AUTH_CODE -> showToast("Err: Incorrect authentication code.")
@@ -284,6 +315,18 @@ abstract class AbstractFragment : Fragment() {
             cancelBtn.setOnClickListener { dialog.dismiss() }
             dialog.setOnDismissListener { if (!okBtnClicked.get()) mListener.onCancelWarning() }
         }
+    }
+
+    /***
+     * Invoke camera activity to take a picture
+     * @param model whose icon is to be captured
+     * @param fileName abs filePath where image will be saved
+     */
+    fun takePicture(model: AbstractModel, fileName: String) {
+        this.model = model
+        val mIntent = Intent(requireActivity(), CameraCaptureActivity::class.java)
+        mIntent.putExtra(Const.ICON_PATH, fileName)
+        startActivityForResult(mIntent, Const.CAPTURE_PICTURE)
     }
 
     protected fun selectDate(callback: (date: String) -> Unit) {

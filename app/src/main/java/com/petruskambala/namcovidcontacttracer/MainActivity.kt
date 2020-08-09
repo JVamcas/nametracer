@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        ParseUtil.initDirs(applicationContext, Const.IMAGE_ROOT_PATH)
+
         accountModel = ViewModelProvider(this).get(AccountViewModel::class.java)
 
         navController = findNavController(R.id.nav_host_fragment)

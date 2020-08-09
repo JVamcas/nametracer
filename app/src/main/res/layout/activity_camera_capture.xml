@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.CameraCaptureActivity">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/app_bar"
+            >
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/camera_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/app_bar"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ImageView
+            android:id="@+id/capture_frame_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar"
+            android:visibility="@{takePicture?View.GONE: View.VISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/preview_icon" />
+        <com.otaliastudios.cameraview.CameraView
+            app:layout_constraintTop_toBottomOf="@id/app_bar"
+            android:visibility="@{takePicture? View.VISIBLE: View.GONE}"
+            android:id="@+id/camera_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:keepScreenOn="true"
+            app:cameraAudio="off"
+            app:cameraEngine="camera2"
+            app:cameraFacing="back"
+            app:cameraFlash="auto"
+            app:cameraHdr="on"
+            app:cameraMode="picture"
+            app:cameraPictureSizeBiggest="true"
+            app:cameraPreview="glSurface" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/discard_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:visibility="@{takePicture?View.GONE: View.VISIBLE}"
+                android:src="@drawable/ic_discard_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/capture_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:src="@drawable/ic_camera"
+                android:visibility="@{takePicture?View.VISIBLE: View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/save_frame"
+                app:layout_constraintStart_toEndOf="@id/discard_frame" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/save_frame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:visibility="@{takePicture?View.GONE: View.VISIBLE}"
+                android:src="@drawable/ic_save_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="takePicture"
+            type="Boolean" />
+    </data>
+</layout>

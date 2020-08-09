@@ -14,6 +14,8 @@ internal interface Const {
         val CAPTURE_PICTURE = 1
         val SCAN_BARCODE = 2
 
+        val IMAGE_ROOT_PATH = "images"
+
 
         //Transformation constants
         val CIRCLE = "Circle"

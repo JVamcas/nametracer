@@ -17,12 +17,14 @@ import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_update_profile.*
 import kotlinx.android.synthetic.main.fragment_update_profile.account_type
 import kotlinx.android.synthetic.main.fragment_update_profile.gender
+import kotlinx.android.synthetic.main.user_icon_layout.*
 
 /**
  * A simple [Fragment] subclass.
@@ -83,6 +85,12 @@ class UpdateProfileFragment : AbstractFragment() {
                     endAuthFlow()
                 }
             })
+        }
+
+        take_new_picture.setOnClickListener {
+            val currentUser = accountModel.currentAccount.value
+            val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH, currentUser!!.id);
+            takePicture(currentUser, filePath);
         }
     }
 

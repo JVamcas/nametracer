@@ -71,6 +71,8 @@ dependencies {
 
     implementation 'com.evrencoskun.library:tableview:0.8.9.2'
 
+    implementation 'com.otaliastudios:cameraview:2.3.0'
+
     // https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl
     implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
 

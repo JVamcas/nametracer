@@ -23,6 +23,7 @@
                 android:padding="2dp"
                 android:contentDescription="@string/user_avatar"
                 app:photoUrl="@{covidCase.photoUrl}"
+                app:viewId="@{covidCase.id}"
                 app:size="@{100}"
                 app:default_icon="@{R.drawable.default_user_icon}"
                 />

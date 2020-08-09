@@ -26,13 +26,23 @@ enum class AuthType {
 
 abstract class AbstractModel(
     open var id: String = "",
-    open var photoUrl: String? = null
+    private var _photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
     class NoEntityException : Exception()
     class PhoneVerificationCodeExpired : Exception()
     class InvalidPasswordEmailException: Exception()
     class InvalidPhoneAuthCodeException: Exception()
+
+    var photoUrl: String?
+    @Bindable
+    get() = _photoUrl
+    set(value) {
+        if(_photoUrl != value){
+            _photoUrl = value
+            notifyPropertyChanged(BR.photoUrl)
+        }
+    }
 }
 
 /***
@@ -44,7 +54,6 @@ data class Visit(
     var place: Account? = null,
     var personId: String = person?.id ?: "",
     var placeId: String = place?.id ?: "",
-    @get:Exclude override var photoUrl: String? = null,
     private var _temperature: String? = null
 ) : AbstractModel(id = "") {
     var temperature: String?
@@ -132,7 +141,6 @@ data class CovidCase(
     @get: Exclude @Transient override var permission: ArrayList<AccessType>? = null,
     @get:Exclude @Transient override var id: String = "",
     @get: Exclude @Transient override var placeVisited: Int = 0,
-    @get: Exclude @Transient override var photoUrl: String? = null,
     @get:Exclude @Transient override var accountType: AccountType? = null,
     @get:Exclude @Transient override var admin: Boolean = false
 ) : Person(

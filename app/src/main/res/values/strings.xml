@@ -9,6 +9,9 @@
 
     <string name="line_1_address">Line 1 Address</string>
     <string name="town">Town</string>
+    <string name="preview_icon">Captured image preview</string>
+    <string name="save_picture">Save Picture</string>
+    <string name="take_picture">Take a Picture</string>
     <string name="btn_register">Create</string>
     <string name="cell_or_email">Email or Cellphone Number.</string>
     <string name="user_password">Password</string>

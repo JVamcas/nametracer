@@ -48,6 +48,7 @@ class HomeFragment : AbstractFragment() {
 
         caseModel.repoResults.observe(viewLifecycleOwner, Observer {
             caseModel.covidStat.value?.apply {
+                binding.statLoaded = true
                 binding.stat = this
                 val barData = BarData(
                     BarDataSet(listOf(BarEntry(0f, recovered.toFloat())), "Recovered").apply {

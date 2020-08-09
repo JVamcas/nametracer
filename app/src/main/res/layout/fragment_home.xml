@@ -6,6 +6,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:indeterminateTint="@color/app_splash_lite"
+            android:visibility="@{statLoaded &amp;account != null? View.GONE: View.VISIBLE}"
+            />
 
         <com.github.mikephil.charting.charts.BarChart
             android:layout_width="330dp"
@@ -74,6 +84,10 @@
     <data>
         <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
         <import type="android.view.View"/>
+        <variable
+            name="statLoaded"
+            type="Boolean" />
+
         <variable
             name="account"
             type="com.petruskambala.namcovidcontacttracer.model.Account" />
