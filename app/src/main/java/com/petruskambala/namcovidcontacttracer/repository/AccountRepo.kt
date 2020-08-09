@@ -1,11 +1,13 @@
 package com.petruskambala.namcovidcontacttracer.repository
 
 import androidx.fragment.app.FragmentActivity
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
@@ -73,9 +75,14 @@ class AccountRepo {
     ) {
         AUTH.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
-                if (it.isSuccessful)
-                    callback(Success(AUTH_SUCCESS))
-                else callback(Results.Error(it.exception))
+                callback(
+                    when {
+                        it.isSuccessful -> Success(AUTH_SUCCESS)
+                        it.exception is FirebaseAuthInvalidCredentialsException ->
+                            Results.Error(AbstractModel.InvalidPasswordEmailException())
+                        else -> Results.Error(it.exception)
+                    }
+                )
             }
     }
 
@@ -86,8 +93,14 @@ class AccountRepo {
         AUTH.signInWithCredential(credential)
             .addOnCompleteListener {
                 callback(
-                    if (it.isSuccessful) Success(AUTH_SUCCESS)
-                    else Results.Error(it.exception)
+                    when {
+                        it.isSuccessful -> Success(AUTH_SUCCESS)
+                        it.exception is FirebaseAuthInvalidCredentialsException ->
+                            Results.Error(
+                                AbstractModel.InvalidPhoneAuthCodeException()
+                            )
+                        else -> Results.Error(it.exception)
+                    }
                 )
             }
     }

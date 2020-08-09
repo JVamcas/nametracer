@@ -39,7 +39,7 @@
                         android:inputType="textAutoComplete"
                         android:padding="9dp"
                         idMailCell="@{auth.idMailCell}"
-                        app:errorMsg="@{`Invalid Email or Cellphone number.`}"
+                        app:errorMsg="@{`Invalid email address.`}"
                         android:singleLine="true"
                         android:text="@={auth.idMailCell}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -59,7 +59,6 @@
                         android:hint="@string/user_password"
                         android:inputType="textPassword"
                         android:padding="9dp"
-                        password="@{auth.password}"
                         android:singleLine="true"
                         android:text="@={auth.password}" />
                 </com.google.android.material.textfield.TextInputLayout>

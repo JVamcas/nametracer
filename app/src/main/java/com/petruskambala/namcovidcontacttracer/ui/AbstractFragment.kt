@@ -259,6 +259,9 @@ abstract class AbstractFragment : Fragment() {
                 NO_RECORD -> showToast("Err: No record found for your search.")
                 NO_ACCOUNT -> showToast("Err: Visitor has no account.")
                 NO_SUCH_USER ->showToast("Err: No account with such email.")
+                DUPLICATE_ACCOUNT -> showToast("Err: Account already exist.")
+                INCORRECT_EMAIL_PASSWORD_COMBO -> showToast("Err: Incorrect email or password.")
+                INVALID_AUTH_CODE -> showToast("Err: Incorrect authentication code.")
                 else -> showToast("Err: Unknown error!")
             }
         }

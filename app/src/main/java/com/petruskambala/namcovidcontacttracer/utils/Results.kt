@@ -4,6 +4,7 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestoreException
 import java.lang.Exception
 import com.google.firebase.firestore.FirebaseFirestoreException.Code.*
@@ -40,17 +41,21 @@ sealed class Results {
             NO_ACCOUNT,
             INVALID_AUTH_CODE,
             PHONE_VERIFICATION_CODE_EXPIRED,
-            NO_SUCH_USER
+            NO_SUCH_USER,
+            DUPLICATE_ACCOUNT,
+            INCORRECT_EMAIL_PASSWORD_COMBO
         }
 
         val code: CODE = when (error) {
             is EntityExistException -> CODE.ENTITY_EXISTS
             is FirebaseAuthInvalidUserException -> CODE.NO_SUCH_USER
-            is FirebaseAuthInvalidCredentialsException -> CODE.INVALID_AUTH_CODE
+            is AbstractModel.InvalidPhoneAuthCodeException -> CODE.INVALID_AUTH_CODE
+            is FirebaseAuthUserCollisionException -> CODE.DUPLICATE_ACCOUNT
             is FirebaseAuthException -> CODE.AUTH
             is FirebaseNetworkException -> CODE.NETWORK
             is AbstractModel.NoEntityException -> CODE.NO_RECORD
             is AbstractModel.PhoneVerificationCodeExpired -> CODE.PHONE_VERIFICATION_CODE_EXPIRED
+            is AbstractModel.InvalidPasswordEmailException -> CODE.INCORRECT_EMAIL_PASSWORD_COMBO
              is FirebaseFirestoreException -> {
                 when (error.code) {
                     PERMISSION_DENIED -> CODE.PERMISSION_DENIED

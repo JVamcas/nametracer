@@ -61,7 +61,8 @@ class BindingUtil {
         @BindingAdapter(value = ["password"])
         fun validatePassword(mEditText: EditText, password: String?) {
             mEditText.error =
-                if (password.isNullOrEmpty() || password.length < 8) "Password should be at least 8 characters long." else null
+                if (password.isNullOrEmpty() || password.length >= 8) null else
+                    "Password should be at least 8 characters long."
         }
 
 
@@ -101,7 +102,9 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (idMailCell.isNullOrEmpty() || isValidMobile(idMailCell) || isValidEmail(idMailCell)
+                if (idMailCell.isNullOrEmpty() || isValidMobile(idMailCell) || isValidEmail(
+                        idMailCell
+                    )
                 /**|| isValidNationalID(
                 idMailCell
                 )**/
@@ -205,7 +208,9 @@ class BindingUtil {
         ) {
             email_cell_id?.apply {
                 mEditText.error =
-                    if (email_cell_id.isNullOrEmpty() || isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
+                    if (email_cell_id.isNullOrEmpty() || isValidMobile(email_cell_id) || isValidEmail(
+                            email_cell_id
+                        )
                     /**|| isValidNationalID(
                     email_cell_id
                     )**/

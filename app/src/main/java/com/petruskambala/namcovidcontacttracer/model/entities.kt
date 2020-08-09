@@ -31,6 +31,8 @@ abstract class AbstractModel(
     class EntityExistException : Exception()
     class NoEntityException : Exception()
     class PhoneVerificationCodeExpired : Exception()
+    class InvalidPasswordEmailException: Exception()
+    class InvalidPhoneAuthCodeException: Exception()
 }
 
 /***
