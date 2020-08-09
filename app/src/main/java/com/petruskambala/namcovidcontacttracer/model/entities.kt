@@ -78,7 +78,8 @@ data class Visit(
             person?.birthDate,
             person?.cellphone,
             person?.email,
-            person?.gender?.name
+            person?.gender?.name,
+            time
         )
 
     val personColumns: ArrayList<String>
@@ -88,7 +89,8 @@ data class Visit(
             "Date of birth",
             "Cellphone",
             "Email Address",
-            "Gender"
+            "Gender",
+            "Time visited"
         )
 }
 

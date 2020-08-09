@@ -26,6 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/app_splash"
             android:layout_margin="20dp"
             android:visibility="@{account.accountType == AccountType.BUSINESS?View.VISIBLE:View.GONE}"
             android:text="@string/new_visit"

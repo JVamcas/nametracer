@@ -49,7 +49,7 @@ class RecordVisitFragment : AbstractFragment() {
             val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
             val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
             showProgressBar("Loading visitor's account...")
-            accountModel.findAccount(email = email, phoneNumber = cell)
+            accountModel.findAccount(email = email, phoneNumber = ParseUtil.formatPhone(cell!!))
 
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.apply {
@@ -93,10 +93,11 @@ class RecordVisitFragment : AbstractFragment() {
                 super.onTextChanged(p0, p1, p2, p3)
                 val value = p0.toString()
                 email_cell_id.error =
-                    if (ParseUtil.isValidMobile(value) || ParseUtil.isValidEmail(value) || isValidNationalID(
+                    if (value.isNullOrEmpty() || ParseUtil.isValidMobile(value) || ParseUtil.isValidEmail(
                             value
                         )
-                    ) null
+                    )
+                        null
                     else "Enter a valid email or cellphone number."
             }
         })

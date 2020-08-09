@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/app_bar</color>
-    <color name="colorPrimaryDark">@color/app_color</color>
+    <color name="colorPrimary">@color/app_splash</color>
+    <color name="colorPrimaryDark">@color/app_splash_lite</color>
     <color name="colorAccent">#D81B60</color>
     <color name="input_login">#222222</color>
     <color name="input_login_hint">#E9E5E5</color>
     <color name="white">#ffffff</color>
-    <color name="splash_screen">@color/app_color</color>
-    <color name="app_color">#03A9F4</color>
+    <color name="splash_screen">@color/app_splash_lite</color>
+    <color name="app_color">@color/app_splash_lite</color>
     <color name="app_bar">#0B68B1</color>
     <color name="btn_ripple_color">#6AB8CF</color>
     <color name="active_toggle_btn">#2196F3</color>
@@ -17,6 +17,9 @@
     <color name="my_acc_background">#CACFCF</color>
     <color name="app_background">#77B1F1F1</color>
     <color name="black">#000</color>
+    <color name="app_splash">#2E687D</color>
+    <color name="app_splash_lite">#4F97B1</color>
+
 
     <!--    Table colors-->
 

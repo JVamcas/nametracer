@@ -101,7 +101,7 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (isValidMobile(idMailCell) || isValidEmail(idMailCell)
+                if (idMailCell.isNullOrEmpty() || isValidMobile(idMailCell) || isValidEmail(idMailCell)
                 /**|| isValidNationalID(
                 idMailCell
                 )**/
@@ -117,14 +117,12 @@ class BindingUtil {
             cellphone: String?,
             isEmail: Boolean = false
         ) {
-
             mEditText.error =
-                if (isEmail){
-                    if(emailAddress.isNullOrEmpty() || !isValidEmail(emailAddress))
+                if (isEmail) {
+                    if (emailAddress.isNullOrEmpty() || !isValidEmail(emailAddress))
                         "Enter a valid email address."
                     else null
-                }
-                else if (cellphone.isNullOrEmpty() || !isValidMobile(cellphone))
+                } else if (cellphone.isNullOrEmpty() || !isValidMobile(cellphone))
                     "Enter valid phone number."
                 else null
         }
@@ -207,14 +205,16 @@ class BindingUtil {
         ) {
             email_cell_id?.apply {
                 mEditText.error =
-                    if (isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
+                    if (email_cell_id.isNullOrEmpty() || isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
                     /**|| isValidNationalID(
                     email_cell_id
                     )**/
                     ) null
-                    else "Enter a valid ID, email or cellphone number."
+                    else "Enter a valid email or cellphone number."
                 mButton.isEnabled =
-                    (isValidMobile(email_cell_id) || isValidEmail(email_cell_id)
+                    (isValidMobile(email_cell_id) || isValidEmail(
+                        email_cell_id
+                    )
                             /**|| isValidNationalID(
                             email_cell_id
                             )**/
@@ -238,7 +238,7 @@ class BindingUtil {
         }
 
         @JvmStatic
-        fun formatPhone(phoneNumber: String?):String{
+        fun formatPhone(phoneNumber: String?): String {
             return "+264"
         }
 
