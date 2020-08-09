@@ -70,13 +70,13 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
                 val bundle = Bundle()
                 bundle.putString(Const.ACCOUNT, ParseUtil.toJson(account))
                 bundle.putString(Const.PASSWORD, password)
-                bundle.putString(Const.AUTH_TYPE,AuthType.EMAIL.name)
+                bundle.putString(Const.AUTH_TYPE, AuthType.EMAIL.name)
                 navController.navigate(
                     R.id.action_registrationFragment_to_extendedRegistrationFragment,
                     bundle
                 )
             } else
-                createNewUser(account.also { ParseUtil.formatPhone(it.cellphone?:"") }, password)
+                createNewUser(account.also { ParseUtil.formatPhone(it.cellphone ?: "") }, password)
         }
     }
 
@@ -90,9 +90,12 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
                 new_account_btn.isEnabled = true
                 if (pair.second is Results.Success) {
                     showToast("Account created successfully.")
-                    if (accountModel.authState.value == EMAIL_NOT_VERIFIED)
-                        navController.navigate(R.id.action_emailRegistrationFragment_to_verifyEmailFragment)
-                    else {
+                    if (accountModel.authState.value == EMAIL_NOT_VERIFIED) {
+                        if (this@EmailRegistrationFragment is ExtendedRegistrationFragment)
+                            navController.navigate(R.id.action_extendedRegistrationFragment_to_verifyEmailFragment)
+                        else
+                            navController.navigate(R.id.action_emailRegistrationFragment_to_verifyEmailFragment)
+                    } else {
                         requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                         ///navController.popBackStack(R.id.selectLoginModeFragment,true)
                     }
