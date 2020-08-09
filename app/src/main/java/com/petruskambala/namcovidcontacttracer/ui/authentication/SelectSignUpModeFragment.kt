@@ -47,6 +47,6 @@ open class SelectSignUpModeFragment : AbstractAuthFragment() {
     }
 
     override fun onBackClick() {
-        navController.popBackStack(R.id.selectLoginModeFragment,true)
+        navController.popBackStack(R.id.selectLoginModeFragment,false)
     }
 }

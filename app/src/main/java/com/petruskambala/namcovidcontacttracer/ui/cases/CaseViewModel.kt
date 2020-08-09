@@ -42,8 +42,8 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
         }
     }
 
-    fun findCase(email: String? = null, cellphone: String? = null, nationalId: String? = null) {
-        caseRepo.findCase(email, cellphone, nationalId) { case, results ->
+    fun findCase(email: String? = null, cellphone: String? = null) {
+        caseRepo.findCase(email, cellphone) { case, results ->
             _repoResults.postValue(Pair(case?.also { it.person = Person() }, results))
         }
     }

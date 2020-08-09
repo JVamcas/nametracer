@@ -1,10 +1,8 @@
 package com.petruskambala.namcovidcontacttracer.utils
 
 import android.content.Context
-import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import com.google.gson.Gson
-import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import java.io.File
 import java.util.regex.Pattern
@@ -21,7 +19,7 @@ class ParseUtil {
         }
 
         fun <K : AbstractModel?> copyOf(model: K, kClass: Class<K>): K {
-            val json = ParseUtil.toJson(model)
+            val json = toJson(model)
             return fromJson(json, kClass)
         }
 

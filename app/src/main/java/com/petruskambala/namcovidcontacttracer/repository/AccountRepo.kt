@@ -95,17 +95,14 @@ class AccountRepo {
     fun findAccount(
         email: String? = null,
         phoneNumber: String? = null,
-        nationalId: String? = null,
         accountType: AccountType,
         callback: (Person?, Results) -> Unit
     ) {
 
         val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("email", email)
-        else if (!phoneNumber.isNullOrEmpty())
-            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
         else
-            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("nationalId", nationalId)
+            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
         query.whereEqualTo("accountType", accountType).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -132,7 +129,6 @@ class AccountRepo {
                         "address_1", account.address_1,
                         "town", account.town,
                         "gender", null,
-                        "nationalId", null,
                         "birthDate", null
                     )
                 else
@@ -143,7 +139,6 @@ class AccountRepo {
                             "address_1", it.address_1,
                             "town", it.town,
                             "gender", it.gender?.name,
-                            "nationalId", it.nationalId,
                             "birthDate", it.birthDate
                         )
                     }
@@ -162,7 +157,7 @@ class AccountRepo {
         user?.sendEmailVerification()?.addOnCompleteListener {
             callback(
                 if (it.isSuccessful)
-                    Success(Success.CODE.VERIFICATION_EMAIL_SENT)
+                    Success(VERIFICATION_EMAIL_SENT)
                 else Results.Error(it.exception)
             )
         }
@@ -170,7 +165,7 @@ class AccountRepo {
 
     fun resetPassword(email: String, callback: (Results) -> Unit) {
         Firebase.auth.sendPasswordResetEmail(email).addOnCompleteListener {
-            val results = if (it.isSuccessful) Success(Success.CODE.PASSWORD_RESET_LINK_SENT)
+            val results = if (it.isSuccessful) Success(PASSWORD_RESET_LINK_SENT)
             else Results.Error(it.exception)
             callback(results)
         }

@@ -29,10 +29,6 @@ abstract class AbstractContactFragment: AbstractFragment() {
         return binding.root
     }
 
-
-
-
-
     fun initTable(
         colHeader: ArrayList<ColumnHeader>,
         rows: List<ArrayList<Cell>>,

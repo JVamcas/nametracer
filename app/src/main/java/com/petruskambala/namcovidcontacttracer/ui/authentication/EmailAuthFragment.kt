@@ -73,7 +73,7 @@ class EmailAuthFragment : AbstractAuthFragment() {
                         navController.navigate(R.id.action_emailAuthFragment_to_verifyEmailFragment)
                     else {//logged in and emailed verified
                         requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                        navController.popBackStack(R.id.selectLoginModeFragment,true)
+                        navController.popBackStack(R.id.selectLoginModeFragment,false)
                     }
                 } else (it.second is Results.Error)
                 super.parseRepoResults(it.second, "")

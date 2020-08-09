@@ -53,7 +53,7 @@ class PointOfContactFragment : AbstractFragment() {
             val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
             val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
 
-            accountModel.findAccount(email,cell,nationalID,AccountType.BUSINESS)
+            accountModel.findAccount(email,cell,AccountType.BUSINESS)
 
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 binding.account = null

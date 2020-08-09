@@ -50,7 +50,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_visit">New Visit</string>
-    <string name="visitor_credential">Visitor\'s ID, email or cellphone number</string>
+    <string name="visitor_credential">Visitor\'s email or cellphone number</string>
     <string name="visitor_temperature">Visitor\'s temperature</string>
     <string name="about_developer">About Developer</string>
     <string name="info">Info</string>

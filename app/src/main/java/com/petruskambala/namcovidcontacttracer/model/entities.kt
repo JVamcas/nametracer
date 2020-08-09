@@ -78,7 +78,6 @@ data class Visit(
             person?.birthDate,
             person?.cellphone,
             person?.email,
-            person?.nationalId,
             person?.gender?.name
         )
 
@@ -89,7 +88,6 @@ data class Visit(
             "Date of birth",
             "Cellphone",
             "Email Address",
-            "National ID",
             "Gender"
         )
 }
@@ -136,7 +134,6 @@ data class CovidCase(
 ) : Person(
     account = _person,
     _gender = _person?.gender,
-    _nationalId = _person?.nationalId ?: "",
     _placeVisited = _person?.placeVisited ?: 0,
     _birthDate = _person?.birthDate ?: ""
 ) {
@@ -174,7 +171,6 @@ data class CovidCase(
             return false
         return (!other.email.isNullOrEmpty() && email == other.email)
                 || (!other.cellphone.isNullOrEmpty() && cellphone == other.cellphone)
-                || (!other.nationalId.isNullOrEmpty() && nationalId == other.nationalId)
     }
 }
 
@@ -266,7 +262,6 @@ open class Account(
 open class Person(
     account: Account? = null,
     private var _birthDate: String? = "",
-    private var _nationalId: String? = "",
     private var _gender: Gender? = null,
     private var _placeVisited: Int = 0
 ) : Account(
@@ -300,12 +295,6 @@ open class Person(
         set(value) {
             _placeVisited = value
             notifyPropertyChanged(BR.placeVisited)
-        }
-    var nationalId: String?
-        @Bindable get() = _nationalId
-        set(value) {
-            _nationalId = value
-            notifyPropertyChanged(BR.nationalId)
         }
 
     override fun toString(): String {

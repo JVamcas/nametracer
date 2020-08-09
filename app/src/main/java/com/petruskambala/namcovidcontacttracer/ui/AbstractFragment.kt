@@ -28,6 +28,7 @@ import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthS
 import com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.SelectLoginModeFragment
+import com.petruskambala.namcovidcontacttracer.ui.home.HomeFragment
 import com.petruskambala.namcovidcontacttracer.utils.AccessType
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -58,21 +59,13 @@ abstract class AbstractFragment : Fragment() {
 
         accountModel.authState.observe(viewLifecycleOwner, Observer {
             it?.apply {
-                if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment){
+                if (this == UNAUTHENTICATED && this@AbstractFragment !is AbstractAuthFragment) {
                     endAuthFlow()
-                    navController.navigate(R.id.action_global_to_auth)
-                }
-                else if (this == ACCOUNT_INFO_MISSING && this@AbstractFragment !is UpdateProfileFragment) {
+                    navController.popBackStack(R.id.selectLoginModeFragment, false)
+                } else if (this == ACCOUNT_INFO_MISSING && this@AbstractFragment !is UpdateProfileFragment) {
                     endAuthFlow()
                     showToast("Please update your account.")
                     navController.navigate(R.id.action_global_updateProfileFragment)
-                }
-                else if(this ==  AUTHENTICATED
-                    && this@AbstractFragment !is SelectLoginModeFragment
-                    && this@AbstractFragment !is UpdateProfileFragment
-                ){
-                    endAuthFlow()
-                    navController.popBackStack(R.id.selectLoginModeFragment,true)
                 }
             }
         })
@@ -262,9 +255,10 @@ abstract class AbstractFragment : Fragment() {
                 PERMISSION_DENIED -> showToast("Err: Permission denied!")
                 NETWORK -> showToast("Err: No internet connection!")
                 ENTITY_EXISTS -> showToast("Err: $modelName is already registered!")
-                AUTH -> showToast("Err: Invalid login details.")
+                AUTH -> showToast("Err: Authentication.")
                 NO_RECORD -> showToast("Err: No record found for your search.")
                 NO_ACCOUNT -> showToast("Err: Visitor has no account.")
+                NO_SUCH_USER ->showToast("Err: No account with such email.")
                 else -> showToast("Err: Unknown error!")
             }
         }

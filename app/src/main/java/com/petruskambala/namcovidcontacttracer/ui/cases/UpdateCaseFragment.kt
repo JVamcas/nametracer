@@ -57,7 +57,7 @@ class UpdateCaseFragment : NewCaseFragment() {
         val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
 
         showProgressBar("Loading info...")
-        caseModel.findCase(email = email, cellphone = cell, nationalId = nationalID)
+        caseModel.findCase(email = email, cellphone = cell)
 
         caseModel.repoResults.observe(viewLifecycleOwner, Observer {
             it?.apply {

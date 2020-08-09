@@ -39,15 +39,12 @@ class CaseRepo {
     fun findCase(
         email: String? = null,
         phoneNumber: String? = null,
-        nationalId: String? = null,
         callback: (CovidCase?, Results) -> Unit
     ) {
         val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.CASES.name).whereEqualTo("email", email)
-        else if (!phoneNumber.isNullOrEmpty())
-            DB.collection(Docs.CASES.name).whereEqualTo("cellphone", phoneNumber)
         else
-            DB.collection(Docs.CASES.name).whereEqualTo("nationalId", nationalId)
+            DB.collection(Docs.CASES.name).whereEqualTo("cellphone", phoneNumber)
         query.get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {

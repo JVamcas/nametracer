@@ -3,6 +3,7 @@ package com.petruskambala.namcovidcontacttracer.utils
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.FirebaseFirestoreException
 import java.lang.Exception
 import com.google.firebase.firestore.FirebaseFirestoreException.Code.*
@@ -38,15 +39,17 @@ sealed class Results {
             NO_RECORD,
             NO_ACCOUNT,
             INVALID_AUTH_CODE,
-            PHONE_VERIFICATION_CODE_EXPIRED
+            PHONE_VERIFICATION_CODE_EXPIRED,
+            NO_SUCH_USER
         }
 
         val code: CODE = when (error) {
             is EntityExistException -> CODE.ENTITY_EXISTS
+            is FirebaseAuthInvalidUserException -> CODE.NO_SUCH_USER
+            is FirebaseAuthInvalidCredentialsException -> CODE.INVALID_AUTH_CODE
             is FirebaseAuthException -> CODE.AUTH
             is FirebaseNetworkException -> CODE.NETWORK
             is AbstractModel.NoEntityException -> CODE.NO_RECORD
-            is FirebaseAuthInvalidCredentialsException -> CODE.INVALID_AUTH_CODE
             is AbstractModel.PhoneVerificationCodeExpired -> CODE.PHONE_VERIFICATION_CODE_EXPIRED
              is FirebaseFirestoreException -> {
                 when (error.code) {

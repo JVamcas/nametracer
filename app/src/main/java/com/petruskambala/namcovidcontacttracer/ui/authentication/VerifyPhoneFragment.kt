@@ -100,7 +100,7 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
                         }
                         this == AUTH_SUCCESS -> {
                             endAuthFlow()
-                            navController.popBackStack(R.id.selectLoginModeFragment, true)
+                            navController.popBackStack(R.id.selectLoginModeFragment, false)
                         }
                     }
                 }

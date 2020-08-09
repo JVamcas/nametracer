@@ -91,10 +91,10 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
                 if (pair.second is Results.Success) {
                     showToast("Account created successfully.")
                     if (accountModel.authState.value == EMAIL_NOT_VERIFIED)
-                        navController.navigate(R.id.action_global_verifyEmailFragment)
+                        navController.navigate(R.id.action_emailRegistrationFragment_to_verifyEmailFragment)
                     else {
                         requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                        navController.popBackStack(R.id.selectLoginModeFragment,true)
+                        ///navController.popBackStack(R.id.selectLoginModeFragment,true)
                     }
                 } else super.parseRepoResults(pair.second, "")
                 accountModel.clearRepoResults(viewLifecycleOwner)

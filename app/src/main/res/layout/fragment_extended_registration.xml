@@ -35,27 +35,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/national_id_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/gender_layout"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/national_id"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:padding="9dp"
-                    android:hint="@string/input_id"
-                    android:inputType="number"
-                    android:text="@={person.nationalId}"
-                    android:singleLine="true"
-                    /></com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/birth_date_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/national_id_layout"
+                app:layout_constraintTop_toBottomOf="@id/gender_layout"
                 >
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birth_date"

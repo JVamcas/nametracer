@@ -119,8 +119,11 @@ class BindingUtil {
         ) {
 
             mEditText.error =
-                if (isEmail && (emailAddress.isNullOrEmpty() || !isValidEmail(emailAddress)))
-                    "Enter a valid email address."
+                if (isEmail){
+                    if(emailAddress.isNullOrEmpty() || !isValidEmail(emailAddress))
+                        "Enter a valid email address."
+                    else null
+                }
                 else if (cellphone.isNullOrEmpty() || !isValidMobile(cellphone))
                     "Enter valid phone number."
                 else null
@@ -217,13 +220,6 @@ class BindingUtil {
                             )**/
                             )
             }
-        }
-
-        @JvmStatic
-        @BindingAdapter(value = ["userId"])
-        fun validateNationalId(mEditText: EditText, nationalId: String?) {
-            mEditText.error =
-                if (nationalId.isNullOrEmpty() || nationalId.length != 11) "Invalid ID number." else null
         }
 
         @InverseMethod("toAccountType")

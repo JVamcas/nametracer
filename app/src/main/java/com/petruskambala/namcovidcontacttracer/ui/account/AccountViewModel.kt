@@ -211,13 +211,11 @@ class AccountViewModel : AbstractViewModel<Account>() {
     fun findAccount(
         email: String? = null,
         phoneNumber: String? = null,
-        nationalId: String? = null,
         accountType: AccountType = AccountType.PERSONAL
     ) {
         accountRepo.findAccount(
             email,
             phoneNumber,
-            nationalId,
             accountType
         ) { account, results ->
             _repoResults.postValue(Pair(account, results))

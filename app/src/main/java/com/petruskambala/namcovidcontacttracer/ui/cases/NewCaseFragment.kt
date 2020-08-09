@@ -118,13 +118,12 @@ open class NewCaseFragment : AbstractFragment() {
             if (find {
                     (it.email == email && !email.isNullOrEmpty())
                             || (it.cellphone == cell && !cell.isNullOrEmpty())
-                            || (it.nationalId == nationalID)
                 } != null)
                 showToast("Case already recorded.")
             else {
                 find_user.isEnabled = false
                 showProgressBar("Loading info...")
-                accountModel.findAccount(email = email, phoneNumber = cell, nationalId = nationalID)
+                accountModel.findAccount(email = email, phoneNumber = cell)
                 accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                     it?.apply {
                         endProgressBar()

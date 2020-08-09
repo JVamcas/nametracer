@@ -76,9 +76,6 @@ dependencies {
 
     implementation 'lib.kashif:folderpicker:2.4'
 
-    // https://mvnrepository.com/artifact/com.googlecode.libphonenumber/libphonenumber
-    implementation group: 'com.googlecode.libphonenumber', name: 'libphonenumber', version: '8.12.7'
-
 
 
 }

@@ -9,7 +9,6 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.model.AuthType
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.utils.Const
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_select_sign_up_mode.*
 /**
@@ -42,7 +41,7 @@ class SelectLoginModeFragment : SelectSignUpModeFragment() {
         }//No account?
         accountModel.authState.observe(viewLifecycleOwner, Observer {
             if(it == AccountViewModel.AuthState.AUTHENTICATED)
-                navController.navigate(R.id.action_selectLoginModeFragment_to_root)
+                navController.navigate(R.id.action_global_homeFragment)
         })
     }
 
