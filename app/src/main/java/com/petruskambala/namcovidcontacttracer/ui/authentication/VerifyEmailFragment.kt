@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
@@ -36,12 +38,15 @@ class VerifyEmailFragment : AbstractAuthFragment() {
             verifyEmail()
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.apply {
-                    endProgressBar()
                     re_send_link.isEnabled = true
                     parseRepoResults(second, "")
-                    accountModel.clearRepoResults(viewLifecycleOwner)
+                    endAuthFlow()
                 }
             })
         }
+    }
+
+    override fun onBackClick() {
+       navController.popBackStack(R.id.selectLoginModeFragment,false)
     }
 }

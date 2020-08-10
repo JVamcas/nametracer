@@ -34,7 +34,19 @@ class AccountViewModel : AbstractViewModel<Account>() {
     private var mAuthListener: FirebaseAuth.AuthStateListener
 
     private val _mAuthState = MutableLiveData<AuthState>(AuthState.UNAUTHENTICATED)
-    val authState: LiveData<AuthState> = _mAuthState
+    val authState: LiveData<AuthState>
+        get() {
+            val userTask = Firebase.auth
+            userTask.currentUser?.apply {
+                this.reload().addOnSuccessListener {
+                    if (userTask.currentUser!!.isEmailVerified){
+                        _mAuthState.postValue(AuthState.AUTHENTICATED)
+                        userId.postValue(userTask.currentUser!!.uid)//trigger account data load
+                    }
+                }
+            }
+            return _mAuthState
+        }
 
     init {
         //listen for auth changes
@@ -65,12 +77,12 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     private fun isEmailAuth(): Boolean {
         val user = Firebase.auth.currentUser
-        return user?.providerData?.get(1)?.providerId  == EmailAuthProvider.PROVIDER_ID
+        return user?.providerData?.get(1)?.providerId == EmailAuthProvider.PROVIDER_ID
     }
 
     private fun isPhoneAuth(): Boolean {
         val user = Firebase.auth.currentUser
-        return user?.providerData?.get(1)?.providerId  == PhoneAuthProvider.PROVIDER_ID
+        return user?.providerData?.get(1)?.providerId == PhoneAuthProvider.PROVIDER_ID
     }
 
     private fun loadUserProfile(userId: String) {
@@ -172,14 +184,6 @@ class AccountViewModel : AbstractViewModel<Account>() {
             _repoResults.postValue(Pair(obj, mResults))
         }
     }
-
-//    fun createNewUser(account: Person) {
-//        accountRepo.createUserWithPhone(account) { acc, mResults ->
-//            if (acc != null)
-//                _currentAccount.postValue(acc)
-//            _repoResults.postValue(Pair(null, mResults))
-//        }
-//    }
 
     fun sendVerificationEmail() {
         accountRepo.sendVerificationEmail {

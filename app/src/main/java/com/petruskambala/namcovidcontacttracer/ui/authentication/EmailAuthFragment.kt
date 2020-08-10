@@ -69,11 +69,12 @@ class EmailAuthFragment : AbstractAuthFragment() {
             it?.let {
                 login_btn.isEnabled = true
                 if (it.second is Results.Success) {
-                    if (accountModel.authState.value == EMAIL_NOT_VERIFIED)
+                    val authState = accountModel.authState.value
+                    if (authState == EMAIL_NOT_VERIFIED)
                         navController.navigate(R.id.action_emailAuthFragment_to_verifyEmailFragment)
                     else {//logged in and emailed verified
                         requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                        navController.popBackStack(R.id.selectLoginModeFragment,false)
+                        navController.popBackStack(R.id.selectLoginModeFragment, false)
                     }
                 } else (it.second is Results.Error)
                 super.parseRepoResults(it.second, "")

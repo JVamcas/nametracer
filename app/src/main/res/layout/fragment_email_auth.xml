@@ -35,7 +35,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
-                        android:hint="@string/cell_or_email"
+                        android:hint="@string/email_address"
                         android:inputType="textAutoComplete"
                         android:padding="9dp"
                         idMailCell="@{auth.idMailCell}"
