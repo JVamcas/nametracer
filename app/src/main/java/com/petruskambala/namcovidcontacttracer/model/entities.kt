@@ -31,18 +31,18 @@ abstract class AbstractModel(
     class EntityExistException : Exception()
     class NoEntityException : Exception()
     class PhoneVerificationCodeExpired : Exception()
-    class InvalidPasswordEmailException: Exception()
-    class InvalidPhoneAuthCodeException: Exception()
+    class InvalidPasswordEmailException : Exception()
+    class InvalidPhoneAuthCodeException : Exception()
 
     var photoUrl: String?
-    @Bindable
-    get() = _photoUrl
-    set(value) {
-        if(_photoUrl != value){
-            _photoUrl = value
-            notifyPropertyChanged(BR.photoUrl)
+        @Bindable
+        get() = _photoUrl
+        set(value) {
+            if (_photoUrl != value) {
+                _photoUrl = value
+                notifyPropertyChanged(BR.photoUrl)
+            }
         }
-    }
 }
 
 /***
@@ -77,7 +77,9 @@ data class Visit(
         @Exclude get() = arrayListOf(
             place?.name,
             place?.toString(),
-            "$temperature \u00B0C",
+            if (temperature == null)
+                "Not recorded" else
+                "$temperature \u00B0C",
             time
         )
 

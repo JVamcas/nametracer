@@ -37,8 +37,8 @@ class AboutDeveloperFragment : AbstractFragment() {
                     _name = "Petrus Mesias Kambala",
                     _cellphone = "+264 81 326 4666",
                     _email = "kmbpet001@myuct.ac.za",
-                    _town = "Windhoek",
-                    _address_1 = "Windhoek North"
+                    _town = "Namibia",
+                    _address_1 = "Windhoek"
                 )
             )
     }

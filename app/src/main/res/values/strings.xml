@@ -69,7 +69,7 @@
     <string name="follow_me">Twitter</string>
     <string name="linked_in">LinkedIn</string>
     <string name="update_profile">Update Profile</string>
-    <string name="contacts">Possible Contacts</string>
+    <string name="contacts">Contacts</string>
     <string name="OK">OK</string>
     <string name="verify_email">Email verification link has been sent to your email. Click on link to verify your email address.</string>
     <string name="resend_link">Resend Link</string>
@@ -87,4 +87,6 @@
     <string name="input_phone_verify_code">Enter verification code sent to your phone.</string>
     <string name="twitter_url">https://twitter.com/intent/follow?user_id=48101720</string>
     <string name="linkedin_url">https://www.linkedin.com/in/petrus-kambala-2178789a/</string>
+    <string name="profile">Profile</string>
+    <string name="possible_contacts">Possible Contacts</string>
 </resources>

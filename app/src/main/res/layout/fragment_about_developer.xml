@@ -10,18 +10,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.AboutDeveloperFragment">
 
-        <include
+        <ImageView
             android:id="@+id/user_avatar"
-            layout="@layout/user_icon_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:contentDescription="@string/user_avatar"
+            app:default_icon="@{R.drawable.dev}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            bind:cameraVisible="@{false}"
-            bind:model="@{person}"
-            bind:size="@{300}" />
+            app:viewId="@{``}"
+            app:size="@{300}"
+            app:photoUrl="@{person.photoUrl}"
+            android:layout_marginBottom="10dp"
+            />
 
         <include
             android:id="@+id/user_details"
@@ -61,6 +63,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <data>
+        <import type="com.petruskambala.namcovidcontacttracer.R" />
         <variable
             name="person"
             type="com.petruskambala.namcovidcontacttracer.model.Person" />
