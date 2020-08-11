@@ -3,6 +3,7 @@ package com.petruskambala.namcovidcontacttracer.ui.account
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -79,8 +80,10 @@ class UpdateProfileFragment : AbstractFragment() {
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 it?.apply {
                     update_account.isEnabled = true
-                    if (it.second is Results.Success)
+                    if (it.second is Results.Success) {
+                        renameTempImageFile(Const.IMAGE_ROOT_PATH,Const.TEMP_FILE,binding.account!!.id)
                         navController.popBackStack()
+                    }
                     super.parseRepoResults(it.second, "Profile")
                     endAuthFlow()
                 }
@@ -88,8 +91,8 @@ class UpdateProfileFragment : AbstractFragment() {
         }
 
         take_new_picture.setOnClickListener {
-            val currentUser = accountModel.currentAccount.value
-            val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH, currentUser!!.id);
+            val currentUser = binding.account!!
+            val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH, Const.TEMP_FILE);
             takePicture(currentUser, filePath);
         }
     }
@@ -98,5 +101,32 @@ class UpdateProfileFragment : AbstractFragment() {
         super.onResume()
         val activity = (activity as MainActivity)
         activity.drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    override fun onBackClick() {
+        showWarningDialog(Const.DISCARD_CHANGES, object : WarningDialogListener {
+            /***
+             * Called when user Ok the delete Op
+             */
+            override fun onOkWarning() {
+                deleteFile(requireActivity(),Const.IMAGE_ROOT_PATH, binding.account!!.id)
+                super@UpdateProfileFragment.onBackClick()
+            }
+
+            /***
+             * Called when user explicitly cancelled the op or when dialog dismissed
+             * by touching elsewhere in the device screen
+             */
+            override fun onCancelWarning() {}
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // handle the up button here
+        if (item.itemId == android.R.id.home) {
+            onBackClick()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

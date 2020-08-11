@@ -179,7 +179,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
             })
     }
 
-    fun createNewUser(account: Account, password: String) {
+    fun createNewUser(account: Person, password: String) {
         accountRepo.createNewUserWithEmailAndPassword(account, password) { obj, mResults ->
             _repoResults.postValue(Pair(obj, mResults))
         }

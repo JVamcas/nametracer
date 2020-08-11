@@ -5,19 +5,24 @@ import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.owambo.jvamcas.stokkman.ui.camera.CameraCaptureActivity
 import com.petruskambala.namcovidcontacttracer.R
@@ -59,6 +64,7 @@ abstract class AbstractFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         handleBackClicks()
 
         accountModel.authState.observe(viewLifecycleOwner, Observer {
@@ -200,10 +206,21 @@ abstract class AbstractFragment : Fragment() {
                     requireActivity().getExternalFilesDir(null),
                     data?.getStringExtra(Const.ICON_PATH)
                 ).absolutePath
-                model.photoUrl = absPath //force update of model icon
+                model.photoUrl = "file:$absPath" //force update of model icon
                 Picasso.get().invalidate("file:$absPath") //force picasso to reload pic
             }
         }
+    }
+    /***
+     * Invoke camera activity to take a picture
+     * @param model whose icon is to be captured
+     * @param fileName abs filePath where image will be saved
+     */
+    fun takePicture(model: AbstractModel, fileName: String) {
+        this.model = model
+        val mIntent = Intent(requireActivity(), CameraCaptureActivity::class.java)
+        mIntent.putExtra(Const.ICON_PATH, fileName)
+        startActivityForResult(mIntent, Const.CAPTURE_PICTURE)
     }
 
     fun renameTempImageFile(dir: String?, from: String, to: String) {
@@ -216,9 +233,9 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
-    open fun deleteFile(dir: String?, name: String?) {
-        var filePath = ParseUtil.iconPath(dir, name!!)
-        filePath = File(requireActivity().getExternalFilesDir(null), filePath).absolutePath
+    open fun deleteFile(activity: FragmentActivity,baseDir: String, viewId: String) {
+        var filePath = ParseUtil.iconPath(baseDir, viewId)
+        filePath = File(activity.getExternalFilesDir(null), filePath).absolutePath
         File(filePath).delete()
     }
 
@@ -315,18 +332,6 @@ abstract class AbstractFragment : Fragment() {
             cancelBtn.setOnClickListener { dialog.dismiss() }
             dialog.setOnDismissListener { if (!okBtnClicked.get()) mListener.onCancelWarning() }
         }
-    }
-
-    /***
-     * Invoke camera activity to take a picture
-     * @param model whose icon is to be captured
-     * @param fileName abs filePath where image will be saved
-     */
-    fun takePicture(model: AbstractModel, fileName: String) {
-        this.model = model
-        val mIntent = Intent(requireActivity(), CameraCaptureActivity::class.java)
-        mIntent.putExtra(Const.ICON_PATH, fileName)
-        startActivityForResult(mIntent, Const.CAPTURE_PICTURE)
     }
 
     protected fun selectDate(callback: (date: String) -> Unit) {

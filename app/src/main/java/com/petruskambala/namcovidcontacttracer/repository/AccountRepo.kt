@@ -22,12 +22,11 @@ class AccountRepo {
     private val AUTH = Firebase.auth
 
     fun createNewUserWithEmailAndPassword(
-        mAccount: Account,
+        person: Person,
         password: String,
         callback: (Person?, Results) -> Unit
     ) {
-        val person = Person(account = mAccount)
-        AUTH.createUserWithEmailAndPassword(mAccount.email!!, password)
+        AUTH.createUserWithEmailAndPassword(person.email!!, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     person.apply { id = AUTH.currentUser!!.uid }

@@ -13,6 +13,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentEmailRegistra
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.AuthType
+import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.EMAIL_NOT_VERIFIED
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
@@ -82,14 +83,14 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
 
     fun createNewUser(account: Account, password: String) {
         showProgressBar("Creating your account... Please wait!")
-        accountModel.createNewUser(account, password)
+        accountModel.createNewUser(account as? Person?:Person(account = account), password)
         new_account_btn.isEnabled = false
         accountModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
             pair?.let {
                 endProgressBar()
                 new_account_btn.isEnabled = true
                 if (pair.second is Results.Success) {
-                    showToast("Account created successfully.")
+                    showToast("Account created.")
                     if (accountModel.authState.value == EMAIL_NOT_VERIFIED) {
                         if (this@EmailRegistrationFragment is ExtendedRegistrationFragment)
                             navController.navigate(R.id.action_extendedRegistrationFragment_to_verifyEmailFragment)

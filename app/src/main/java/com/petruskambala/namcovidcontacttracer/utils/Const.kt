@@ -23,6 +23,11 @@ internal interface Const {
         val ICON_PATH = "ICON_PATH"
         val ACCOUNT = "business"
         val AUTH_TYPE = "auth_type"
+
+        val TEMP_FILE = "temp"//only used when creating a new model
+
+
+        val DISCARD_CHANGES = "Discard Changes?"
     }
 
 }

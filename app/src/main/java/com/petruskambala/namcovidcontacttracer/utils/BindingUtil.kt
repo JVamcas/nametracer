@@ -81,7 +81,7 @@ class BindingUtil {
          * @param size the required size of the image
          */
         @JvmStatic
-        @BindingAdapter(value = ["viewId","default_icon", "photoUrl", "size"])
+        @BindingAdapter(value = ["viewId", "default_icon", "photoUrl", "size"])
         fun loadImage(
             mView: ImageView,
             viewId: String?,
@@ -89,8 +89,11 @@ class BindingUtil {
             photoUrl: String?,
             size: Int
         ) {
-            val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH,viewId?:"")
-            val absPath = photoUrl?:ParseUtil.findFilePath(mView.context,filePath)
+            val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH, viewId ?: "")
+            val absPath = if (photoUrl.isNullOrBlank()) ParseUtil.findFilePath(
+                mView.context,
+                filePath
+            ) else photoUrl
             val creator =
                 ImageUtil.requestCreator(CircleTransformation, absPath, size, default_icon)
             creator.into(mView)
