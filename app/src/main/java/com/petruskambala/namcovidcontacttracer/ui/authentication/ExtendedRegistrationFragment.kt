@@ -28,7 +28,7 @@ class ExtendedRegistrationFragment : EmailRegistrationFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
-            password = getString(Const.PASSWORD)?:""
+            password = getString(Const.PASSWORD) ?: ""
             val account = ParseUtil.fromJson(getString(Const.ACCOUNT), Account::class.java)
             person = Person(account = account)
             authType = AuthType.valueOf(getString(Const.AUTH_TYPE)!!)
@@ -64,7 +64,10 @@ class ExtendedRegistrationFragment : EmailRegistrationFragment() {
                 val resultCode = (repoResults?.second as? Results.Error)?.code
 
                 if (repoResults == null || resultCode == Results.Error.CODE.PHONE_VERIFICATION_CODE_EXPIRED)
-                    accountModel.verifyPhoneNumber(account.cellphone!!, requireActivity())
+                    accountModel.verifyPhoneNumber(account.also {
+                        it.cellphone = ParseUtil.formatPhone(it.cellphone!!)
+                    }.cellphone!!, requireActivity())
+
                 navController.navigate(
                     R.id.action_extendedRegistrationFragment_to_verifyPhoneFragment,
                     Bundle().apply {

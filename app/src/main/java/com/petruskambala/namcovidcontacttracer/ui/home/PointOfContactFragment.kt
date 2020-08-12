@@ -51,21 +51,19 @@ class PointOfContactFragment : AbstractFragment() {
             val idEmailCell = binding.auth!!.idMailCell
             val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
             val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
-            val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
 
             accountModel.findAccount(email,cell,AccountType.BUSINESS)
 
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 binding.account = null
                 it?.apply {
-                    endProgressBar()
+                    endAuthFlow()
                     find_user.isEnabled = true
                     if (second is Results.Success) {
                         binding.account = first as Account
                         requireActivity().toolbar.title = "Point of Contact"
                     }
                     else parseRepoResults(second,"")
-                    accountModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
         }

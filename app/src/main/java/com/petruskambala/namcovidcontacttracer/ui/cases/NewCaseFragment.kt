@@ -98,7 +98,7 @@ open class NewCaseFragment : AbstractFragment() {
                 val value = p0.toString()
                 email_cell_id.error =
                     if (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value)) null
-                    else "Enter a valid ID, email or cellphone number."
+                    else "Enter a valid email or cellphone number."
                 find_user.isEnabled =
                     (isValidMobile(value) || isValidEmail(value) || isValidNationalID(value))
             }
@@ -111,7 +111,6 @@ open class NewCaseFragment : AbstractFragment() {
         val idEmailCell = binding.auth!!.idMailCell
         val email = if (isValidEmail(idEmailCell)) idEmailCell else null
         val cell = if (isValidMobile(idEmailCell)) idEmailCell else null
-        val nationalID = if (isValidNationalID(idEmailCell)) idEmailCell else null
 
         caseModel.caseList.value?.apply {
 

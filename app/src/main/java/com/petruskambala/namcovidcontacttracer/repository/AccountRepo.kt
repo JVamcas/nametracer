@@ -6,6 +6,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.WriteBatch
 import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel.NoEntityException
@@ -13,6 +14,7 @@ import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.utils.Docs
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import com.petruskambala.namcovidcontacttracer.utils.Results.Success.CODE.*
@@ -111,10 +113,12 @@ class AccountRepo {
         callback: (Person?, Results) -> Unit
     ) {
 
+
+
         val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("email", email)
         else
-            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", phoneNumber)
+            DB.collection(Docs.ACCOUNTS.name).whereEqualTo("cellphone", ParseUtil.formatPhone(phoneNumber!!))
         query.whereEqualTo("accountType", accountType).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -123,7 +127,7 @@ class AccountRepo {
                         if (docs.isEmpty()) null else docs.mapNotNull { acc -> acc.toObject(Person::class.java) }
                             .first()
                     val results =
-                        if (account == null) Results.Error(NoEntityException()) else Success(Success.CODE.LOAD_SUCCESS)
+                        if (account == null) Results.Error(NoEntityException()) else Success(LOAD_SUCCESS)
                     callback(account, results)
                 } else {
                     callback(null, Results.Error(it.exception))
@@ -132,6 +136,7 @@ class AccountRepo {
     }
 
     fun updateAccount(account: Account, callback: (Results) -> Unit) {
+
         DB.collection(Docs.ACCOUNTS.name).document(account.id)
             .apply {
                 val task = if (account.accountType == AccountType.BUSINESS)

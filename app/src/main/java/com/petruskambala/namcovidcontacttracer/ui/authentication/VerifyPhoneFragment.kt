@@ -61,6 +61,7 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
             accountModel.verifyPhoneNumber(phone, requireActivity())
         }
 
+
         submit_btn.setOnClickListener {
             submit_btn.isEnabled = false
             showProgressBar("Authenticating...")
@@ -82,7 +83,6 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
         accountModel.repoResults.observe(viewLifecycleOwner, Observer { it ->
             it?.apply {
                 endProgressBar()
-                submit_btn.isEnabled = true
                 (second as? Results.Error)?.code.apply {
                     if (this == PHONE_VERIFICATION_CODE_EXPIRED)
                         showToast("Verification code expired.")

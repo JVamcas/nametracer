@@ -23,9 +23,10 @@ class PhoneRegistrationFragment : EmailRegistrationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        endAuthFlow()
         new_account_btn.setOnClickListener {
             new_account_btn.isEnabled = false
+
             if (account.accountType == AccountType.BUSINESS) {
                 val repoResults = accountModel.repoResults.value
                 val resultCode = (repoResults?.second as? Results.Error)?.code

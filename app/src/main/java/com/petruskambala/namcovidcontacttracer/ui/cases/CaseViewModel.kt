@@ -17,7 +17,11 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
     private val caseRepo = CaseRepo()
 
     private var _caseList = MutableLiveData<ArrayList<CovidCase>>()
-    val caseList: LiveData<ArrayList<CovidCase>> = _caseList
+    val caseList: LiveData<ArrayList<CovidCase>>
+        get() {
+            return if (_caseList.value == null) MutableLiveData<ArrayList<CovidCase>>(ArrayList())
+            else _caseList
+        }
 
     private var _covidStat = MutableLiveData<CovidStat>()
     val covidStat: LiveData<CovidStat> = _covidStat
@@ -30,7 +34,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
     fun registerNewCase(case: CovidCase) {
         caseRepo.registerNewCase(case) { result ->
             if (result is Results.Success)
-                _caseList.postValue(_caseList.value?.apply { add(case) })
+                _caseList.postValue(caseList.value?.apply { add(case) })
             _repoResults.postValue(Pair(null, result))
         }
     }
@@ -82,7 +86,12 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
                         newCases = obj.getString("todayCases")
                     )
                 _covidStat.postValue(stats)
-                _repoResults.postValue(Pair(null,Results.Success(Results.Success.CODE.LOAD_SUCCESS)))
+                _repoResults.postValue(
+                    Pair(
+                        null,
+                        Results.Success(Results.Success.CODE.LOAD_SUCCESS)
+                    )
+                )
             }
         })
     }
