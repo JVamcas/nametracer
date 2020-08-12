@@ -38,10 +38,8 @@ abstract class AbstractModel(
         @Bindable
         get() = _photoUrl
         set(value) {
-            if (_photoUrl != value) {
-                _photoUrl = value
-                notifyPropertyChanged(BR.photoUrl)
-            }
+            _photoUrl = value
+            notifyPropertyChanged(BR.photoUrl)
         }
 }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
+import com.squareup.picasso.Picasso
 import java.io.File
 import java.util.regex.Pattern
 
@@ -88,6 +89,11 @@ class ParseUtil {
         }
         fun isValidAuthCode(code:String?): Boolean{
             return code?.length?:0 == 6
+        }
+        fun refreshImage(context: Context, rtDir: String, viewId: String){
+            val filePath = ParseUtil.iconPath(rtDir,viewId)
+            val absPath = ParseUtil.findFilePath(context,filePath)
+            Picasso.get().invalidate(absPath)
         }
     }
 }

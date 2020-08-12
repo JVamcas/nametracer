@@ -20,7 +20,10 @@ import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValid
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidMobile
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidTemperature
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.refreshImage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_new_case.*
+import java.io.File
 
 class BindingUtil {
     companion object {
@@ -65,7 +68,6 @@ class BindingUtil {
                     "Password should be at least 8 characters long."
         }
 
-
         @JvmStatic
         @BindingAdapter(value = ["errorMsg", "editContent"])
         fun emptyEdit(mEditText: EditText, errorMsg: String?, value: String?) {
@@ -90,10 +92,10 @@ class BindingUtil {
             size: Int
         ) {
             val filePath = ParseUtil.iconPath(Const.IMAGE_ROOT_PATH, viewId ?: "")
-            val absPath = if (photoUrl.isNullOrBlank()) ParseUtil.findFilePath(
-                mView.context,
-                filePath
-            ) else photoUrl
+            val absPath = ParseUtil.findFilePath(mView.context, filePath)
+
+            Picasso.get().invalidate(absPath)
+
             val creator =
                 ImageUtil.requestCreator(CircleTransformation, absPath, size, default_icon)
             creator.into(mView)

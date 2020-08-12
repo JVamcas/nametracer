@@ -39,7 +39,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
             val userTask = Firebase.auth
             userTask.currentUser?.apply {
                 this.reload().addOnSuccessListener {
-                    if (userTask.currentUser!!.isEmailVerified){
+                    if (userTask.currentUser!!.isEmailVerified) {
                         _mAuthState.postValue(AuthState.AUTHENTICATED)
                         userId.postValue(userTask.currentUser!!.uid)//trigger account data load
                     }
@@ -197,12 +197,8 @@ class AccountViewModel : AbstractViewModel<Account>() {
                 _mAuthState.postValue(AuthState.AUTHENTICATED)
             _currentAccount.postValue(
                 if (account.accountType == AccountType.BUSINESS)
-                    Person(
-                        account = ParseUtil.copyOf(
-                            account,
-                            Account::class.java
-                        )
-                    ) else account as Person
+                    Person(account = account)
+                else account as Person
             )
             _repoResults.postValue(Pair(null, results))
         }

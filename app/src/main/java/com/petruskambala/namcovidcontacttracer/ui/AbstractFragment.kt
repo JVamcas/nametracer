@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -199,8 +200,8 @@ abstract class AbstractFragment : Fragment() {
                     requireActivity().getExternalFilesDir(null),
                     data?.getStringExtra(Const.ICON_PATH)
                 ).absolutePath
+                model.id = Const.TEMP_FILE
                 model.photoUrl = "file:$absPath" //force update of model icon
-                Picasso.get().invalidate("file:$absPath") //force picasso to reload pic
             }
         }
     }

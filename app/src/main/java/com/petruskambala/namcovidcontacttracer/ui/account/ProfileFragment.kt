@@ -9,6 +9,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentProfileBindin
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 
 /**
