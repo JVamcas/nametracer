@@ -1,4 +1,4 @@
-package com.owambo.jvamcas.stokkman.ui.camera
+package com.petruskambala.namcovidcontacttracer
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.PictureResult
-import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.ActivityCameraCaptureBinding
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import kotlinx.android.synthetic.main.activity_camera_capture.*

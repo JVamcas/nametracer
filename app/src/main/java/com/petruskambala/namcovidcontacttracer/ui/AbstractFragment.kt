@@ -1,16 +1,13 @@
 package com.petruskambala.namcovidcontacttracer.ui
 
 import android.Manifest
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -21,10 +18,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.owambo.jvamcas.stokkman.ui.camera.CameraCaptureActivity
+import com.petruskambala.namcovidcontacttracer.CameraCaptureActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
 import com.petruskambala.namcovidcontacttracer.databinding.ProgressbarBinding
@@ -35,8 +30,6 @@ import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.ui.account.UpdateProfileFragment
 import com.petruskambala.namcovidcontacttracer.ui.authentication.AbstractAuthFragment
-import com.petruskambala.namcovidcontacttracer.ui.authentication.SelectLoginModeFragment
-import com.petruskambala.namcovidcontacttracer.ui.home.HomeFragment
 import com.petruskambala.namcovidcontacttracer.utils.*
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.Results.Error.CODE.*

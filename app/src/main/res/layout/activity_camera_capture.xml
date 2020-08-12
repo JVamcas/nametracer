@@ -19,7 +19,7 @@
                 android:id="@+id/camera_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/app_bar"
+                android:background="@color/app_splash"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,6 +35,7 @@
             app:layout_constraintTop_toBottomOf="@id/app_bar"
             android:visibility="@{takePicture? View.VISIBLE: View.GONE}"
             android:id="@+id/camera_surface"
+            android:backgroundTint="@color/app_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:keepScreenOn="true"
@@ -51,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:backgroundTint="@android:color/transparent"
                 android:visibility="@{takePicture?View.GONE: View.VISIBLE}"
                 android:src="@drawable/ic_discard_frame"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -61,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:backgroundTint="@android:color/transparent"
                 android:src="@drawable/ic_camera"
                 android:visibility="@{takePicture?View.VISIBLE: View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
+                android:backgroundTint="@android:color/transparent"
                 android:visibility="@{takePicture?View.GONE: View.VISIBLE}"
                 android:src="@drawable/ic_save_frame"
                 app:layout_constraintBottom_toBottomOf="parent"

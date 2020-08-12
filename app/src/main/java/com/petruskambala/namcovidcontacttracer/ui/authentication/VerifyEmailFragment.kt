@@ -3,6 +3,7 @@ package com.petruskambala.namcovidcontacttracer.ui.authentication
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.drawerlayout.widget.DrawerLayout
@@ -44,6 +45,15 @@ class VerifyEmailFragment : AbstractAuthFragment() {
                 }
             })
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // handle the up button here
+        if (item.itemId == android.R.id.home) {
+            onBackClick()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackClick() {

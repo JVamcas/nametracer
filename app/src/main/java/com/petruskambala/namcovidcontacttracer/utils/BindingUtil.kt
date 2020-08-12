@@ -248,11 +248,6 @@ class BindingUtil {
             }
         }
 
-        @JvmStatic
-        fun formatPhone(phoneNumber: String?): String {
-            return "+264"
-        }
-
         @InverseMethod("toGender")
         @JvmStatic
         fun fromGender(gender: Gender?): String? {

@@ -109,7 +109,7 @@ class UpdateProfileFragment : AbstractFragment() {
              * Called when user Ok the delete Op
              */
             override fun onOkWarning() {
-                deleteFile(requireActivity(),Const.IMAGE_ROOT_PATH, binding.account!!.id)
+                deleteFile(requireActivity(),Const.IMAGE_ROOT_PATH, Const.TEMP_FILE)
                 super@UpdateProfileFragment.onBackClick()
             }
 
