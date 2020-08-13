@@ -284,8 +284,7 @@ abstract class AbstractFragment : Fragment() {
     protected fun parseRepoResults(mResults: Results?, modelName: String) {
         if (mResults is Results.Success) {
             when (mResults.code) {
-                AUTH_SUCCESS -> {
-                }
+                AUTH_SUCCESS -> { }
                 WRITE_SUCCESS -> showToast("$modelName registered successfully.")
                 UPDATE_SUCCESS -> showToast("$modelName updated successfully.")
                 LOGOUT_SUCCESS -> showToast("Logout successfully!")
@@ -299,7 +298,7 @@ abstract class AbstractFragment : Fragment() {
                 ENTITY_EXISTS -> showToast("Err: $modelName is already registered!")
                 AUTH -> showToast("Err: Authentication.")
                 NO_RECORD -> showToast("Err: No record found for your search.")
-                NO_ACCOUNT -> showToast("Err: Visitor has no account.")
+                NO_ACCOUNT -> showToast("Err: No record found for your search.")
                 NO_SUCH_USER -> showToast("Err: No account with such email.")
                 DUPLICATE_ACCOUNT -> showToast("Err: Account already exist.")
                 INCORRECT_EMAIL_PASSWORD_COMBO -> showToast("Err: Incorrect email or password.")
@@ -348,5 +347,12 @@ abstract class AbstractFragment : Fragment() {
          * by touching elsewhere in the device screen
          */
         fun onCancelWarning()
+    }
+}
+class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
+    override fun onChanged(event: Event<T>?) {
+        event?.getContentIfNotHandled()?.let { value ->
+            onEventUnhandledContent(value)
+        }
     }
 }

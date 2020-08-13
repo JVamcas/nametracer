@@ -33,7 +33,8 @@
             android:layout_margin="20dp"
             app:elevation="10dp"
             app:srcCompat="@drawable/ic_add"
-            app:rippleColor="@color/app_bar" />
+            android:backgroundTint="@color/app_splash"
+            app:rippleColor="@color/app_splash_lite" />
 
     </FrameLayout>
 

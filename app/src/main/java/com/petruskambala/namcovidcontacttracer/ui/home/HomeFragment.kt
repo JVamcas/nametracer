@@ -101,6 +101,7 @@ class HomeFragment : AbstractFragment() {
         accountModel.currentAccount.observe(viewLifecycleOwner, Observer {
             it?.apply {
                 if (admin && accountType == AccountType.PERSONAL) {
+                    menu.clear()
                     super.onCreateOptionsMenu(menu, inflater)
                     inflater.inflate(R.menu.admin_menu, menu)
                 }

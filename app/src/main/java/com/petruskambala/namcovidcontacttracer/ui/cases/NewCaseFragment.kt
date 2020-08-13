@@ -125,15 +125,17 @@ open class NewCaseFragment : AbstractFragment() {
                 accountModel.findAccount(email = email, phoneNumber = cell)
                 accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                     it?.apply {
-                        endProgressBar()
                         find_user.isEnabled = true
                         if (second is Results.Success) {
                             case = CovidCase(_person = first as Person)
                             requireActivity().toolbar.title = "Record New Case"
                             binding.covidCase = case
-                        } else
-                            super.parseRepoResults(it.second, "")
-                        accountModel.clearRepoResults(viewLifecycleOwner)
+                        } else {
+                            if (first == null)
+                                showToast("Person must create account.")
+                            else super.parseRepoResults(it.second, "")
+                        }
+                        endAuthFlow()
                     }
                 })
             }

@@ -54,6 +54,7 @@ sealed class Results {
             is FirebaseAuthException -> CODE.AUTH
             is FirebaseNetworkException -> CODE.NETWORK
             is AbstractModel.NoEntityException -> CODE.NO_RECORD
+            is AbstractModel.NoAccountException -> CODE.NO_ACCOUNT
             is AbstractModel.PhoneVerificationCodeExpired -> CODE.PHONE_VERIFICATION_CODE_EXPIRED
             is AbstractModel.InvalidPasswordEmailException -> CODE.INCORRECT_EMAIL_PASSWORD_COMBO
              is FirebaseFirestoreException -> {

@@ -47,7 +47,7 @@ class RecordVisitFragment : AbstractFragment() {
         record_btn.setOnClickListener {
             val idEmailCell = email_cell_id.text.toString()
             val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
-            val cell = if (ParseUtil.isValidMobile(idEmailCell)) ParseUtil.formatPhone(idEmailCell) else null
+            val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
             showProgressBar("Loading visitor's account...")
 
             accountModel.findAccount(email = email, phoneNumber = cell)
@@ -64,11 +64,13 @@ class RecordVisitFragment : AbstractFragment() {
                             time = DateUtil.today()
                             temperature = binding.visit?.visitorTemperature
                         }
-                        updateProgressBarMsg("Recording visit...")
+                        showProgressBar("Recording visit...")
                         visitModel.recordVisit(visit)
-                    } else
-                        super.parseRepoResults(second, "")
-                    accountModel.clearRepoResults(viewLifecycleOwner)
+                    } else{
+                        if (first == null)
+                            showToast("Person must create account.")
+                        else super.parseRepoResults(it.second, "")
+                    }
                 }
             })
             visitModel.repoResults.observe(viewLifecycleOwner, Observer { res ->
@@ -77,9 +79,8 @@ class RecordVisitFragment : AbstractFragment() {
                     if (second is Results.Success) {
                         showToast("Visit recorded.")
                         navController.popBackStack()
-                    }
-                    else
-                    super.parseRepoResults(second, "")
+                    } else
+                        super.parseRepoResults(second, "")
                     visitModel.clearRepoResults(viewLifecycleOwner)
                 }
             })

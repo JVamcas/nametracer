@@ -54,12 +54,13 @@ class UpdateCaseFragment : NewCaseFragment() {
         val idEmailCell = binding.auth!!.idMailCell
         val email = if (ParseUtil.isValidEmail(idEmailCell)) idEmailCell else null
         val cell = if (ParseUtil.isValidMobile(idEmailCell)) idEmailCell else null
-        val nationalID = if (ParseUtil.isValidNationalID(idEmailCell)) idEmailCell else null
 
         showProgressBar("Loading info...")
         caseModel.findCase(email = email, cellphone = cell)
+        caseModel.clearRepoResults(viewLifecycleOwner)
 
         caseModel.repoResults.observe(viewLifecycleOwner, Observer {
+            println("called with $it")
             it?.apply {
                 endProgressBar()
                 find_user.isEnabled = true

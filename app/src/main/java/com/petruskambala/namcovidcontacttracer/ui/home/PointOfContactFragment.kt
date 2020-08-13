@@ -57,13 +57,18 @@ class PointOfContactFragment : AbstractFragment() {
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
                 binding.account = null
                 it?.apply {
-                    endAuthFlow()
+
                     find_user.isEnabled = true
                     if (second is Results.Success) {
                         binding.account = first as Account
                         requireActivity().toolbar.title = "Point of Contact"
                     }
-                    else parseRepoResults(second,"")
+                    else {
+                        if (first == null)
+                            showToast("Person must create account.")
+                        else super.parseRepoResults(it.second, "")
+                    }
+                    endAuthFlow()
                 }
             })
         }

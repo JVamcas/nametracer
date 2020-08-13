@@ -29,10 +29,11 @@ abstract class AbstractModel(
     private var _photoUrl: String? = null
 ) : BaseObservable() {
     class EntityExistException : Exception()
-    class NoEntityException : Exception()
+    open class NoEntityException : Exception()
     class PhoneVerificationCodeExpired : Exception()
     class InvalidPasswordEmailException : Exception()
     class InvalidPhoneAuthCodeException : Exception()
+    class NoAccountException: NoEntityException()
 
     var photoUrl: String?
         @Bindable

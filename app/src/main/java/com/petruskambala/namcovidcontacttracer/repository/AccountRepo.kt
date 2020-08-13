@@ -112,9 +112,6 @@ class AccountRepo {
         accountType: AccountType,
         callback: (Person?, Results) -> Unit
     ) {
-
-
-
         val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.ACCOUNTS.name).whereEqualTo("email", email)
         else

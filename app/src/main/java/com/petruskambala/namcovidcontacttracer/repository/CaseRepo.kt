@@ -61,6 +61,7 @@ class CaseRepo {
                             Results.Success.CODE.LOAD_SUCCESS
                         )
                     callback(case, results)
+                    println("results is $results")
                 } else callback(null, Results.Error(it.exception))
             }
     }
