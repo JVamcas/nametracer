@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentNewCaseBinding
 import com.petruskambala.namcovidcontacttracer.model.Auth
@@ -15,7 +14,7 @@ import com.petruskambala.namcovidcontacttracer.model.CaseState
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
-import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.utils.*
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidEmail
@@ -80,15 +79,14 @@ open class NewCaseFragment : AbstractFragment() {
             case.time = DateUtil.today()
             showProgressBar("Recording new case...")
             caseModel.registerNewCase(case)
-            caseModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
-                pair?.let {
+            caseModel.repoResults.observe(viewLifecycleOwner, ObserveOnce { pair ->
+                pair.let {
                     endProgressBar()
                     record_btn.isEnabled = true
                     if (pair.second is Results.Success) {
                         showToast("Case recorded successfully.")
                         navController.popBackStack()
                     } else super.parseRepoResults(pair.second, "")
-                    caseModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
         }
@@ -123,8 +121,9 @@ open class NewCaseFragment : AbstractFragment() {
                 find_user.isEnabled = false
                 showProgressBar("Loading info...")
                 accountModel.findAccount(email = email, phoneNumber = cell)
-                accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                    it?.apply {
+                accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+                    it.apply {
+                        endProgressBar()
                         find_user.isEnabled = true
                         if (second is Results.Success) {
                             case = CovidCase(_person = first as Person)
@@ -135,7 +134,6 @@ open class NewCaseFragment : AbstractFragment() {
                                 showToast("Person must create account.")
                             else super.parseRepoResults(it.second, "")
                         }
-                        endAuthFlow()
                     }
                 })
             }

@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.petruskambala.namcovidcontacttracer.model.AbstractModel
 import com.petruskambala.namcovidcontacttracer.model.CovidCase
 import com.petruskambala.namcovidcontacttracer.utils.Docs
+import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 
 class CaseRepo {
@@ -41,10 +42,11 @@ class CaseRepo {
         phoneNumber: String? = null,
         callback: (CovidCase?, Results) -> Unit
     ) {
+        val phone = phoneNumber?.let { ParseUtil.formatPhone(phoneNumber) }
         val query = if (!email.isNullOrEmpty())
             DB.collection(Docs.CASES.name).whereEqualTo("email", email)
         else
-            DB.collection(Docs.CASES.name).whereEqualTo("cellphone", phoneNumber)
+            DB.collection(Docs.CASES.name).whereEqualTo("cellphone", phone)
         query.get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -61,7 +63,6 @@ class CaseRepo {
                             Results.Success.CODE.LOAD_SUCCESS
                         )
                     callback(case, results)
-                    println("results is $results")
                 } else callback(null, Results.Error(it.exception))
             }
     }

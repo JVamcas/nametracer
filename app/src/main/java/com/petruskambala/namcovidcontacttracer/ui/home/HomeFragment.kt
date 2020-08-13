@@ -17,9 +17,9 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentHomeBinding
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.ui.cases.CaseViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -46,8 +46,9 @@ class HomeFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        caseModel.repoResults.observe(viewLifecycleOwner, Observer {
-            caseModel.covidStat.value?.apply {
+//        caseModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+        caseModel.covidStat.observe(viewLifecycleOwner, Observer {
+            it.apply {
                 binding.statLoaded = true
                 binding.stat = this
                 val barData = BarData(
@@ -111,8 +112,10 @@ class HomeFragment : AbstractFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.cases -> { navController.navigate(R.id.action_homeFragment_to_casesFragment) }
-            R.id.point_of_contact ->{
+            R.id.cases -> {
+                navController.navigate(R.id.action_homeFragment_to_casesFragment)
+            }
+            R.id.point_of_contact -> {
                 navController.navigate(R.id.action_homeFragment_to_findPointOfContactFragment)
             }
         }

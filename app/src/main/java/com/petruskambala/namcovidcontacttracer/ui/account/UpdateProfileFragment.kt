@@ -15,6 +15,7 @@ import com.petruskambala.namcovidcontacttracer.databinding.FragmentUpdateProfile
 import com.petruskambala.namcovidcontacttracer.model.Gender
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -72,8 +73,10 @@ class UpdateProfileFragment : AbstractFragment() {
             showProgressBar("Updating your profile...")
             val modelId = accountModel.currentAccount.value!!.id
             accountModel.updateAccount(binding.account!!.also { it.id = modelId })
-            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                it?.apply {
+
+            accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+                it.apply {
+                    endProgressBar()
                     update_account.isEnabled = true
                     if (it.second is Results.Success) {
                         renameTempImageFile(Const.IMAGE_ROOT_PATH, Const.TEMP_FILE, modelId)
@@ -81,9 +84,15 @@ class UpdateProfileFragment : AbstractFragment() {
                         navController.popBackStack()
                     }
                     super.parseRepoResults(it.second, "Profile")
-                    endAuthFlow()
                 }
             })
+
+//            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+//                it?.apply {
+//
+//                    endAuthFlow()
+//                }
+//            })
         }
 
         take_new_picture.setOnClickListener {

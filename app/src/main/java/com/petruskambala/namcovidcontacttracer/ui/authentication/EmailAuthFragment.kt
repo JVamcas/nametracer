@@ -68,7 +68,8 @@ class EmailAuthFragment : AbstractAuthFragment() {
         accountModel.repoResults.observe(viewLifecycleOwner, Observer {
             it?.let {
                 login_btn.isEnabled = true
-                if (it.second is Results.Success) {
+                val results = it.peekContent().second
+                if (results is Results.Success) {
                     val authState = accountModel.authState.value
                     if (authState == EMAIL_NOT_VERIFIED)
                         navController.navigate(R.id.action_emailAuthFragment_to_verifyEmailFragment)
@@ -76,9 +77,9 @@ class EmailAuthFragment : AbstractAuthFragment() {
                         requireActivity().drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                         navController.popBackStack(R.id.selectLoginModeFragment, false)
                     }
-                } else (it.second is Results.Error)
-                super.parseRepoResults(it.second, "")
-                endAuthFlow()
+                } else
+                    super.parseRepoResults(results, "")
+//                endAuthFlow()
             }
         })
     }

@@ -349,10 +349,4 @@ abstract class AbstractFragment : Fragment() {
         fun onCancelWarning()
     }
 }
-class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
-    override fun onChanged(event: Event<T>?) {
-        event?.getContentIfNotHandled()?.let { value ->
-            onEventUnhandledContent(value)
-        }
-    }
-}
+

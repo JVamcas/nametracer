@@ -12,11 +12,10 @@ import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.model.RecordVisit
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
-import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.utils.BindingUtil
 import com.petruskambala.namcovidcontacttracer.utils.DateUtil
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
-import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidNationalID
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil.Companion.isValidTemperature
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import kotlinx.android.synthetic.main.fragment_new_case.email_cell_id
@@ -53,10 +52,9 @@ class RecordVisitFragment : AbstractFragment() {
             accountModel.findAccount(email = email, phoneNumber = cell)
 
             accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                it?.apply {
+                it?.peekContent()?.apply {
                     endProgressBar()
                     if (second is Results.Success) {
-                        accountModel.clearRepoResults(viewLifecycleOwner)
                         val visit = Visit(
                             person = (first as Person).apply { placeVisited++ },
                             place = accountModel.currentAccount.value
@@ -66,22 +64,21 @@ class RecordVisitFragment : AbstractFragment() {
                         }
                         showProgressBar("Recording visit...")
                         visitModel.recordVisit(visit)
-                    } else{
+                    } else {
                         if (first == null)
                             showToast("Person must create account.")
-                        else super.parseRepoResults(it.second, "")
+                        else super.parseRepoResults(second, "")
                     }
                 }
             })
-            visitModel.repoResults.observe(viewLifecycleOwner, Observer { res ->
-                res?.apply {
+            visitModel.repoResults.observe(viewLifecycleOwner, ObserveOnce { res ->
+                res.apply {
                     endProgressBar()
                     if (second is Results.Success) {
                         showToast("Visit recorded.")
                         navController.popBackStack()
                     } else
                         super.parseRepoResults(second, "")
-                    visitModel.clearRepoResults(viewLifecycleOwner)
                 }
             })
         }

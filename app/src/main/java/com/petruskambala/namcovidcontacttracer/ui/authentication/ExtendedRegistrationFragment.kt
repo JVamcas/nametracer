@@ -60,7 +60,7 @@ class ExtendedRegistrationFragment : EmailRegistrationFragment() {
             if (authType == AuthType.EMAIL)
                 createNewUser(person, password)
             else {
-                val repoResults = accountModel.repoResults.value
+                val repoResults = accountModel.repoResults.value?.peekContent()
                 val resultCode = (repoResults?.second as? Results.Error)?.code
 
                 if (repoResults == null || resultCode == Results.Error.CODE.PHONE_VERIFICATION_CODE_EXPIRED)

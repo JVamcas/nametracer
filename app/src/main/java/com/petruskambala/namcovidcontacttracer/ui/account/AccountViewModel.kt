@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import com.petruskambala.namcovidcontacttracer.model.*
 import com.petruskambala.namcovidcontacttracer.repository.AccountRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
+import com.petruskambala.namcovidcontacttracer.ui.Event
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
 
@@ -99,7 +100,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
                                         if (isAccountInfoMissing(account))
                                             _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
                                     }
-                                    _repoResults.postValue(Pair(null, results))
+                                    _repoResults.postValue(Event(Pair(null, results)))
                                 }
                             }
                             isAccountInfoMissing(mUser) -> _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
@@ -112,7 +113,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     fun authenticateWithEmail(email: String, password: String) {
         accountRepo.authenticateWithEmailAndPassword(email, password) { mResults ->
-            _repoResults.postValue(Pair(null, mResults))
+            _repoResults.postValue(Event(Pair(null, mResults)))
         }
     }
 
@@ -128,7 +129,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
         accountRepo.signInWithPhoneAuthCredential(
             credential = phoneCredential
         ) { results ->
-            _repoResults.postValue(Pair(null, results))
+            _repoResults.postValue(Event(Pair(null, results)))
         }
     }
 
@@ -140,15 +141,12 @@ class AccountViewModel : AbstractViewModel<Account>() {
                 override fun onVerificationCompleted(p0: PhoneAuthCredential) {
                     val accountCred = PhoneAuthCred(p0)
                     _repoResults.postValue(
-                        Pair(
-                            accountCred,
-                            Results.Success(Results.Success.CODE.PHONE_VERIFY_SUCCESS)
-                        )
+                        Event(Pair(accountCred, Results.Success(Results.Success.CODE.PHONE_VERIFY_SUCCESS)))
                     )
                 }
 
                 override fun onVerificationFailed(p0: FirebaseException) {
-                    _repoResults.postValue(Pair(null, Results.Error(p0)))
+                    _repoResults.postValue(Event(Pair(null, Results.Error(p0))))
                 }
 
                 override fun onCodeSent(
@@ -159,20 +157,20 @@ class AccountViewModel : AbstractViewModel<Account>() {
                     // now need to ask the user to enter the code and then construct a credential
                     // by combining the code with a verification ID.
                     _repoResults.postValue(
-                        Pair(
+                        Event(Pair(
                             PhoneAuthCred(verificationId = verificationId),
                             Results.Success(Results.Success.CODE.PHONE_VERIFY_CODE_SENT)
-                        )
+                        ))
                     )
                 }
 
                 override fun onCodeAutoRetrievalTimeOut(p0: String) {
                     super.onCodeAutoRetrievalTimeOut(p0)
                     _repoResults.postValue(
-                        Pair(
+                        Event(Pair(
                             PhoneAuthCred(verificationId = p0), Results.Error(
                                 AbstractModel.PhoneVerificationCodeExpired()
-                            )
+                            ))
                         )
                     )
                 }
@@ -181,13 +179,13 @@ class AccountViewModel : AbstractViewModel<Account>() {
 
     fun createNewUser(account: Person, password: String) {
         accountRepo.createNewUserWithEmailAndPassword(account, password) { obj, mResults ->
-            _repoResults.postValue(Pair(obj, mResults))
+            _repoResults.postValue(Event(Pair(obj, mResults)))
         }
     }
 
     fun sendVerificationEmail() {
         accountRepo.sendVerificationEmail {
-            _repoResults.postValue(Pair(null, it))
+            _repoResults.postValue(Event(Pair(null, it)))
         }
     }
 
@@ -200,7 +198,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
                     Person(account = account)
                 else account as Person
             )
-            _repoResults.postValue(Pair(null, results))
+            _repoResults.postValue(Event(Pair(null, results)))
         }
     }
 
@@ -218,14 +216,14 @@ class AccountViewModel : AbstractViewModel<Account>() {
             phoneNumber,
             accountType
         ) { account, results ->
-            _repoResults.postValue(Pair(account, results))
+            _repoResults.postValue(Event(Pair(account, results)))
         }
     }
 
     fun resetPassword(email: String) {
 
         accountRepo.resetPassword(email = email) {
-            _repoResults.postValue(Pair(null, it))
+            _repoResults.postValue(Event(Pair(null, it)))
         }
     }
 }

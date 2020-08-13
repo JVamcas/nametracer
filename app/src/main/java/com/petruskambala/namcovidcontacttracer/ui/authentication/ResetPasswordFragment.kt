@@ -5,15 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentResetPasswordBinding
-import com.petruskambala.namcovidcontacttracer.model.Auth
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
-import kotlinx.android.synthetic.main.fragment_email_auth.*
-import kotlinx.android.synthetic.main.fragment_email_auth.reset_password
-import kotlinx.android.synthetic.main.fragment_new_case.*
 import kotlinx.android.synthetic.main.fragment_reset_password.*
 
 /**
@@ -40,18 +35,19 @@ class ResetPasswordFragment : AbstractAuthFragment() {
             if (!ParseUtil.isValidEmail(email))
                 showToast("Invalid email address.")
             else {
+                endProgressBar()
                 reset_password_btn.isEnabled = false
                 showProgressBar("Sending password reset email...")
                 accountModel.resetPassword(email = email)
-                accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                    it?.apply {
+                accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+                    it.apply {
+                        endProgressBar()
                         reset_password_btn.isEnabled = true
                         if (it.second is Results.Success) {
                             showToast("A password reset link has been sent to your email.")
                             navController.popBackStack()
                         }
                         else super.parseRepoResults(it.second, "")
-                        endAuthFlow()
                     }
                 })
             }

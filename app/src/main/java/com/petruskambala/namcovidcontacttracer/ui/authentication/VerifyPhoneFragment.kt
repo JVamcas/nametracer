@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthProvider
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentVerifyPhoneBinding
-import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.model.PhoneAuthCred
@@ -67,10 +66,13 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
             showProgressBar("Authenticating...")
 
             val code = verification_code.text.toString()
-            accountModel.repoResults.value?.apply {
+            val results = accountModel.repoResults.value?.peekContent()
+
+            results?.apply {
                 if ((second as? Results.Success)?.code == PHONE_VERIFY_CODE_SENT) {
                     val verificationId = (first as? PhoneAuthCred)?.verificationId
-                    accountModel.signInWithPhoneAuthCredential(account = account,
+                    accountModel.signInWithPhoneAuthCredential(
+                        account = account,
                         phoneCredential = PhoneAuthProvider.getCredential(
                             verificationId!!,
                             code
@@ -80,8 +82,8 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
             }
         }
 
-        accountModel.repoResults.observe(viewLifecycleOwner, Observer { it ->
-            it?.apply {
+        accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+            it?.peekContent()?.apply {
                 endProgressBar()
                 (second as? Results.Error)?.code.apply {
                     if (this == PHONE_VERIFICATION_CODE_EXPIRED)
@@ -94,12 +96,12 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
 
                         this == PHONE_VERIFY_SUCCESS -> {
                             val phoneCred = (first as PhoneAuthCred).phoneAuthCredential
-                            accountModel.signInWithPhoneAuthCredential(account = account,
+                            accountModel.signInWithPhoneAuthCredential(
+                                account = account,
                                 phoneCredential = phoneCred!!
                             )
                         }
                         this == AUTH_SUCCESS -> {
-                            endAuthFlow()
                             navController.popBackStack(R.id.selectLoginModeFragment, false)
                         }
                     }

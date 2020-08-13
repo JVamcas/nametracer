@@ -35,11 +35,10 @@ class PhoneAuthFragment : AbstractAuthFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         login_btn.setOnClickListener {
-            accountModel.clearRepoResults(viewLifecycleOwner)
             login_btn.isEnabled = false
             val phone = ParseUtil.formatPhone(phone_number.text.toString())
 
-            val repoResults = accountModel.repoResults.value
+            val repoResults = accountModel.repoResults.value?.peekContent()
             val resultCode = (repoResults?.second as? Results.Error)?.code
 
             if (repoResults == null || resultCode == PHONE_VERIFICATION_CODE_EXPIRED)

@@ -7,6 +7,7 @@ import com.petruskambala.namcovidcontacttracer.model.CovidStat
 import com.petruskambala.namcovidcontacttracer.model.Person
 import com.petruskambala.namcovidcontacttracer.repository.CaseRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
+import com.petruskambala.namcovidcontacttracer.ui.Event
 import com.petruskambala.namcovidcontacttracer.utils.Results
 import okhttp3.*
 import org.json.JSONObject
@@ -35,7 +36,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
         caseRepo.registerNewCase(case) { result ->
             if (result is Results.Success)
                 _caseList.postValue(caseList.value?.apply { add(case) })
-            _repoResults.postValue(Pair(null, result))
+            _repoResults.postValue(Event(Pair(null, result)))
         }
     }
 
@@ -48,7 +49,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
 
     fun findCase(email: String? = null, cellphone: String? = null) {
         caseRepo.findCase(email, cellphone) { case, results ->
-            _repoResults.postValue(Pair(case?.also { it.person = Person() }, results))
+            _repoResults.postValue(Event( Pair(case?.also { it.person = Person() }, results)))
         }
     }
 
@@ -58,7 +59,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
                 val pos = caseList.value!!.indexOfFirst { case.personId == it.personId }
                 _caseList.postValue(_caseList.value!!.apply { set(pos, case) })
             }
-            _repoResults.postValue(Pair(null, it))
+            _repoResults.postValue(Event(Pair(null, it)))
         }
     }
 
@@ -70,7 +71,7 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                _repoResults.postValue(Pair(null, Results.Error(e)))
+                _repoResults.postValue(Event(Pair(null, Results.Error(e))))
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -86,12 +87,6 @@ class CaseViewModel : AbstractViewModel<CovidCase>() {
                         newCases = obj.getString("todayCases")
                     )
                 _covidStat.postValue(stats)
-                _repoResults.postValue(
-                    Pair(
-                        null,
-                        Results.Success(Results.Success.CODE.LOAD_SUCCESS)
-                    )
-                )
             }
         })
     }

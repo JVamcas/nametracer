@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentEmailRegistrationBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.AuthType
 import com.petruskambala.namcovidcontacttracer.model.Person
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.EMAIL_NOT_VERIFIED
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
@@ -85,8 +85,8 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
         showProgressBar("Creating your account... Please wait!")
         accountModel.createNewUser(account as? Person?:Person(account = account), password)
         new_account_btn.isEnabled = false
-        accountModel.repoResults.observe(viewLifecycleOwner, Observer { pair ->
-            pair?.let {
+        accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce { pair ->
+            pair.let {
                 endProgressBar()
                 new_account_btn.isEnabled = true
                 if (pair.second is Results.Success) {
@@ -101,7 +101,7 @@ open class EmailRegistrationFragment : AbstractAuthFragment() {
                         ///navController.popBackStack(R.id.selectLoginModeFragment,true)
                     }
                 } else super.parseRepoResults(pair.second, "")
-                accountModel.clearRepoResults(viewLifecycleOwner)
+//                accountModel.clearRepoResults(viewLifecycleOwner)
             }
         })
     }

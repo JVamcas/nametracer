@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import com.petruskambala.namcovidcontacttracer.model.Visit
 import com.petruskambala.namcovidcontacttracer.repository.VisitRepo
 import com.petruskambala.namcovidcontacttracer.ui.AbstractViewModel
+import com.petruskambala.namcovidcontacttracer.ui.Event
 import com.petruskambala.namcovidcontacttracer.utils.Results
 
 class VisitViewModel : AbstractViewModel<Visit>() {
@@ -44,7 +45,7 @@ class VisitViewModel : AbstractViewModel<Visit>() {
                 _visitorsList.postValue(
                     if (visitorsList.value == null) arrayListOf(visit)
                     else visitorsList.value?.also { it.add(visit) })
-            _repoResults.postValue(Pair(null, result))
+            _repoResults.postValue(Event( Pair(null, result)))
         }
     }
 
@@ -82,7 +83,7 @@ class VisitViewModel : AbstractViewModel<Visit>() {
         visitRepo.loadVisits { visits, results ->
             if (results is Results.Success)
                 _allVisits.postValue(visits)
-            _repoResults.postValue(Pair(null, results))
+            _repoResults.postValue(Event(Pair(null, results)))
         }
     }
 

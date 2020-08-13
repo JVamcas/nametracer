@@ -6,16 +6,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.petruskambala.namcovidcontacttracer.MainActivity
 import com.petruskambala.namcovidcontacttracer.R
-import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
-import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import kotlinx.android.synthetic.main.fragment_verify_email.*
 
 /**
@@ -37,11 +29,11 @@ class VerifyEmailFragment : AbstractAuthFragment() {
         re_send_link.setOnClickListener {
             re_send_link.isEnabled = false
             verifyEmail()
-            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                it?.apply {
+            accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+                it.apply {
+                    endProgressBar()
                     re_send_link.isEnabled = true
                     parseRepoResults(second, "")
-                    endAuthFlow()
                 }
             })
         }

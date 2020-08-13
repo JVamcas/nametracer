@@ -5,15 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentPointOfContactBinding
 import com.petruskambala.namcovidcontacttracer.model.Account
 import com.petruskambala.namcovidcontacttracer.model.AccountType
 import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.ui.AbstractFragment
-import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.ParseUtil
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -54,10 +52,10 @@ class PointOfContactFragment : AbstractFragment() {
 
             accountModel.findAccount(email,cell,AccountType.BUSINESS)
 
-            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
+            accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
                 binding.account = null
-                it?.apply {
-
+                it.apply {
+                    endProgressBar()
                     find_user.isEnabled = true
                     if (second is Results.Success) {
                         binding.account = first as Account
@@ -68,7 +66,6 @@ class PointOfContactFragment : AbstractFragment() {
                             showToast("Person must create account.")
                         else super.parseRepoResults(it.second, "")
                     }
-                    endAuthFlow()
                 }
             })
         }
