@@ -12,6 +12,7 @@ import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.FragmentEmailAuthBinding
 import com.petruskambala.namcovidcontacttracer.model.Auth
 import com.petruskambala.namcovidcontacttracer.model.AuthType
+import com.petruskambala.namcovidcontacttracer.ui.ObserveOnce
 import com.petruskambala.namcovidcontacttracer.ui.account.AccountViewModel.AuthState.*
 import com.petruskambala.namcovidcontacttracer.utils.Const
 import com.petruskambala.namcovidcontacttracer.utils.Results
@@ -65,10 +66,11 @@ class EmailAuthFragment : AbstractAuthFragment() {
         val auth = binding.auth!!
 
         accountModel.authenticateWithEmail(auth.idMailCell, auth.password)
-        accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+            it.let {
+                endProgressBar()
                 login_btn.isEnabled = true
-                val results = it.peekContent().second
+                val results = it.second
                 if (results is Results.Success) {
                     val authState = accountModel.authState.value
                     if (authState == EMAIL_NOT_VERIFIED)

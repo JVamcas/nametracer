@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -20,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.petruskambala.namcovidcontacttracer.CameraCaptureActivity
 import com.petruskambala.namcovidcontacttracer.R
 import com.petruskambala.namcovidcontacttracer.databinding.AppDismissDialogBinding
@@ -174,6 +176,28 @@ abstract class AbstractFragment : Fragment() {
         }
         wkb.write()
         wkb.close()
+    }
+
+    protected open fun showSnackBar(msg: String, isError: Boolean, callback: SnackBarCallback?) {
+        val bar = Snackbar.make(requireView(), msg, Snackbar.LENGTH_LONG)
+        with(bar){
+            val txtColor = if (isError) Color.RED else Color.GREEN
+            setTextColor(txtColor)
+            setBackgroundTint(Color.parseColor("#B2B4AE"))
+            callback?.let {
+                val undoClicked = AtomicBoolean(false)
+                setAction("UNDO") {
+                    undoClicked.set(true)
+                    callback.onUndo()
+                }
+                addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(snackbar: Snackbar, event: Int) {
+                        if (!undoClicked.get()) callback.onDismissed(event)
+                    }
+                })
+            }
+            show()
+        }
     }
 
     private lateinit var callback: (String?) -> Unit
@@ -347,6 +371,11 @@ abstract class AbstractFragment : Fragment() {
          * by touching elsewhere in the device screen
          */
         fun onCancelWarning()
+    }
+    interface SnackBarCallback {
+
+        fun onDismissed(event: Int)
+        fun onUndo()
     }
 }
 

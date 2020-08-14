@@ -73,27 +73,20 @@ class UpdateProfileFragment : AbstractFragment() {
             showProgressBar("Updating your profile...")
             val modelId = accountModel.currentAccount.value!!.id
             accountModel.updateAccount(binding.account!!.also { it.id = modelId })
-
-            accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
-                it.apply {
-                    endProgressBar()
-                    update_account.isEnabled = true
-                    if (it.second is Results.Success) {
-                        renameTempImageFile(Const.IMAGE_ROOT_PATH, Const.TEMP_FILE, modelId)
-                        accountModel.currentAccount.value?.let { it.photoUrl = "" }
-                        navController.popBackStack()
-                    }
-                    super.parseRepoResults(it.second, "Profile")
-                }
-            })
-
-//            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-//                it?.apply {
-//
-//                    endAuthFlow()
-//                }
-//            })
         }
+        accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+            it.apply {
+                endProgressBar()
+                update_account.isEnabled = true
+                val modelId = accountModel.currentAccount.value!!.id
+                if (it.second is Results.Success) {
+                    renameTempImageFile(Const.IMAGE_ROOT_PATH, Const.TEMP_FILE, modelId)
+                    accountModel.currentAccount.value?.let { it.photoUrl = "" }
+                    navController.popBackStack()
+                }
+                super.parseRepoResults(it.second, "Profile")
+            }
+        })
 
         take_new_picture.setOnClickListener {
             val currentUser = binding.account!!

@@ -64,9 +64,7 @@ class ExtendedRegistrationFragment : EmailRegistrationFragment() {
                 val resultCode = (repoResults?.second as? Results.Error)?.code
 
                 if (repoResults == null || resultCode == Results.Error.CODE.PHONE_VERIFICATION_CODE_EXPIRED)
-                    accountModel.verifyPhoneNumber(account.also {
-                        it.cellphone = ParseUtil.formatPhone(it.cellphone!!)
-                    }.cellphone!!, requireActivity())
+                    accountModel.verifyPhoneNumber(account.cellphone!!, requireActivity())
 
                 navController.navigate(
                     R.id.action_extendedRegistrationFragment_to_verifyPhoneFragment,

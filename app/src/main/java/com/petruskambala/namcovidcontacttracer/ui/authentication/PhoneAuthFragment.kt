@@ -36,7 +36,7 @@ class PhoneAuthFragment : AbstractAuthFragment() {
 
         login_btn.setOnClickListener {
             login_btn.isEnabled = false
-            val phone = ParseUtil.formatPhone(phone_number.text.toString())
+            val phone = phone_number.text.toString()
 
             val repoResults = accountModel.repoResults.value?.peekContent()
             val resultCode = (repoResults?.second as? Results.Error)?.code

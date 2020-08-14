@@ -102,6 +102,7 @@ class VerifyPhoneFragment : AbstractAuthFragment() {
                             )
                         }
                         this == AUTH_SUCCESS -> {
+                            accountModel.clearRepoResults(viewLifecycleOwner)
                             navController.popBackStack(R.id.selectLoginModeFragment, false)
                         }
                     }

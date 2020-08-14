@@ -31,7 +31,6 @@ abstract class AbstractViewModel<K : AbstractModel> : ViewModel() {
         repoResults.removeObservers(owner)
         _repoResults.postValue(null)
     }
-
 }
 
 class ObserveOnce<T : AbstractModel>(private val onEventUnhandledContent: (Pair<T?, Results>) -> Unit) :

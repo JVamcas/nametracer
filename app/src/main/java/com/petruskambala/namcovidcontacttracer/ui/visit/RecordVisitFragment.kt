@@ -51,10 +51,11 @@ class RecordVisitFragment : AbstractFragment() {
 
             accountModel.findAccount(email = email, phoneNumber = cell)
 
-            accountModel.repoResults.observe(viewLifecycleOwner, Observer {
-                it?.peekContent()?.apply {
+            accountModel.repoResults.observe(viewLifecycleOwner, ObserveOnce {
+                it.apply {
                     endProgressBar()
                     if (second is Results.Success) {
+
                         val visit = Visit(
                             person = (first as Person).apply { placeVisited++ },
                             place = accountModel.currentAccount.value
@@ -64,6 +65,7 @@ class RecordVisitFragment : AbstractFragment() {
                         }
                         showProgressBar("Recording visit...")
                         visitModel.recordVisit(visit)
+
                     } else {
                         if (first == null)
                             showToast("Person must create account.")
@@ -71,18 +73,18 @@ class RecordVisitFragment : AbstractFragment() {
                     }
                 }
             })
-            visitModel.repoResults.observe(viewLifecycleOwner, ObserveOnce { res ->
-                res.apply {
-                    endProgressBar()
-                    if (second is Results.Success) {
-                        showToast("Visit recorded.")
-                        navController.popBackStack()
-                    } else
-                        super.parseRepoResults(second, "")
-                }
-            })
-        }
 
+        }
+        visitModel.repoResults.observe(viewLifecycleOwner, ObserveOnce { res ->
+            res.apply {
+                endProgressBar()
+                if (second is Results.Success) {
+                    showToast("Visit recorded.")
+                    navController.popBackStack()
+                } else
+                    super.parseRepoResults(second, "")
+            }
+        })
         visitor_temperature.addTextChangedListener(object : BindingUtil.TextChangeLister() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 super.onTextChanged(p0, p1, p2, p3)

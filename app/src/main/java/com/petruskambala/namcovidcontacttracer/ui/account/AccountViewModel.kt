@@ -100,7 +100,7 @@ class AccountViewModel : AbstractViewModel<Account>() {
                                         if (isAccountInfoMissing(account))
                                             _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
                                     }
-                                    _repoResults.postValue(Event(Pair(null, results)))
+//                                    _repoResults.postValue(Event(Pair(null, results)))
                                 }
                             }
                             isAccountInfoMissing(mUser) -> _mAuthState.postValue(AuthState.ACCOUNT_INFO_MISSING)
@@ -134,8 +134,9 @@ class AccountViewModel : AbstractViewModel<Account>() {
     }
 
     fun verifyPhoneNumber(phoneNumber: String, activity: FragmentActivity) {
+        val phone = ParseUtil.formatPhone(phoneNumber)
         accountRepo.verifyPhoneNumber(
-            phoneNumber,
+            phone,
             activity,
             object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(p0: PhoneAuthCredential) {

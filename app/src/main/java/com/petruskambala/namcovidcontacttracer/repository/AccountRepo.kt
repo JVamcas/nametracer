@@ -45,7 +45,10 @@ class AccountRepo {
 
 
     fun createUserWithPhone(account: Person, callback: (Person?, Results) -> Unit) {
-        account.let { it.id = AUTH.currentUser?.uid ?: "" }
+        account.let {
+            it.id = AUTH.currentUser?.uid ?: ""
+            it.cellphone = ParseUtil.formatPhone(it.cellphone!!)
+        }
 
         DB.collection(Docs.ACCOUNTS.name).document(account.id)
             .set(account)
