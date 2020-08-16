@@ -9,7 +9,7 @@
         android:layout_margin="1dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.account.PlaceVisitedFragment">
+        tools:context=".ui.visit.PlaceVisitedFragment">
 
         <com.evrencoskun.tableview.TableView
             app:layout_constraintTop_toTopOf="parent"

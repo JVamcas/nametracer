@@ -182,12 +182,12 @@
 
         <import type="android.view.View" />
 
-        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil" />
+        <import type="com.petruskambala.nametracer.utils.BindingUtil" />
 
-        <import type="com.petruskambala.namcovidcontacttracer.model.AccountType" />
+        <import type="com.petruskambala.nametracer.model.AccountType" />
 
         <variable
             name="account"
-            type="com.petruskambala.namcovidcontacttracer.model.Person" />
+            type="com.petruskambala.nametracer.model.Person" />
     </data>
 </layout>

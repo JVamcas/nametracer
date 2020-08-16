@@ -203,15 +203,15 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
-        <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
-        <import type="com.petruskambala.namcovidcontacttracer.model.AuthType"/>
+        <import type="com.petruskambala.nametracer.utils.BindingUtil"/>
+        <import type="com.petruskambala.nametracer.model.AccountType"/>
+        <import type="com.petruskambala.nametracer.model.AuthType"/>
         <variable
             name="authType"
-            type="com.petruskambala.namcovidcontacttracer.model.AuthType" />
+            type="com.petruskambala.nametracer.model.AuthType" />
 
         <variable
             name="account"
-            type="com.petruskambala.namcovidcontacttracer.model.Account" />
+            type="com.petruskambala.nametracer.model.Account" />
     </data>
 </layout>

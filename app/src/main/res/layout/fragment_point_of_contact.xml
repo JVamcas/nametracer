@@ -110,13 +110,13 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.petruskambala.namcovidcontacttracer.model.Person"/>
+        <import type="com.petruskambala.nametracer.model.Person"/>
 
         <variable
             name="auth"
-            type="com.petruskambala.namcovidcontacttracer.model.Auth" />
+            type="com.petruskambala.nametracer.model.Auth" />
         <variable
             name="account"
-            type="com.petruskambala.namcovidcontacttracer.model.Account" />
+            type="com.petruskambala.nametracer.model.Account" />
     </data>
 </layout>

@@ -54,9 +54,9 @@
     </com.google.android.material.card.MaterialCardView>
 
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.R" />
+        <import type="com.petruskambala.nametracer.R" />
         <variable
             name="covidCase"
-            type="com.petruskambala.namcovidcontacttracer.model.CovidCase" />
+            type="com.petruskambala.nametracer.model.Cases" />
     </data>
 </layout>

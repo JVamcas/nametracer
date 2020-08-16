@@ -102,14 +102,14 @@
     </LinearLayout>
 
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.model.AuthType"/>
+        <import type="com.petruskambala.nametracer.model.AuthType"/>
         <import type="android.view.View"/>
         <variable
             name="authType"
-            type="com.petruskambala.namcovidcontacttracer.model.AuthType" />
+            type="com.petruskambala.nametracer.model.AuthType" />
 
         <variable
             name="auth"
-            type="com.petruskambala.namcovidcontacttracer.model.Auth" />
+            type="com.petruskambala.nametracer.model.Auth" />
     </data>
 </layout>

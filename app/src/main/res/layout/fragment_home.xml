@@ -82,7 +82,7 @@
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.model.AccountType"/>
+        <import type="com.petruskambala.nametracer.model.AccountType"/>
         <import type="android.view.View"/>
         <variable
             name="statLoaded"
@@ -90,12 +90,12 @@
 
         <variable
             name="account"
-            type="com.petruskambala.namcovidcontacttracer.model.Account" />
+            type="com.petruskambala.nametracer.model.Account" />
         <variable
             name="new_case_count"
             type="String" />
         <variable
             name="stat"
-            type="com.petruskambala.namcovidcontacttracer.model.CovidStat" />
+            type="com.petruskambala.nametracer.model.CovidStat" />
     </data>
 </layout>

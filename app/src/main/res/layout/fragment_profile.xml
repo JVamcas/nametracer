@@ -38,6 +38,6 @@
 
         <variable
             name="person"
-            type="com.petruskambala.namcovidcontacttracer.model.Person" />
+            type="com.petruskambala.nametracer.model.Person" />
     </data>
 </layout>

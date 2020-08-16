@@ -69,9 +69,9 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.utils.BindingUtil"/>
+        <import type="com.petruskambala.nametracer.utils.BindingUtil"/>
         <variable
             name="person"
-            type="com.petruskambala.namcovidcontacttracer.model.Person" />
+            type="com.petruskambala.nametracer.model.Person" />
     </data>
 </layout>

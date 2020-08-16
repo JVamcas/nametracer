@@ -63,9 +63,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <data>
-        <import type="com.petruskambala.namcovidcontacttracer.R" />
+        <import type="com.petruskambala.nametracer.R" />
         <variable
             name="person"
-            type="com.petruskambala.namcovidcontacttracer.model.Person" />
+            type="com.petruskambala.nametracer.model.Person" />
     </data>
 </layout>
