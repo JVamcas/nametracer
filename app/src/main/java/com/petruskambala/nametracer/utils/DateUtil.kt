@@ -1,7 +1,6 @@
 package com.petruskambala.nametracer.utils
 
 import android.text.format.DateFormat
-import android.text.format.Time
 import com.google.firebase.Timestamp
 import java.text.ParseException
 import java.text.SimpleDateFormat

@@ -11,7 +11,6 @@ import com.petruskambala.nametracer.model.RowHeader
 import com.petruskambala.nametracer.ui.AbstractViewModel
 import com.petruskambala.nametracer.ui.account.AbstractContactFragment
 import com.petruskambala.nametracer.utils.Const
-import com.petruskambala.nametracer.utils.Results
 import jxl.Workbook
 import kotlinx.android.synthetic.main.fragment_place_visited.*
 import java.io.File
