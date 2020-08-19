@@ -169,13 +169,13 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.petruskambala.nametracer.utils.BindingUtil"/>
+        <import type="com.pet001kambala.namecontacttracer.utils.BindingUtil"/>
 
         <variable
             name="auth"
-            type="com.petruskambala.nametracer.model.Auth" />
+            type="com.pet001kambala.namecontacttracer.model.Auth" />
         <variable
             name="covidCase"
-            type="com.petruskambala.nametracer.model.Cases" />
+            type="com.pet001kambala.namecontacttracer.model.Cases" />
     </data>
 </layout>

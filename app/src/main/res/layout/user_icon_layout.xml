@@ -35,11 +35,11 @@
     <data>
         <import type="android.view.View" />
 
-        <import type="com.petruskambala.nametracer.R" />
+        <import type="com.pet001kambala.namecontacttracer.R" />
 
         <variable
             name="model"
-            type="com.petruskambala.nametracer.model.Account" />
+            type="com.pet001kambala.namecontacttracer.model.Account" />
 
         <variable
             name="cameraVisible"

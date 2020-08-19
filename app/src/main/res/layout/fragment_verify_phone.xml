@@ -89,6 +89,6 @@
     <data>
         <variable
             name="auth"
-            type="com.petruskambala.nametracer.model.Auth" />
+            type="com.pet001kambala.namecontacttracer.model.Auth" />
     </data>
 </layout>

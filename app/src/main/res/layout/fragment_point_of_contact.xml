@@ -110,13 +110,13 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.petruskambala.nametracer.model.Person"/>
+        <import type="com.pet001kambala.namecontacttracer.model.Person"/>
 
         <variable
             name="auth"
-            type="com.petruskambala.nametracer.model.Auth" />
+            type="com.pet001kambala.namecontacttracer.model.Auth" />
         <variable
             name="account"
-            type="com.petruskambala.nametracer.model.Account" />
+            type="com.pet001kambala.namecontacttracer.model.Account" />
     </data>
 </layout>

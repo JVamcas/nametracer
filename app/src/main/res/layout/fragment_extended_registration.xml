@@ -69,9 +69,9 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <data>
-        <import type="com.petruskambala.nametracer.utils.BindingUtil"/>
+        <import type="com.pet001kambala.namecontacttracer.utils.BindingUtil"/>
         <variable
             name="person"
-            type="com.petruskambala.nametracer.model.Person" />
+            type="com.pet001kambala.namecontacttracer.model.Person" />
     </data>
 </layout>

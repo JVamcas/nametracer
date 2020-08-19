@@ -9,7 +9,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.petruskambala.nametracer"
+        applicationId "com.pet001kambala.namecontacttracer"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 2

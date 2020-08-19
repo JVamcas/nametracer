@@ -8,54 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:197858767739:android:98e14e9b85cfd83e9103de",
+        "mobilesdk_app_id": "1:197858767739:android:bba9b52e90b307929103de",
         "android_client_info": {
-          "package_name": "com.petruskambala.namcovidcontacttracer"
+          "package_name": "com.pet001kambala.namecontacttracer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "197858767739-22bcjpk6c0ali3e7jc0n7bdi5s7ud9t8.apps.googleusercontent.com",
+          "client_id": "197858767739-vcc2mtt1s613989k86vcmnh8058mahnu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.petruskambala.namcovidcontacttracer",
-            "certificate_hash": "9eca4016b48ece89d5ab2c8321705a7f7477a722"
-          }
-        },
-        {
-          "client_id": "197858767739-487n9rri07ian4dlu1lb9loshth0bfg2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCaWexbcDIxu8EaPEzT1fkc79DgdzrU-ZY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "197858767739-487n9rri07ian4dlu1lb9loshth0bfg2.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:197858767739:android:90cd863b6f1c94059103de",
-        "android_client_info": {
-          "package_name": "com.petruskambala.nametracer"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "197858767739-c9ih3tbvgasv6dnuohpfn02akqnr0rfc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.petruskambala.nametracer",
+            "package_name": "com.pet001kambala.namecontacttracer",
             "certificate_hash": "224559c62c645a2e8cc106c6eb591d9b0f0da4c9"
           }
         },

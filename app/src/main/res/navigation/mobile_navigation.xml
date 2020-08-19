@@ -6,7 +6,7 @@
     app:startDestination="@id/authNav">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.petruskambala.nametracer.ui.home.HomeFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.home.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/casesFragment"
-        android:name="com.petruskambala.nametracer.ui.cases.RecordedCaseFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.cases.RecordedCaseFragment"
         android:label="Recorded Cases"
         tools:layout="@layout/fragment_recorded_case">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/newCaseFragment"
-        android:name="com.petruskambala.nametracer.ui.cases.NewCaseFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.cases.NewCaseFragment"
         android:label="Find Person"
         tools:layout="@layout/fragment_new_case">
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateCaseFragment"
-        android:name="com.petruskambala.nametracer.ui.cases.UpdateCaseFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.cases.UpdateCaseFragment"
         android:label="Find Case">
         <action
             android:id="@+id/action_updateCaseFragment_to_placeVisitedFragment"
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.petruskambala.nametracer.ui.account.ProfileFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.account.ProfileFragment"
         android:label="My Profile"
         tools:layout="@layout/fragment_profile"/>
     <action
@@ -58,12 +58,12 @@
         app:destination="@id/profileFragment" />
     <fragment
         android:id="@+id/recordVisitFragment"
-        android:name="com.petruskambala.nametracer.ui.visit.RecordVisitFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.visit.RecordVisitFragment"
         android:label="Record New Visit"
         tools:layout="@layout/fragment_record_visit" />
     <fragment
         android:id="@+id/aboutDeveloperFragment"
-        android:name="com.petruskambala.nametracer.ui.home.AboutDeveloperFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.home.AboutDeveloperFragment"
         android:label="About Developer"
         tools:layout="@layout/fragment_about_developer" />
     <action
@@ -71,7 +71,7 @@
         app:destination="@id/aboutDeveloperFragment" />
     <fragment
         android:id="@+id/placeVisitedFragment"
-        android:name="com.petruskambala.nametracer.ui.visit.PlaceVisitedFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.visit.PlaceVisitedFragment"
         android:label="Places Visited"
         tools:layout="@layout/fragment_place_visited" />
     <action
@@ -79,7 +79,7 @@
         app:destination="@id/placeVisitedFragment" />
     <fragment
         android:id="@+id/findPointOfContactFragment"
-        android:name="com.petruskambala.nametracer.ui.home.PointOfContactFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.home.PointOfContactFragment"
         android:label="Find Point of Contact"
         tools:layout="@layout/fragment_point_of_contact">
         <action
@@ -88,12 +88,12 @@
     </fragment>
     <fragment
         android:id="@+id/placeVisitorsFragment"
-        android:name="com.petruskambala.nametracer.ui.visit.VisitorsListFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.visit.VisitorsListFragment"
         android:label="Suspected Contacts"
         tools:layout="@layout/fragment_place_visitors" />
     <fragment
         android:id="@+id/updateProfileFragment"
-        android:name="com.petruskambala.nametracer.ui.account.UpdateProfileFragment"
+        android:name="com.pet001kambala.namecontacttracer.ui.account.UpdateProfileFragment"
         android:label="Update Profile" />
     <action
         android:id="@+id/action_global_placeVisitorsFragment"
@@ -104,7 +104,7 @@
         app:startDestination="@id/selectLoginModeFragment">
         <fragment
             android:id="@+id/selectSignUpModeFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.SelectSignUpModeFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.SelectSignUpModeFragment"
             android:label="Select sign up method"
             tools:layout="@layout/fragment_select_sign_up_mode">
             <action
@@ -116,7 +116,7 @@
         </fragment>
         <fragment
             android:id="@+id/selectLoginModeFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.SelectLoginModeFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.SelectLoginModeFragment"
             android:label="@string/app_name">
             <action
                 android:id="@+id/action_selectLoginModeFragment_to_selectSignUpModeFragment"
@@ -131,7 +131,7 @@
         </fragment>
         <fragment
             android:id="@+id/emailAuthFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.EmailAuthFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.EmailAuthFragment"
             android:label="Sign In"
             tools:layout="@layout/fragment_email_auth">
             <action
@@ -146,7 +146,7 @@
         </fragment>
         <fragment
             android:id="@+id/emailRegistrationFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.EmailRegistrationFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.EmailRegistrationFragment"
             android:label="Create New Account"
             tools:layout="@layout/fragment_email_registration">
             <action
@@ -158,17 +158,17 @@
         </fragment>
         <fragment
             android:id="@+id/resetPasswordFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.ResetPasswordFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.ResetPasswordFragment"
             android:label="Reset Password"
             tools:layout="@layout/fragment_reset_password" />
         <fragment
             android:id="@+id/verifyEmailFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.VerifyEmailFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.VerifyEmailFragment"
             android:label="Verify Email Address"
             tools:layout="@layout/fragment_verify_email" />
         <fragment
             android:id="@+id/extendedRegistrationFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.ExtendedRegistrationFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.ExtendedRegistrationFragment"
             android:label="Create New Account"
             tools:layout="@layout/fragment_extended_registration">
             <action
@@ -180,7 +180,7 @@
         </fragment>
         <fragment
             android:id="@+id/phoneAuthFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.PhoneAuthFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.PhoneAuthFragment"
             android:label="Sign In"
             tools:layout="@layout/fragment_phone_auth">
             <action
@@ -189,12 +189,12 @@
         </fragment>
         <fragment
             android:id="@+id/verifyPhoneFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.VerifyPhoneFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.VerifyPhoneFragment"
             android:label="Verify Phone Number"
             tools:layout="@layout/fragment_verify_phone" />
         <fragment
             android:id="@+id/phoneRegistrationFragment"
-            android:name="com.petruskambala.nametracer.ui.authentication.PhoneRegistrationFragment"
+            android:name="com.pet001kambala.namecontacttracer.ui.authentication.PhoneRegistrationFragment"
             android:label="Create New Account">
             <action
                 android:id="@+id/action_phoneRegistrationFragment_to_verifyPhoneFragment"

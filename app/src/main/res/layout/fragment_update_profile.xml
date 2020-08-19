@@ -182,12 +182,12 @@
 
         <import type="android.view.View" />
 
-        <import type="com.petruskambala.nametracer.utils.BindingUtil" />
+        <import type="com.pet001kambala.namecontacttracer.utils.BindingUtil" />
 
-        <import type="com.petruskambala.nametracer.model.AccountType" />
+        <import type="com.pet001kambala.namecontacttracer.model.AccountType" />
 
         <variable
             name="account"
-            type="com.petruskambala.nametracer.model.Person" />
+            type="com.pet001kambala.namecontacttracer.model.Person" />
     </data>
 </layout>

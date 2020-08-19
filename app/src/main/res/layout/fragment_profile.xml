@@ -38,6 +38,6 @@
 
         <variable
             name="person"
-            type="com.petruskambala.nametracer.model.Person" />
+            type="com.pet001kambala.namecontacttracer.model.Person" />
     </data>
 </layout>

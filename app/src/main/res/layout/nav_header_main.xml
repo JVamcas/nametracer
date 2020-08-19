@@ -45,7 +45,7 @@
     <data>
         <variable
             name="user"
-            type="com.petruskambala.nametracer.model.Account" />
+            type="com.pet001kambala.namecontacttracer.model.Account" />
     </data>
 
 </layout>

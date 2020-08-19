@@ -203,15 +203,15 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.petruskambala.nametracer.utils.BindingUtil"/>
-        <import type="com.petruskambala.nametracer.model.AccountType"/>
-        <import type="com.petruskambala.nametracer.model.AuthType"/>
+        <import type="com.pet001kambala.namecontacttracer.utils.BindingUtil"/>
+        <import type="com.pet001kambala.namecontacttracer.model.AccountType"/>
+        <import type="com.pet001kambala.namecontacttracer.model.AuthType"/>
         <variable
             name="authType"
-            type="com.petruskambala.nametracer.model.AuthType" />
+            type="com.pet001kambala.namecontacttracer.model.AuthType" />
 
         <variable
             name="account"
-            type="com.petruskambala.nametracer.model.Account" />
+            type="com.pet001kambala.namecontacttracer.model.Account" />
     </data>
 </layout>
